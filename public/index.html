@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="行方がわからなくなった大切な人を探しています。些細なことでも構いません。情報をお寄せください。">
+  <title>失踪した彼女を探してください。</title>
+  <style>
+    :root {
+      --paper: #f7f5ef;
+      --paper-deep: #ebe7dd;
+      --ink: #242424;
+      --muted: #66645f;
+      --line: #cdc8bb;
+      --red: #a92222;
+      --red-dark: #791818;
+      --blue: #315d82;
+      --white: #fff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        linear-gradient(rgba(255, 255, 255, .54), rgba(255, 255, 255, .54)),
+        repeating-linear-gradient(0deg, #e4e1d9 0, #e4e1d9 1px, transparent 1px, transparent 5px),
+        var(--paper-deep);
+      font-family: "Yu Gothic", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+      line-height: 1.85;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .site-header {
+      border-top: 8px solid var(--red);
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, .93);
+      box-shadow: 0 2px 12px rgba(38, 35, 29, .08);
+    }
+
+    .header-inner {
+      width: min(920px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 18px 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .site-mark {
+      margin: 0;
+      font-family: "Yu Mincho", "Hiragino Mincho ProN", serif;
+      font-size: clamp(1rem, 2.5vw, 1.28rem);
+      letter-spacing: .08em;
+      font-weight: 700;
+    }
+
+    .updated {
+      margin: 0;
+      color: var(--muted);
+      font-size: .74rem;
+      white-space: nowrap;
+    }
+
+    main {
+      width: min(920px, calc(100% - 32px));
+      margin: 38px auto 56px;
+    }
+
+    .notice-card {
+      overflow: hidden;
+      border: 1px solid #bbb5a7;
+      background: rgba(255, 255, 255, .97);
+      box-shadow: 0 14px 36px rgba(35, 31, 24, .13);
+    }
+
+    .alert-band {
+      margin: 0;
+      padding: 8px 20px;
+      color: var(--white);
+      background: var(--red);
+      text-align: center;
+      font-size: .76rem;
+      font-weight: 700;
+      letter-spacing: .25em;
+    }
+
+    .hero {
+      padding: 34px 42px 30px;
+      text-align: center;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, #fff 0%, #faf9f5 100%);
+    }
+
+    .hero-label {
+      display: inline-block;
+      margin: 0 0 12px;
+      padding: 3px 13px;
+      border: 1px solid var(--red);
+      color: var(--red);
+      font-size: .76rem;
+      font-weight: 700;
+      letter-spacing: .18em;
+    }
+
+    h1 {
+      margin: 0;
+      font-family: "Yu Mincho", "Hiragino Mincho ProN", serif;
+      font-size: clamp(1.9rem, 5.7vw, 3.3rem);
+      line-height: 1.35;
+      letter-spacing: .03em;
+      color: #171717;
+    }
+
+    .hero-lead {
+      max-width: 660px;
+      margin: 18px auto 0;
+      font-size: clamp(.94rem, 2vw, 1.06rem);
+    }
+
+    .search-profile {
+      display: grid;
+      grid-template-columns: 292px 1fr;
+      gap: 42px;
+      padding: 42px;
+      align-items: start;
+    }
+
+    .photo-frame {
+      width: 292px;
+      margin: 0;
+      padding: 10px;
+      background: #fff;
+      border: 1px solid #aaa59a;
+      box-shadow: 2px 4px 12px rgba(0, 0, 0, .14);
+      transform: rotate(-.4deg);
+    }
+
+    .photo-frame img {
+      display: block;
+      width: 100%;
+      height: 350px;
+      object-fit: cover;
+      object-position: center 38%;
+      filter: saturate(.85) contrast(.96);
+      background: #ddd;
+    }
+
+    .photo-note {
+      margin: 9px 2px 0;
+      color: var(--muted);
+      text-align: center;
+      font-size: .72rem;
+      line-height: 1.5;
+    }
+
+    .profile-heading,
+    .section-heading {
+      margin: 0 0 18px;
+      padding: 0 0 8px 12px;
+      border-left: 5px solid var(--red);
+      border-bottom: 1px solid var(--line);
+      font-family: "Yu Mincho", "Hiragino Mincho ProN", serif;
+      font-size: 1.25rem;
+      line-height: 1.4;
+    }
+
+    .facts {
+      margin: 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .facts-row {
+      display: grid;
+      grid-template-columns: 8.5em 1fr;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .facts dt,
+    .facts dd {
+      margin: 0;
+      padding: 10px 12px;
+      font-size: .92rem;
+    }
+
+    .facts dt {
+      background: #f1eee6;
+      font-weight: 700;
+    }
+
+    .facts dd {
+      background: #fff;
+    }
+
+    .last-seen {
+      margin: 22px 0 0;
+      padding: 14px 16px;
+      border: 1px solid #d4b2b2;
+      background: #fff7f7;
+      color: #451d1d;
+      font-size: .9rem;
+      line-height: 1.7;
+    }
+
+    .last-seen strong {
+      color: var(--red-dark);
+    }
+
+    .story,
+    .request {
+      padding: 0 42px 38px;
+    }
+
+    .story p,
+    .request p {
+      margin: 0 0 1.25em;
+    }
+
+    .story p:last-child,
+    .request p:last-child {
+      margin-bottom: 0;
+    }
+
+    .handwritten {
+      margin: 24px 0 0;
+      padding: 18px 20px;
+      border-left: 3px solid #99958c;
+      background: #f5f3ed;
+      font-family: "Yu Mincho", "Hiragino Mincho ProN", serif;
+      font-size: .95rem;
+    }
+
+    .request {
+      padding-top: 34px;
+      border-top: 1px dashed #aaa59a;
+      background: #fbfaf7;
+    }
+
+    .caution-list {
+      margin: 18px 0 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 7px;
+    }
+
+    .caution-list li {
+      position: relative;
+      padding-left: 1.5em;
+      color: #4d4b46;
+      font-size: .86rem;
+    }
+
+    .caution-list li::before {
+      content: "・";
+      position: absolute;
+      left: .25em;
+      color: var(--red);
+      font-weight: 700;
+    }
+
+    .contact-area {
+      padding: 34px 42px 40px;
+      border-top: 1px solid var(--line);
+      background: #292a2c;
+      color: #fff;
+      text-align: center;
+    }
+
+    .contact-area h2 {
+      margin: 0 0 10px;
+      font-family: "Yu Mincho", "Hiragino Mincho ProN", serif;
+      font-size: clamp(1.25rem, 3vw, 1.65rem);
+    }
+
+    .contact-area p {
+      max-width: 610px;
+      margin: 0 auto 22px;
+      color: #dedede;
+      font-size: .9rem;
+    }
+
+    .contact-button {
+      display: inline-flex;
+      min-width: min(100%, 330px);
+      min-height: 58px;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px 28px;
+      border: 2px solid #fff;
+      border-radius: 2px;
+      color: #fff;
+      background: var(--red);
+      box-shadow: 0 5px 0 var(--red-dark);
+      text-decoration: none;
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+    }
+
+    .contact-button:hover,
+    .contact-button:focus-visible {
+      background: #c02b2b;
+      transform: translateY(-2px);
+      box-shadow: 0 7px 0 var(--red-dark);
+    }
+
+    .contact-button:active {
+      transform: translateY(3px);
+      box-shadow: 0 2px 0 var(--red-dark);
+    }
+
+    .mail-icon {
+      font-size: 1.25rem;
+      line-height: 1;
+    }
+
+    .privacy-note {
+      margin-top: 18px !important;
+      margin-bottom: 0 !important;
+      color: #bfc0c2 !important;
+      font-size: .72rem !important;
+    }
+
+    body.archive-open {
+      overflow: hidden;
+    }
+
+    .site-footer {
+      border-top: 1px solid #c7c2b7;
+      background: #eeebe3;
+      color: #575550;
+    }
+
+    .footer-inner {
+      width: min(920px, calc(100% - 32px));
+      min-height: 76px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px 0;
+    }
+
+    .fiction-notice {
+      margin: 0;
+      font-size: .72rem;
+      line-height: 1.7;
+    }
+
+    .archive-button {
+      flex: 0 0 auto;
+      min-width: 128px;
+      padding: 10px 13px;
+      border: 1px solid #8f8a7f;
+      color: #353431;
+      background: #fff;
+      font: inherit;
+      font-size: .76rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      cursor: pointer;
+      transition: color .15s ease, border-color .15s ease, background .15s ease;
+    }
+
+    .archive-button:hover,
+    .archive-button:focus-visible {
+      border-color: var(--red);
+      color: var(--red);
+      background: #fffafa;
+    }
+
+    .archive-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      background: rgba(22, 22, 22, .7);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .18s ease, visibility .18s ease;
+    }
+
+    .archive-overlay.is-open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .archive-dialog {
+      width: min(520px, 100%);
+      max-height: min(680px, calc(100vh - 40px));
+      overflow: hidden;
+      border: 1px solid #aaa59a;
+      background: #f9f7f1;
+      box-shadow: 0 22px 60px rgba(0, 0, 0, .34);
+      transform: translateY(10px);
+      transition: transform .18s ease;
+    }
+
+    .archive-overlay.is-open .archive-dialog {
+      transform: translateY(0);
+    }
+
+    .archive-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 19px 20px;
+      border-bottom: 1px solid #c8c3b7;
+      background: #292a2c;
+      color: #fff;
+    }
+
+    .archive-header h2 {
+      margin: 0;
+      font-family: "Yu Mincho", "Hiragino Mincho ProN", serif;
+      font-size: 1.12rem;
+      letter-spacing: .08em;
+    }
+
+    .archive-close {
+      width: 36px;
+      height: 36px;
+      padding: 0;
+      border: 1px solid #747577;
+      color: #fff;
+      background: transparent;
+      font-size: 1.45rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .archive-content {
+      padding: 20px;
+    }
+
+    .archive-description {
+      margin: 0 0 15px;
+      color: #68655f;
+      font-size: .8rem;
+      line-height: 1.7;
+    }
+
+    .archive-list {
+      max-height: 330px;
+      margin: 0;
+      padding: 0;
+      overflow-y: auto;
+      border-top: 1px solid #cbc6bb;
+      list-style: none;
+    }
+
+    .archive-entry {
+      display: grid;
+      grid-template-columns: 64px 1fr;
+      align-items: center;
+      gap: 12px;
+      padding: 13px 11px;
+      border-bottom: 1px solid #d8d3c8;
+      color: #272623;
+      background: #fff;
+      text-decoration: none;
+    }
+
+    a.archive-entry:hover,
+    a.archive-entry:focus-visible {
+      background: #fff4f4;
+    }
+
+    .archive-entry.is-locked {
+      color: #99958d;
+      background: #efede7;
+      cursor: default;
+      user-select: none;
+    }
+
+    .archive-entry.is-locked .archive-number {
+      color: #8c8880;
+    }
+
+    .archive-entry.is-locked .archive-title {
+      letter-spacing: .18em;
+    }
+
+    .archive-number {
+      color: var(--red);
+      font-family: Consolas, monospace;
+      font-size: .78rem;
+      font-weight: 700;
+    }
+
+    .archive-title {
+      font-size: .88rem;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 700px) {
+      .header-inner {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      main {
+        width: min(100% - 20px, 560px);
+        margin-top: 20px;
+      }
+
+      .hero {
+        padding: 26px 20px 24px;
+      }
+
+      .search-profile {
+        grid-template-columns: 1fr;
+        gap: 28px;
+        padding: 28px 20px;
+      }
+
+      .photo-frame {
+        width: min(100%, 292px);
+        margin: 0 auto;
+      }
+
+      .photo-frame img {
+        height: min(350px, 112vw);
+      }
+
+      .story,
+      .request,
+      .contact-area {
+        padding-right: 20px;
+        padding-left: 20px;
+      }
+
+      .facts-row {
+        grid-template-columns: 7em 1fr;
+      }
+
+      .facts dt,
+      .facts dd {
+        padding: 9px 8px;
+        font-size: .82rem;
+      }
+
+      .footer-inner {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .archive-button {
+        width: 100%;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      .contact-button,
+      .archive-overlay,
+      .archive-dialog {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <p class="site-mark">行方不明者を探しています</p>
+      <p class="updated">最終更新：2026年8月11日 23:40</p>
+    </div>
+  </header>
+
+  <main>
+    <article class="notice-card">
+      <p class="alert-band">情報提供のお願い</p>
+
+      <section class="hero">
+        <p class="hero-label">PLEASE HELP ME</p>
+        <h1>失踪した彼女を<br>探してください。</h1>
+        <p class="hero-lead">大切な人と、突然連絡が取れなくなりました。<br>どんなに小さなことでも構いません。皆さんの力を貸してください。</p>
+      </section>
+
+      <section class="search-profile" aria-labelledby="profile-title">
+        <div>
+          <figure class="photo-frame">
+            <!-- 場面：行方不明者捜索サイトに掲載する、本人がSNS上で公開していた日常写真。ターゲット層：捜索への協力を呼びかけられた一般のインターネット利用者。テーマ・コンセプト：親しみやすい公開写真でありながら、後から見ると依頼人が保存していたことに不穏さを感じる写真。含めたい要素：20代後半の日本人女性が一人でカメラに穏やかに微笑んでいる。肩より少し長い暗い髪、前髪、ベージュ色の薄手コート、白いトップス。背景は春先の小さな公園。文字、ロゴ、ほかの人物は入れない。カラーテーマ：自然光、ベージュ、淡い緑。画像サイズ：1122*1402px。レイアウトイメージ：縦位置の自撮り写真。人物の顔と服装が分かるよう、サイト上では胸元までを適度にトリミングして表示。 -->
+            <img src="images/missing-woman.png" alt="行方を探している女性の写真" width="800" height="1000">
+            <figcaption class="photo-note">本人が公開していた写真です</figcaption>
+          </figure>
+        </div>
+
+        <div>
+          <h2 class="profile-heading" id="profile-title">探している人について</h2>
+          <dl class="facts">
+            <div class="facts-row">
+              <dt>年齢</dt>
+              <dd>20代後半</dd>
+            </div>
+            <div class="facts-row">
+              <dt>身長</dt>
+              <dd>158cmくらい</dd>
+            </div>
+            <div class="facts-row">
+              <dt>髪型</dt>
+              <dd>肩より少し長い黒髪、前髪あり</dd>
+            </div>
+            <div class="facts-row">
+              <dt>写真の服装</dt>
+              <dd>ベージュの薄手コート、白いトップス</dd>
+            </div>
+            <div class="facts-row">
+              <dt>特徴</dt>
+              <dd>右肩に白いバッグを掛けています</dd>
+            </div>
+          </dl>
+          <p class="last-seen"><strong>最後に更新を確認した日：</strong><br>2026年8月7日（金）午後9時ごろ<br><br>それ以降、毎日のように更新されていたSNSやブログがすべて止まり、送ったメッセージにも反応がありません。</p>
+        </div>
+      </section>
+
+      <section class="story" aria-labelledby="story-title">
+        <h2 class="section-heading" id="story-title">これまでの経緯</h2>
+        <p>8月7日の夜、彼女が普段使っているSNSに「今日は少し疲れた。早く寝ようかな」という投稿がありました。その後、毎日欠かさず続いていた投稿が突然途絶えました。何度メッセージを送っても既読にならず、電話もつながりません。</p>
+        <p>心配になり、翌日から何度か彼女の家の近くまで様子を見に行きました。しかし、夜になっても部屋の明かりはつかず、外から見える範囲では人が戻った気配もありませんでした。いつも利用していた駅でも、彼女の姿を確認できていません。</p>
+        <p>彼女の事情もあり、僕たちの関係は周囲に詳しく話していませんでした。共通の知人はほとんどおらず、ご家族の連絡先も分かりません。警察には相談しましたが、家族ではない僕には伝えられる情報がなく、本人の意思で連絡を絶っている可能性もあると言われました。</p>
+        <p>僕はインターネットに詳しくありません。彼女が公開していたSNSやブログ以外に、どこを探せばよいのか分からず、このページを作りました。</p>
+        <div class="handwritten">もし、彼女の投稿を最近見かけた方や、似た人を駅や街中で見た方がいましたら、どうか教えてください。間違いでも構いません。彼女が今どこにいるのか、それだけでも知りたいです。</div>
+      </section>
+
+      <section class="request" aria-labelledby="request-title">
+        <h2 class="section-heading" id="request-title">情報をお寄せいただく前に</h2>
+        <p>似た人物を見かけた場所や日時、インターネット上で見つけた投稿など、確認できる範囲でお知らせください。</p>
+        <ul class="caution-list">
+          <li>ご本人と思われる方を見かけても、追いかけたり声をかけたりしないでください。</li>
+          <li>未確認の情報をSNSなどで広めないようお願いします。</li>
+          <li>情報提供者の個人情報を、許可なく公開することはありません。</li>
+        </ul>
+      </section>
+
+      <section class="contact-area" aria-labelledby="contact-title">
+        <h2 id="contact-title">心当たりはありませんか？</h2>
+        <p>些細な情報でも構いません。下のボタンから直接ご連絡ください。できるだけ早く確認し、返信します。</p>
+        <a class="contact-button" id="contactButton" href="mail.html"><span class="mail-icon" aria-hidden="true">✉</span><span>連絡する</span></a>
+        <p class="privacy-note">お送りいただいた内容は、捜索以外の目的には使用しません。</p>
+      </section>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="fiction-notice">このサイトの内容はフィクションです。登場する人物・団体・名称等は架空のものであり、実在のものとは関係ありません。</p>
+      <button class="archive-button" id="archiveButton" type="button" aria-haspopup="dialog" aria-controls="archiveOverlay">01 / 15</button>
+    </div>
+  </footer>
+
+  <div class="archive-overlay" id="archiveOverlay" aria-hidden="true">
+    <section class="archive-dialog" role="dialog" aria-modal="true" aria-labelledby="archiveTitle">
+      <header class="archive-header">
+        <h2 id="archiveTitle">ページアーカイブ</h2>
+        <button class="archive-close" id="archiveClose" type="button" aria-label="ページアーカイブを閉じる">×</button>
+      </header>
+      <div class="archive-content">
+        <p class="archive-description">一度訪れたページが記録されます。解放済みのページを選ぶと、そのページへ戻れます。未探索のページは「？？？」と表示されます。</p>
+        <ol class="archive-list" id="archiveList"></ol>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const contactButton = document.getElementById('contactButton');
+    const archiveButton = document.getElementById('archiveButton');
+    const archiveOverlay = document.getElementById('archiveOverlay');
+    const archiveClose = document.getElementById('archiveClose');
+    const archiveList = document.getElementById('archiveList');
+    const archiveStorageKey = 'hanazono-page-archive-v1';
+    const totalPages = 15;
+    const currentPage = {
+      number: 1,
+      title: '失踪した彼女を探してください。',
+      href: 'index.html'
+    };
+
+    function loadArchive() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(archiveStorageKey) || '[]');
+        return Array.isArray(saved) ? saved : [];
+      } catch (error) {
+        return [];
+      }
+    }
+
+    function saveArchive(pages) {
+      try {
+        localStorage.setItem(archiveStorageKey, JSON.stringify(pages));
+      } catch (error) {
+        return;
+      }
+    }
+
+    function registerCurrentPage() {
+      const pages = loadArchive();
+      const existingIndex = pages.findIndex(function (page) {
+        return page.number === currentPage.number;
+      });
+
+      if (existingIndex >= 0) {
+        pages[existingIndex] = currentPage;
+      } else {
+        pages.push(currentPage);
+      }
+
+      pages.sort(function (a, b) {
+        return a.number - b.number;
+      });
+      saveArchive(pages);
+      return pages;
+    }
+
+    function renderArchive() {
+      const pages = registerCurrentPage();
+      archiveList.textContent = '';
+
+      for (let pageNumber = 1; pageNumber <= totalPages; pageNumber += 1) {
+        const page = pages.find(function (savedPage) {
+          return savedPage.number === pageNumber;
+        });
+        const item = document.createElement('li');
+        const entry = document.createElement(page ? 'a' : 'div');
+        const number = document.createElement('span');
+        const title = document.createElement('span');
+
+        entry.className = 'archive-entry';
+        number.className = 'archive-number';
+        title.className = 'archive-title';
+        number.textContent = String(pageNumber).padStart(2, '0');
+
+        if (page) {
+          entry.href = page.href;
+          title.textContent = page.title;
+        } else {
+          entry.classList.add('is-locked');
+          entry.setAttribute('aria-label', String(pageNumber).padStart(2, '0') + ' 未探索');
+          title.textContent = '？？？';
+        }
+
+        entry.append(number, title);
+        item.appendChild(entry);
+        archiveList.appendChild(item);
+      }
+    }
+
+    function openArchive() {
+      renderArchive();
+      archiveOverlay.classList.add('is-open');
+      archiveOverlay.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('archive-open');
+      archiveClose.focus();
+    }
+
+    function closeArchive() {
+      archiveOverlay.classList.remove('is-open');
+      archiveOverlay.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('archive-open');
+      archiveButton.focus();
+    }
+
+    registerCurrentPage();
+
+    archiveButton.addEventListener('click', openArchive);
+    archiveClose.addEventListener('click', closeArchive);
+
+    archiveOverlay.addEventListener('click', function (event) {
+      if (event.target === archiveOverlay) closeArchive();
+    });
+
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape' && archiveOverlay.classList.contains('is-open')) {
+        closeArchive();
+      }
+    });
+
+    contactButton.addEventListener('click', function (event) {
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      event.preventDefault();
+      contactButton.setAttribute('aria-disabled', 'true');
+      contactButton.querySelector('span:last-child').textContent = 'メールを開いています…';
+      window.setTimeout(function () {
+        window.location.href = contactButton.href;
+      }, 420);
+    });
+  </script>
+</body>
+</html>

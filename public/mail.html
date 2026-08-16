@@ -1,0 +1,1471 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="捜索ページ管理者とのメール画面">
+  <title>捜索ページ管理者とのメール</title>
+  <style>
+    :root {
+      --bg: #f2f2f4;
+      --panel: rgba(255, 255, 255, .88);
+      --white: #fff;
+      --ink: #1d1d1f;
+      --muted: #6e6e73;
+      --line: #d6d6da;
+      --blue: #0879f9;
+      --blue-dark: #0066d6;
+      --sidebar: #e9e9ed;
+      --incoming: #e9e9eb;
+      --red: #a92222;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      min-height: 100%;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 10%, rgba(130, 183, 255, .28), transparent 34%),
+        radial-gradient(circle at 88% 5%, rgba(228, 190, 255, .22), transparent 30%),
+        #dfe1e6;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Yu Gothic UI", "Yu Gothic", sans-serif;
+      line-height: 1.6;
+    }
+
+    button,
+    textarea {
+      font: inherit;
+    }
+
+    button,
+    a {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .page-shell {
+      min-height: calc(100vh - 76px);
+      padding: 28px;
+      display: grid;
+      place-items: center;
+    }
+
+    .mail-window {
+      width: min(1120px, 100%);
+      height: min(760px, calc(100vh - 132px));
+      min-height: 590px;
+      overflow: hidden;
+      display: grid;
+      grid-template-rows: 52px 1fr;
+      border: 1px solid rgba(90, 90, 94, .24);
+      border-radius: 14px;
+      background: var(--panel);
+      box-shadow: 0 24px 70px rgba(45, 48, 56, .23);
+      backdrop-filter: blur(24px);
+    }
+
+    .window-bar {
+      display: grid;
+      grid-template-columns: 170px 1fr 170px;
+      align-items: center;
+      padding: 0 16px;
+      border-bottom: 1px solid rgba(120, 120, 125, .24);
+      background: rgba(246, 246, 248, .9);
+    }
+
+    .traffic-lights {
+      display: flex;
+      gap: 8px;
+    }
+
+    .traffic-lights span {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .traffic-lights span:nth-child(1) {
+      background: #ff5f57;
+    }
+
+    .traffic-lights span:nth-child(2) {
+      background: #febc2e;
+    }
+
+    .traffic-lights span:nth-child(3) {
+      background: #28c840;
+    }
+
+    .window-title {
+      margin: 0;
+      text-align: center;
+      font-size: .84rem;
+      font-weight: 650;
+    }
+
+    .security-state {
+      justify-self: end;
+      color: var(--muted);
+      font-size: .72rem;
+    }
+
+    .mail-layout {
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 215px 1fr;
+    }
+
+    .sidebar {
+      padding: 18px 12px;
+      border-right: 1px solid rgba(120, 120, 125, .22);
+      background: rgba(231, 231, 235, .78);
+    }
+
+    .compose-mark {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 7px 20px;
+      color: #45454a;
+      font-size: .82rem;
+      font-weight: 650;
+    }
+
+    .compose-icon {
+      display: grid;
+      width: 29px;
+      height: 29px;
+      place-items: center;
+      border-radius: 8px;
+      color: #fff;
+      background: var(--blue);
+      font-size: .96rem;
+    }
+
+    .folder-label {
+      margin: 0 10px 7px;
+      color: #8a8a8f;
+      font-size: .69rem;
+      font-weight: 700;
+      letter-spacing: .04em;
+    }
+
+    .folder-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .folder-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 8px 10px;
+      border-radius: 7px;
+      color: #4b4b50;
+      font-size: .82rem;
+    }
+
+    .folder-item.is-active {
+      color: #fff;
+      background: var(--blue);
+    }
+
+    .folder-count {
+      min-width: 20px;
+      text-align: right;
+      font-size: .7rem;
+    }
+
+    .thread-panel {
+      min-width: 0;
+      min-height: 0;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      background: rgba(255, 255, 255, .95);
+    }
+
+    .thread-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 13px 22px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .sender-summary {
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      gap: 11px;
+    }
+
+    .avatar {
+      flex: 0 0 auto;
+      display: grid;
+      width: 38px;
+      height: 38px;
+      place-items: center;
+      border-radius: 50%;
+      color: #fff;
+      background: linear-gradient(145deg, #8b8d93, #56585e);
+      font-size: .98rem;
+      font-weight: 700;
+    }
+
+    .sender-text {
+      min-width: 0;
+    }
+
+    .sender-text h1 {
+      margin: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: .94rem;
+    }
+
+    .sender-text p {
+      margin: 1px 0 0;
+      color: var(--muted);
+      font-size: .69rem;
+    }
+
+    .thread-status {
+      flex: 0 0 auto;
+      padding: 5px 9px;
+      border-radius: 999px;
+      color: #81702d;
+      background: #fff3bd;
+      font-size: .7rem;
+      font-weight: 650;
+    }
+
+    .thread-actions {
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .reset-button {
+      padding: 6px 10px;
+      border: 1px solid #c8c8cc;
+      border-radius: 8px;
+      color: #5f6065;
+      background: #fff;
+      font-size: .69rem;
+      cursor: pointer;
+    }
+
+    .reset-button:hover,
+    .reset-button:focus-visible {
+      border-color: #e09b9b;
+      color: #a12a2a;
+      background: #fff7f7;
+    }
+
+    .message-log {
+      min-height: 0;
+      overflow-y: auto;
+      padding: 24px clamp(18px, 5vw, 64px) 30px;
+      scroll-behavior: smooth;
+    }
+
+    .date-divider {
+      margin: 0 0 20px;
+      color: #929297;
+      text-align: center;
+      font-size: .68rem;
+    }
+
+    .message-row {
+      display: flex;
+      margin: 0 0 12px;
+      animation: message-in .24s ease both;
+    }
+
+    .message-row.outgoing {
+      justify-content: flex-end;
+    }
+
+    .message-row.incoming {
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .message-avatar {
+      flex: 0 0 auto;
+      display: grid;
+      width: 30px;
+      height: 30px;
+      margin-top: 0;
+      place-items: center;
+      border-radius: 50%;
+      color: #fff;
+      background: linear-gradient(145deg, #8b8d93, #56585e);
+      font-size: .72rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .message-wrap {
+      max-width: min(620px, 78%);
+    }
+
+    .message-meta {
+      margin: 0 8px 3px;
+      color: #97979c;
+      font-size: .64rem;
+    }
+
+    .outgoing .message-meta {
+      text-align: right;
+    }
+
+    .bubble {
+      padding: 10px 14px;
+      border-radius: 17px;
+      background: var(--incoming);
+      font-size: .87rem;
+      line-height: 1.72;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .incoming .bubble {
+      border-bottom-left-radius: 5px;
+    }
+
+    .outgoing .bubble {
+      color: #fff;
+      background: var(--blue);
+      border-bottom-right-radius: 5px;
+    }
+
+    .message-link {
+      display: block;
+      margin-top: 9px;
+      padding: 10px 12px;
+      border: 1px solid #b9d8fb;
+      border-radius: 10px;
+      color: #075ebc;
+      background: #fff;
+      text-decoration: none;
+      font-weight: 650;
+    }
+
+    .message-link:hover,
+    .message-link:focus-visible {
+      border-color: var(--blue);
+      background: #f2f8ff;
+    }
+
+    .link-caption {
+      display: block;
+      margin-bottom: 2px;
+      color: #6f7176;
+      font-size: .67rem;
+      font-weight: 500;
+    }
+
+    .typing-row {
+      display: none;
+    }
+
+    .typing-row.is-visible {
+      display: flex;
+    }
+
+    .typing-bubble {
+      display: flex;
+      gap: 4px;
+      padding: 14px 17px;
+      border-radius: 17px 17px 17px 5px;
+      background: var(--incoming);
+    }
+
+    .typing-bubble span {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #8c8c91;
+      animation: typing-dot 1s infinite ease-in-out;
+    }
+
+    .typing-bubble span:nth-child(2) {
+      animation-delay: .14s;
+    }
+
+    .typing-bubble span:nth-child(3) {
+      animation-delay: .28s;
+    }
+
+    .composer {
+      padding: 13px 18px 16px;
+      border-top: 1px solid var(--line);
+      background: rgba(250, 250, 251, .96);
+      transition: background .2s ease, border-color .2s ease;
+    }
+
+    .composer.is-inputting {
+      border-top-color: #dfc66f;
+      background: #fff9e8;
+    }
+
+    .composer.is-receiving {
+      border-top-color: #c6c6ca;
+      background: #e8e8eb;
+    }
+
+    .composer-guide {
+      margin: 0 0 7px 5px;
+      color: #77777d;
+      font-size: .68rem;
+    }
+
+    .composer-row {
+      display: flex;
+      align-items: flex-end;
+      gap: 9px;
+    }
+
+    .reply-input {
+      width: 100%;
+      min-height: 44px;
+      max-height: 106px;
+      resize: none;
+      padding: 10px 14px;
+      border: 1px solid #c8c8cc;
+      border-radius: 18px;
+      outline: none;
+      color: var(--ink);
+      background: #fff;
+      font-size: .84rem;
+      line-height: 1.55;
+    }
+
+    .reply-input:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(8, 121, 249, .12);
+    }
+
+    .composer.is-inputting .reply-input {
+      border-color: #ddc36b;
+      background: #fffdf3;
+    }
+
+    .composer.is-inputting .reply-input:focus {
+      border-color: #c9a928;
+      box-shadow: 0 0 0 3px rgba(201, 169, 40, .14);
+    }
+
+    .composer.is-receiving .reply-input {
+      border-color: #c3c3c7;
+      color: #8b8b90;
+      background: #dedee1;
+    }
+
+    .reply-input:disabled {
+      color: #8b8b90;
+      background: #f1f1f3;
+    }
+
+    .send-button {
+      flex: 0 0 auto;
+      width: 42px;
+      height: 42px;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      color: #fff;
+      background: var(--blue);
+      font-size: 1.16rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity .15s ease, transform .15s ease;
+    }
+
+    .send-button:disabled {
+      color: #fff;
+      background: var(--blue);
+      opacity: .42;
+      cursor: default;
+    }
+
+    .send-button:not(:disabled):hover,
+    .send-button:not(:disabled):focus-visible {
+      background: var(--blue-dark);
+      transform: translateY(-1px);
+    }
+
+    .mobile-reply {
+      display: none;
+      width: 100%;
+      min-height: 46px;
+      padding: 11px 15px;
+      border: 1px solid #9ac8fa;
+      border-radius: 13px;
+      color: #075ebc;
+      background: #f3f8ff;
+      text-align: left;
+      font-size: .83rem;
+      font-weight: 650;
+      cursor: pointer;
+    }
+
+    .waiting-note {
+      display: none;
+      margin: 0;
+      padding: 11px 13px;
+      border-radius: 10px;
+      color: #68686e;
+      background: #ededf0;
+      text-align: center;
+      font-size: .78rem;
+    }
+
+    .site-footer {
+      min-height: 76px;
+      border-top: 1px solid #c7c2b7;
+      background: #eeebe3;
+      color: #575550;
+    }
+
+    .footer-inner {
+      width: min(1120px, calc(100% - 32px));
+      min-height: 76px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px 0;
+    }
+
+    .fiction-notice {
+      margin: 0;
+      font-size: .72rem;
+      line-height: 1.7;
+    }
+
+    .archive-button {
+      flex: 0 0 auto;
+      min-width: 128px;
+      padding: 10px 13px;
+      border: 1px solid #8f8a7f;
+      color: #353431;
+      background: #fff;
+      font-size: .76rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      cursor: pointer;
+    }
+
+    .archive-button:hover,
+    .archive-button:focus-visible {
+      border-color: var(--red);
+      color: var(--red);
+      background: #fffafa;
+    }
+
+    body.archive-open {
+      overflow: hidden;
+    }
+
+    .archive-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      background: rgba(22, 22, 22, .7);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .18s ease, visibility .18s ease;
+    }
+
+    .archive-overlay.is-open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .archive-dialog {
+      width: min(520px, 100%);
+      max-height: min(680px, calc(100vh - 40px));
+      overflow: hidden;
+      border: 1px solid #aaa59a;
+      background: #f9f7f1;
+      box-shadow: 0 22px 60px rgba(0, 0, 0, .34);
+      transform: translateY(10px);
+      transition: transform .18s ease;
+    }
+
+    .archive-overlay.is-open .archive-dialog {
+      transform: translateY(0);
+    }
+
+    .archive-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 19px 20px;
+      border-bottom: 1px solid #c8c3b7;
+      color: #fff;
+      background: #292a2c;
+    }
+
+    .archive-header h2 {
+      margin: 0;
+      font-family: "Yu Mincho", "Hiragino Mincho ProN", serif;
+      font-size: 1.12rem;
+      letter-spacing: .08em;
+    }
+
+    .archive-close {
+      width: 36px;
+      height: 36px;
+      padding: 0;
+      border: 1px solid #747577;
+      color: #fff;
+      background: transparent;
+      font-size: 1.45rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .archive-content {
+      padding: 20px;
+    }
+
+    .archive-description {
+      margin: 0 0 15px;
+      color: #68655f;
+      font-size: .8rem;
+      line-height: 1.7;
+    }
+
+    .archive-list {
+      max-height: 390px;
+      margin: 0;
+      padding: 0;
+      overflow-y: auto;
+      border-top: 1px solid #cbc6bb;
+      list-style: none;
+    }
+
+    .archive-entry {
+      display: grid;
+      grid-template-columns: 64px 1fr;
+      align-items: center;
+      gap: 12px;
+      padding: 13px 11px;
+      border-bottom: 1px solid #d8d3c8;
+      color: #272623;
+      background: #fff;
+      text-decoration: none;
+    }
+
+    a.archive-entry:hover,
+    a.archive-entry:focus-visible {
+      background: #fff4f4;
+    }
+
+    .archive-entry.is-locked {
+      color: #99958d;
+      background: #efede7;
+      cursor: default;
+      user-select: none;
+    }
+
+    .archive-number {
+      color: var(--red);
+      font-family: Consolas, monospace;
+      font-size: .78rem;
+      font-weight: 700;
+    }
+
+    .archive-entry.is-locked .archive-number {
+      color: #8c8880;
+    }
+
+    .archive-title {
+      font-size: .88rem;
+      line-height: 1.5;
+    }
+
+    .archive-entry.is-locked .archive-title {
+      letter-spacing: .18em;
+    }
+
+    @keyframes message-in {
+      from {
+        opacity: 0;
+        transform: translateY(7px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes typing-dot {
+      0%, 65%, 100% {
+        transform: translateY(0);
+        opacity: .42;
+      }
+      32% {
+        transform: translateY(-3px);
+        opacity: 1;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .page-shell {
+        min-height: calc(100dvh - 116px);
+        padding: 0;
+        display: block;
+      }
+
+      .mail-window {
+        width: 100%;
+        height: calc(100dvh - 116px);
+        min-height: 560px;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+      }
+
+      .window-bar {
+        grid-template-columns: 44px 1fr 44px;
+        padding: 0 10px;
+      }
+
+      .traffic-lights {
+        display: none;
+      }
+
+      .security-state {
+        overflow: hidden;
+        color: transparent;
+        font-size: 0;
+      }
+
+      .security-state::after {
+        content: "●";
+        color: #65a16d;
+        font-size: .62rem;
+      }
+
+      .mail-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        display: none;
+      }
+
+      .thread-header {
+        padding: 10px 13px;
+      }
+
+      .thread-status {
+        display: none;
+      }
+
+      .reset-button {
+        padding: 7px 9px;
+      }
+
+      .message-log {
+        padding: 18px 12px 24px;
+      }
+
+      .message-wrap {
+        max-width: 86%;
+      }
+
+      .message-avatar {
+        width: 27px;
+        height: 27px;
+        font-size: .66rem;
+      }
+
+      .bubble {
+        font-size: .84rem;
+      }
+
+      .composer {
+        padding: 11px 11px max(13px, env(safe-area-inset-bottom));
+      }
+
+      .desktop-composer {
+        display: none;
+      }
+
+      .composer.url-mode .desktop-composer {
+        display: flex;
+      }
+
+      .mobile-reply {
+        display: block;
+      }
+
+      .footer-inner {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .site-footer,
+      .footer-inner {
+        min-height: 116px;
+      }
+
+      .archive-button {
+        width: 100%;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .message-row,
+      .typing-bubble span,
+      .archive-overlay,
+      .archive-dialog,
+      .send-button {
+        animation: none;
+        transition: none;
+      }
+
+      .message-log {
+        scroll-behavior: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page-shell">
+    <section class="mail-window" aria-label="捜索ページ管理者とのメール">
+      <header class="window-bar">
+        <div class="traffic-lights" aria-hidden="true"><span></span><span></span><span></span></div>
+        <p class="window-title">Mail</p>
+        <span class="security-state">プライベート通信</span>
+      </header>
+
+      <div class="mail-layout">
+        <aside class="sidebar" aria-label="メールボックス">
+          <p class="compose-mark"><span class="compose-icon" aria-hidden="true">✎</span>新規メッセージ</p>
+          <p class="folder-label">メールボックス</p>
+          <ul class="folder-list">
+            <li class="folder-item is-active"><span>受信</span><span class="folder-count">1</span></li>
+            <li class="folder-item"><span>フラグ付き</span><span class="folder-count">0</span></li>
+            <li class="folder-item"><span>送信済み</span><span class="folder-count">1</span></li>
+            <li class="folder-item"><span>下書き</span><span class="folder-count">0</span></li>
+          </ul>
+        </aside>
+
+        <section class="thread-panel">
+          <header class="thread-header">
+            <div class="sender-summary">
+              <span class="avatar" aria-hidden="true">管</span>
+              <div class="sender-text">
+                <h1>捜索について</h1>
+                <p>捜索ページ管理者とのプライベートスレッド</p>
+              </div>
+            </div>
+            <div class="thread-actions">
+              <span class="thread-status" id="threadStatus">あなたの入力待ち</span>
+              <button class="reset-button" id="resetButton" type="button">↻ 会話をリセット</button>
+            </div>
+          </header>
+
+          <div class="message-log" id="messageLog" aria-live="polite">
+            <p class="date-divider" id="dateDivider"></p>
+            <div class="message-row incoming typing-row" id="typingRow" aria-label="捜索ページ管理者が入力中">
+              <span class="message-avatar" aria-hidden="true">管</span>
+              <div class="typing-bubble" aria-hidden="true"><span></span><span></span><span></span></div>
+            </div>
+          </div>
+
+          <div class="composer is-inputting" id="composer">
+            <p class="composer-guide" id="composerGuide">入力欄を選択し、キーボードで文章を入力してください。</p>
+            <div class="composer-row desktop-composer" id="desktopComposer">
+              <textarea class="reply-input" id="replyInput" rows="1" placeholder="メッセージ" aria-label="返信メッセージ"></textarea>
+              <button class="send-button" id="sendButton" type="button" aria-label="メッセージを送信" disabled>↑</button>
+            </div>
+            <button class="mobile-reply" id="mobileReply" type="button">捜索への協力を申し出る</button>
+            <p class="waiting-note" id="waitingNote">SNSでブログのURLを見つけたら、このメールに戻り、入力欄へ貼り付けてください。</p>
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="fiction-notice">このサイトの内容はフィクションです。登場する人物・団体・名称等は架空のものであり、実在のものとは関係ありません。</p>
+      <button class="archive-button" id="archiveButton" type="button" aria-haspopup="dialog" aria-controls="archiveOverlay">02 / 15</button>
+    </div>
+  </footer>
+
+  <div class="archive-overlay" id="archiveOverlay" aria-hidden="true">
+    <section class="archive-dialog" role="dialog" aria-modal="true" aria-labelledby="archiveTitle">
+      <header class="archive-header">
+        <h2 id="archiveTitle">ページアーカイブ</h2>
+        <button class="archive-close" id="archiveClose" type="button" aria-label="ページアーカイブを閉じる">×</button>
+      </header>
+      <div class="archive-content">
+        <p class="archive-description">一度訪れたページが記録されます。解放済みのページを選ぶと、そのページへ戻れます。未探索のページは「？？？」と表示されます。</p>
+        <ol class="archive-list" id="archiveList"></ol>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const conversationSteps = [
+      {
+        outgoing: '行方不明の方を探しているサイトを見ました。',
+        reply: '連絡してくれてありがとうございます。彼女について、何か情報を持っていますか？',
+        mobileLabel: '捜索サイトを見たと連絡する'
+      },
+      {
+        outgoing: '情報は持っていません。ただ、インターネットで情報を調べることには自信があります。よければ、捜索に協力させてください。',
+        reply: 'ありがとう。本当に助かります。\n\n最後に彼女の動きが確認できたのは8月7日の夜です。SNSに「今日は少し疲れた。早く寝ようかな」と書いたあと、毎日続いていた投稿が止まりました。メッセージを何度送っても既読になりません。\n\n翌日から何度か家まで様子を見に行きましたが、夜になっても部屋の明かりはつきませんでした。僕は合鍵を持っていないので、中の様子までは確認できていません。\n\n僕たちの関係はあまり周りには話していませんでした。彼女がSNSで、日記のように僕たちのことを細々と発信する程度だったんです。共通の知り合いも、ご家族の連絡先も分からず、今は頼れる人がいなくて……。',
+        mobileLabel: '捜索への協力を申し出る'
+      },
+      {
+        outgoing: '分かりました。最後の投稿や、普段使っていたアカウントは残っていますか？',
+        reply: 'はい。アカウントは残っています。写真や日常のことをよく投稿していました。僕のことも、投稿の中では「Mくん」と呼んでいました。\n\nただ、僕はこういうものに詳しくなくて、投稿を一つずつ見ても、どれが手がかりになるのか分からないんです。',
+        mobileLabel: '残っているアカウントについて聞く'
+      },
+      {
+        outgoing: 'そのSNSを確認したいです。アカウントのURLを送ってもらえますか？',
+        reply: 'もちろんです。下のURLです。\n\n彼女はブログも書いていて、前にSNSのどこかで紹介していた気がします。でも、URLを保存していなくて……。もしブログも見つけたら、そのURLをこのメールに送ってもらえませんか？',
+        link: 'hana-sns.html',
+        linkLabel: 'HANA｜日々の記録',
+        mobileLabel: 'SNSのURLを送ってもらう'
+      }
+    ];
+
+    const messageLog = document.getElementById('messageLog');
+    const dateDivider = document.getElementById('dateDivider');
+    const typingRow = document.getElementById('typingRow');
+    const replyInput = document.getElementById('replyInput');
+    const sendButton = document.getElementById('sendButton');
+    const mobileReply = document.getElementById('mobileReply');
+    const composer = document.getElementById('composer');
+    const composerGuide = document.getElementById('composerGuide');
+    const desktopComposer = document.getElementById('desktopComposer');
+    const waitingNote = document.getElementById('waitingNote');
+    const threadStatus = document.getElementById('threadStatus');
+    const resetButton = document.getElementById('resetButton');
+    const conversationStorageKey = 'hanazono-mail-progress-v3';
+    const conversationStartedStorageKey = 'hanazono-mail-started-at-v3';
+    const blogFoundStorageKey = 'hanazono-mail-blog-found-v3';
+    const blogUrlStorageKey = 'hanazono-mail-blog-url-v3';
+    const expectedBlogFile = 'hana-blog.html';
+    const wrongUrlReplies = [
+      'これではないような……。彼女が書いていたブログとは雰囲気が違います。',
+      '確認しましたが、彼女のブログではありませんね……。ほかに心当たりはありませんか？',
+      'すみません。このURLには見覚えがありません。もう少し探してもらえると助かります。',
+      '開いてみましたが、探しているブログとは違うと思います。SNSの投稿に別のリンクはありませんでしたか？'
+    ];
+    let currentStep = loadConversationProgress();
+    let conversationStartedAt = loadConversationStartedAt();
+    let blogFound = loadBlogFound();
+    let confirmedBlogUrl = loadConfirmedBlogUrl();
+    let typedLength = 0;
+    let isReplying = false;
+
+    function loadConversationProgress() {
+      try {
+        return Math.min(conversationSteps.length, Number(localStorage.getItem(conversationStorageKey)) || 0);
+      } catch (error) {
+        return 0;
+      }
+    }
+
+    function saveConversationProgress() {
+      try {
+        localStorage.setItem(conversationStorageKey, String(currentStep));
+      } catch (error) {
+        return;
+      }
+    }
+
+    function loadConversationStartedAt() {
+      try {
+        const storedValue = Number(localStorage.getItem(conversationStartedStorageKey));
+        return Number.isFinite(storedValue) && storedValue > 0 ? storedValue : 0;
+      } catch (error) {
+        return 0;
+      }
+    }
+
+    function saveConversationStartedAt(timestamp) {
+      conversationStartedAt = timestamp;
+      try {
+        localStorage.setItem(conversationStartedStorageKey, String(timestamp));
+      } catch (error) {
+        return;
+      }
+    }
+
+    function formatMessageTime(timestamp) {
+      return new Intl.DateTimeFormat('ja-JP', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
+      }).format(new Date(timestamp));
+    }
+
+    function updateDateDivider(timestamp) {
+      dateDivider.textContent = new Intl.DateTimeFormat('ja-JP', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      }).format(new Date(timestamp));
+    }
+
+    function loadBlogFound() {
+      try {
+        return localStorage.getItem(blogFoundStorageKey) === 'true';
+      } catch (error) {
+        return false;
+      }
+    }
+
+    function loadConfirmedBlogUrl() {
+      try {
+        return localStorage.getItem(blogUrlStorageKey) || expectedBlogFile;
+      } catch (error) {
+        return expectedBlogFile;
+      }
+    }
+
+    function saveBlogFound(url) {
+      try {
+        localStorage.setItem(blogFoundStorageKey, 'true');
+        localStorage.setItem(blogUrlStorageKey, url);
+      } catch (error) {
+        return;
+      }
+    }
+
+    function createMessage(direction, text, link, linkLabel, animate, timestamp) {
+      const row = document.createElement('div');
+      const wrap = document.createElement('div');
+      const meta = document.createElement('p');
+      const bubble = document.createElement('div');
+
+      row.className = 'message-row ' + direction;
+      if (!animate) row.style.animation = 'none';
+      wrap.className = 'message-wrap';
+      meta.className = 'message-meta';
+      bubble.className = 'bubble';
+      meta.textContent = (direction === 'outgoing' ? 'あなた' : '捜索ページ管理者') + '・' + formatMessageTime(timestamp || Date.now());
+      bubble.textContent = text;
+
+      if (link) {
+        const anchor = document.createElement('a');
+        const caption = document.createElement('span');
+        caption.className = 'link-caption';
+        caption.textContent = '共有されたリンク';
+        anchor.className = 'message-link';
+        anchor.href = link;
+        anchor.append(caption, document.createTextNode(linkLabel));
+        bubble.appendChild(anchor);
+      }
+
+      wrap.append(meta, bubble);
+      if (direction === 'incoming') {
+        const messageAvatar = document.createElement('span');
+        messageAvatar.className = 'message-avatar';
+        messageAvatar.setAttribute('aria-hidden', 'true');
+        messageAvatar.textContent = '管';
+        row.appendChild(messageAvatar);
+      }
+      row.appendChild(wrap);
+      messageLog.insertBefore(row, typingRow);
+      return row;
+    }
+
+    function restoreConversation() {
+      if (currentStep > 0 && !conversationStartedAt) {
+        saveConversationStartedAt(Date.now());
+      }
+
+      const baseTime = conversationStartedAt || Date.now();
+      for (let index = 0; index < currentStep; index += 1) {
+        const step = conversationSteps[index];
+        const outgoingTime = baseTime + index * 120000;
+        createMessage('outgoing', step.outgoing, '', '', false, outgoingTime);
+        createMessage('incoming', step.reply, step.link, step.linkLabel, false, outgoingTime + 45000);
+      }
+
+      if (blogFound) {
+        const blogReplyTime = baseTime + conversationSteps.length * 120000;
+        createMessage('outgoing', confirmedBlogUrl, '', '', false, blogReplyTime);
+        createMessage('incoming', 'あぁ！ まさにこれです！ 間違いありません。彼女のブログです。見つけてくれて、本当にありがとうございます。少し中を確認してみます。', expectedBlogFile, 'HANAのブログを開く', false, blogReplyTime + 45000);
+      }
+    }
+
+    function scrollToLatest() {
+      window.requestAnimationFrame(function () {
+        messageLog.scrollTop = messageLog.scrollHeight;
+      });
+    }
+
+    function focusComposerIfReady() {
+      if (!window.matchMedia('(min-width: 701px)').matches) return;
+      if (replyInput.disabled || isReplying) return;
+      if (document.getElementById('archiveOverlay').classList.contains('is-open')) return;
+
+      window.requestAnimationFrame(function () {
+        replyInput.focus({ preventScroll: true });
+        const caretPosition = replyInput.value.length;
+        replyInput.setSelectionRange(caretPosition, caretPosition);
+      });
+    }
+
+    function updateComposer() {
+      if (currentStep >= conversationSteps.length) {
+        composer.classList.add('url-mode');
+        desktopComposer.style.display = '';
+        composerGuide.style.display = 'block';
+        waitingNote.style.display = 'block';
+        replyInput.placeholder = '発見したブログのURLを貼り付け';
+
+        if (blogFound) {
+          composer.classList.remove('is-inputting', 'is-receiving');
+          composer.classList.add('is-receiving');
+          composerGuide.textContent = 'ブログのURLは確認済みです。';
+          waitingNote.textContent = '正しいブログが確認されました。';
+          replyInput.value = confirmedBlogUrl;
+          replyInput.disabled = true;
+          sendButton.disabled = true;
+          mobileReply.style.display = 'none';
+          threadStatus.textContent = 'URL確認済み';
+        } else {
+          composer.classList.remove('is-receiving');
+          composer.classList.add('is-inputting');
+          composerGuide.textContent = '発見したブログのURLを貼り付け、Enterキーまたは送信ボタンで送ってください。';
+          replyInput.value = '';
+          replyInput.disabled = false;
+          sendButton.disabled = true;
+          mobileReply.style.display = 'none';
+          threadStatus.textContent = 'ブログURLの入力待ち';
+          focusComposerIfReady();
+        }
+        return;
+      }
+
+      const step = conversationSteps[currentStep];
+      composer.classList.remove('url-mode', 'is-receiving');
+      composer.classList.add('is-inputting');
+      typedLength = 0;
+      replyInput.value = '';
+      replyInput.placeholder = 'メッセージ';
+      replyInput.disabled = false;
+      sendButton.disabled = true;
+      mobileReply.disabled = false;
+      mobileReply.textContent = step.mobileLabel;
+      composerGuide.textContent = '入力欄を選択して文章を完成させ、Enterキーまたは送信ボタンで送ってください。';
+      waitingNote.style.display = 'none';
+      threadStatus.textContent = 'あなたの入力待ち';
+      focusComposerIfReady();
+    }
+
+    function setReceivingState() {
+      composer.classList.remove('is-inputting');
+      composer.classList.add('is-receiving');
+      threadStatus.textContent = 'メッセージを受信中';
+      composerGuide.textContent = '捜索ページ管理者が返信しています。';
+    }
+
+    function sendCurrentReply() {
+      if (isReplying || currentStep >= conversationSteps.length) return;
+      const step = conversationSteps[currentStep];
+      isReplying = true;
+      replyInput.disabled = true;
+      sendButton.disabled = true;
+      mobileReply.disabled = true;
+      setReceivingState();
+      const outgoingTimestamp = Date.now();
+      if (currentStep === 0 && !conversationStartedAt) {
+        saveConversationStartedAt(outgoingTimestamp);
+        updateDateDivider(outgoingTimestamp);
+      }
+      createMessage('outgoing', step.outgoing, '', '', true, outgoingTimestamp);
+      replyInput.value = '';
+      typingRow.classList.add('is-visible');
+      scrollToLatest();
+
+      window.setTimeout(function () {
+        typingRow.classList.remove('is-visible');
+        createMessage('incoming', step.reply, step.link, step.linkLabel, true);
+        currentStep += 1;
+        saveConversationProgress();
+        isReplying = false;
+        updateComposer();
+        scrollToLatest();
+      }, 850 + Math.min(1200, step.reply.length * 5));
+    }
+
+    function isCorrectBlogUrl(value) {
+      try {
+        const parsed = new URL(value, window.location.href);
+        const fileName = parsed.pathname.split('/').filter(Boolean).pop() || '';
+        return fileName.toLowerCase() === expectedBlogFile;
+      } catch (error) {
+        return false;
+      }
+    }
+
+    function sendBlogUrl() {
+      if (isReplying || blogFound) return;
+      const submittedUrl = replyInput.value.trim();
+      if (!submittedUrl) return;
+      const isCorrect = isCorrectBlogUrl(submittedUrl);
+      const reply = isCorrect
+        ? 'あぁ！ まさにこれです！ 間違いありません。彼女のブログです。見つけてくれて、本当にありがとうございます。少し中を確認してみます。'
+        : wrongUrlReplies[Math.floor(Math.random() * wrongUrlReplies.length)];
+
+      isReplying = true;
+      replyInput.disabled = true;
+      sendButton.disabled = true;
+      setReceivingState();
+      createMessage('outgoing', submittedUrl, '', '', true);
+      replyInput.value = '';
+      typingRow.classList.add('is-visible');
+      scrollToLatest();
+
+      window.setTimeout(function () {
+        typingRow.classList.remove('is-visible');
+        createMessage('incoming', reply, isCorrect ? expectedBlogFile : '', isCorrect ? 'HANAのブログを開く' : '', true);
+        isReplying = false;
+
+        if (isCorrect) {
+          blogFound = true;
+          confirmedBlogUrl = submittedUrl;
+          saveBlogFound(submittedUrl);
+        }
+
+        updateComposer();
+        scrollToLatest();
+        if (!isCorrect) replyInput.focus();
+      }, 850 + Math.floor(Math.random() * 500));
+    }
+
+    replyInput.addEventListener('keydown', function (event) {
+      if (isReplying) {
+        event.preventDefault();
+        return;
+      }
+
+      if (currentStep >= conversationSteps.length) {
+        if (event.key === 'Enter' && !event.shiftKey) {
+          event.preventDefault();
+          sendBlogUrl();
+        }
+        return;
+      }
+
+      if (event.key === 'Tab') return;
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'a') return;
+      event.preventDefault();
+
+      if (event.key === 'Enter') {
+        if (!sendButton.disabled) sendCurrentReply();
+        return;
+      }
+
+      const targetText = conversationSteps[currentStep].outgoing;
+      const characterCount = Math.floor(Math.random() * 3) + 2;
+      if (event.key === 'Backspace') {
+        typedLength = Math.max(0, typedLength - characterCount);
+      } else if (!event.ctrlKey && !event.metaKey && !event.altKey && event.key !== 'Shift' && event.key !== 'Control' && event.key !== 'Alt' && event.key !== 'Meta' && event.key !== 'CapsLock') {
+        typedLength = Math.min(targetText.length, typedLength + characterCount);
+      }
+
+      replyInput.value = targetText.slice(0, typedLength);
+      sendButton.disabled = typedLength < targetText.length;
+      replyInput.scrollTop = replyInput.scrollHeight;
+    });
+
+    replyInput.addEventListener('paste', function (event) {
+      if (currentStep < conversationSteps.length) event.preventDefault();
+    });
+
+    replyInput.addEventListener('input', function () {
+      if (currentStep >= conversationSteps.length && !blogFound) {
+        sendButton.disabled = replyInput.value.trim().length === 0;
+      }
+    });
+
+    sendButton.addEventListener('click', function () {
+      if (sendButton.disabled) return;
+      if (currentStep >= conversationSteps.length) {
+        sendBlogUrl();
+      } else {
+        sendCurrentReply();
+      }
+    });
+
+    mobileReply.addEventListener('click', sendCurrentReply);
+
+    resetButton.addEventListener('click', function () {
+      const shouldReset = window.confirm('メールの会話を最初からやり直しますか？\nページアーカイブの記録は消去されません。');
+      if (!shouldReset) return;
+
+      try {
+        localStorage.removeItem(conversationStorageKey);
+        localStorage.removeItem(conversationStartedStorageKey);
+        localStorage.removeItem(blogFoundStorageKey);
+        localStorage.removeItem(blogUrlStorageKey);
+      } catch (error) {
+        return;
+      }
+
+      window.location.reload();
+    });
+
+    const archiveButton = document.getElementById('archiveButton');
+    const archiveOverlay = document.getElementById('archiveOverlay');
+    const archiveClose = document.getElementById('archiveClose');
+    const archiveList = document.getElementById('archiveList');
+    const archiveStorageKey = 'hanazono-page-archive-v1';
+    const totalPages = 15;
+    const currentPage = {
+      number: 2,
+      title: '捜索ページ管理者とのメール',
+      href: 'mail.html'
+    };
+
+    function loadArchive() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(archiveStorageKey) || '[]');
+        return Array.isArray(saved) ? saved : [];
+      } catch (error) {
+        return [];
+      }
+    }
+
+    function saveArchive(pages) {
+      try {
+        localStorage.setItem(archiveStorageKey, JSON.stringify(pages));
+      } catch (error) {
+        return;
+      }
+    }
+
+    function registerCurrentPage() {
+      const pages = loadArchive();
+      const existingIndex = pages.findIndex(function (page) {
+        return page.number === currentPage.number;
+      });
+
+      if (existingIndex >= 0) {
+        pages[existingIndex] = currentPage;
+      } else {
+        pages.push(currentPage);
+      }
+
+      pages.sort(function (a, b) {
+        return a.number - b.number;
+      });
+      saveArchive(pages);
+      return pages;
+    }
+
+    function renderArchive() {
+      const pages = registerCurrentPage();
+      archiveList.textContent = '';
+
+      for (let pageNumber = 1; pageNumber <= totalPages; pageNumber += 1) {
+        const page = pages.find(function (savedPage) {
+          return savedPage.number === pageNumber;
+        });
+        const item = document.createElement('li');
+        const entry = document.createElement(page ? 'a' : 'div');
+        const number = document.createElement('span');
+        const title = document.createElement('span');
+
+        entry.className = 'archive-entry';
+        number.className = 'archive-number';
+        title.className = 'archive-title';
+        number.textContent = String(pageNumber).padStart(2, '0');
+
+        if (page) {
+          entry.href = page.href;
+          title.textContent = page.title;
+        } else {
+          entry.classList.add('is-locked');
+          entry.setAttribute('aria-label', String(pageNumber).padStart(2, '0') + ' 未探索');
+          title.textContent = '？？？';
+        }
+
+        entry.append(number, title);
+        item.appendChild(entry);
+        archiveList.appendChild(item);
+      }
+    }
+
+    function openArchive() {
+      renderArchive();
+      archiveOverlay.classList.add('is-open');
+      archiveOverlay.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('archive-open');
+      archiveClose.focus();
+    }
+
+    function closeArchive() {
+      archiveOverlay.classList.remove('is-open');
+      archiveOverlay.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('archive-open');
+      if (window.matchMedia('(min-width: 701px)').matches && !replyInput.disabled) {
+        focusComposerIfReady();
+      } else {
+        archiveButton.focus();
+      }
+    }
+
+    registerCurrentPage();
+    updateDateDivider(conversationStartedAt || Date.now());
+    restoreConversation();
+    updateComposer();
+    scrollToLatest();
+
+    archiveButton.addEventListener('click', openArchive);
+    archiveClose.addEventListener('click', closeArchive);
+
+    archiveOverlay.addEventListener('click', function (event) {
+      if (event.target === archiveOverlay) closeArchive();
+    });
+
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape' && archiveOverlay.classList.contains('is-open')) {
+        closeArchive();
+      }
+    });
+
+    window.addEventListener('focus', focusComposerIfReady);
+
+    document.addEventListener('click', function (event) {
+      if (event.target.closest('button, a, textarea')) return;
+      focusComposerIfReady();
+    });
+  </script>
+</body>
+</html>
