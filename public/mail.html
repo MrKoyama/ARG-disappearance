@@ -975,6 +975,7 @@
     const blogFoundStorageKey = 'hanazono-mail-blog-found-v3';
     const blogUrlStorageKey = 'hanazono-mail-blog-url-v3';
     const expectedBlogFile = 'hana-blog.html';
+    const blogConfirmationReply = '確認します。\n\n……これで間違いないです。彼女のブログです。ブログの中に、行方につながる情報があるかもしれません。僕も確認してみます。何か見つけ次第、ここで連絡しましょう。';
     const wrongUrlReplies = [
       'これではないような……。彼女が書いていたブログとは雰囲気が違います。',
       '確認しましたが、彼女のブログではありませんね……。ほかに心当たりはありませんか？',
@@ -1117,7 +1118,7 @@
       if (blogFound) {
         const blogReplyTime = baseTime + conversationSteps.length * 120000;
         createMessage('outgoing', confirmedBlogUrl, '', '', false, blogReplyTime);
-        createMessage('incoming', 'あぁ！ まさにこれです！ 間違いありません。彼女のブログです。見つけてくれて、本当にありがとうございます。少し中を確認してみます。', expectedBlogFile, 'HANAのブログを開く', false, blogReplyTime + 45000);
+        createMessage('incoming', blogConfirmationReply, expectedBlogFile, 'HANAのブログを開く', false, blogReplyTime + 45000);
       }
     }
 
@@ -1239,7 +1240,7 @@
       if (!submittedUrl) return;
       const isCorrect = isCorrectBlogUrl(submittedUrl);
       const reply = isCorrect
-        ? 'あぁ！ まさにこれです！ 間違いありません。彼女のブログです。見つけてくれて、本当にありがとうございます。少し中を確認してみます。'
+        ? blogConfirmationReply
         : wrongUrlReplies[Math.floor(Math.random() * wrongUrlReplies.length)];
 
       isReplying = true;

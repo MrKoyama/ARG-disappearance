@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="HANAの日々の記録">
-  <title>HANA | 日々の記録</title>
+  <meta name="description" content="@hana_daysのPictaプロフィール">
+  <title>@hana_days | Picta</title>
   <style>
     :root {
       --white: #fff;
@@ -771,46 +771,89 @@
 
       .post-modal {
         padding: 0;
-        place-items: stretch;
+        display: block;
         overflow-y: auto;
+        background: #fff;
+      }
+
+      .post-modal.is-open {
+        display: block;
       }
 
       .post-dialog {
         width: 100%;
         max-height: none;
         min-height: 100dvh;
-        display: flex;
-        flex-direction: column;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: auto auto auto auto;
+        grid-template-areas:
+          "owner"
+          "image"
+          "copy"
+          "actions";
+        overflow: visible;
         border-radius: 0;
+        box-shadow: none;
       }
 
       .post-image-wrap {
+        grid-area: image;
+        width: 100%;
         min-height: 0;
+        aspect-ratio: 1;
       }
 
       .post-image-wrap img {
+        width: 100%;
+        height: 100%;
         max-height: none;
+        aspect-ratio: auto;
+        object-fit: cover;
       }
 
       .post-detail {
-        display: block;
+        display: contents;
+      }
+
+      .post-owner {
+        position: sticky;
+        top: 0;
+        z-index: 3;
+        grid-area: owner;
+        min-height: 57px;
+        padding-right: 62px;
+        background: #fff;
       }
 
       .post-copy {
+        grid-area: copy;
         overflow: visible;
+        background: #fff;
+      }
+
+      .post-actions {
+        grid-area: actions;
+        background: #fff;
       }
 
       .post-close {
-        top: 5px;
-        right: 7px;
+        top: 7px;
+        right: 9px;
+        z-index: 5;
         border-radius: 50%;
-        background: rgba(0, 0, 0, .45);
+        color: #333339;
+        background: #ededf0;
       }
 
       .footer-inner {
         align-items: stretch;
         flex-direction: column;
         gap: 11px;
+      }
+
+      .site-footer {
+        padding-bottom: 58px;
       }
 
       .archive-button {
@@ -883,18 +926,18 @@
 
           <div class="post-grid" id="postGrid">
             <button class="post-button" type="button" data-post="0" aria-label="花束の投稿を開く">
-              <!-- 場面：SNSの記念日投稿。ターゲット層：恋人との幸せな生活に関心を持つSNS利用者。テーマ・コンセプト：Mくんから贈られたように演出したロマンチックなプレゼント。含めたい要素：淡いピンクと白の花束、小さな無地の贈り物箱、裏返したカード。男性や女性は写さない。カラーテーマ：ピンク、白、ベージュ、セージグリーン。画像サイズ：1024*1024px。レイアウトイメージ：自宅のテーブル上をスマートフォンで撮影した正方形の接写。 -->
-              <img src="images/hana-gift.png" alt="テーブルに置かれた花束と贈り物" width="1024" height="1024">
+              <!-- 場面：SNSの記念日投稿。ターゲット層：恋人との幸せな生活に関心を持つSNS利用者。テーマ・コンセプト：Mくんから贈られたように演出したロマンチックなプレゼント。含めたい要素：HANA本人、淡いピンクと白の花束、小さな無地の贈り物箱、裏返したカード。男性は写さない。カラーテーマ：ピンク、白、ベージュ、セージグリーン。画像サイズ：1254*1254px。レイアウトイメージ：HANAが花束を手にしている自然な正方形写真。 -->
+              <img src="images/hana-gift.png" alt="花束を手にしたHANA" width="1254" height="1254">
               <span class="post-hover"><span>♥ 41</span><span>● 3</span></span>
             </button>
             <button class="post-button" type="button" data-post="1" aria-label="夕食の投稿を開く">
-              <!-- 場面：SNSのデート投稿。ターゲット層：恋人との日常を見るSNS利用者。テーマ・コンセプト：二人で夕食を楽しんだように見えるが、人物は一切写らない。含めたい要素：パスタ、二脚のグラス、二人分のテーブルセット、向かい側の空席。カラーテーマ：アンバー、濃い木目、赤の差し色。画像サイズ：1024*1024px。レイアウトイメージ：着席した一人称視点の正方形写真。 -->
-              <img src="images/hana-dinner.png" alt="二人分用意されたレストランのテーブル" width="1024" height="1024">
+              <!-- 場面：SNSのデート投稿。ターゲット層：恋人との日常を見るSNS利用者。テーマ・コンセプト：二人で夕食を楽しんだように見えるが、人物は一切写らない。含めたい要素：料理の入った二皿のパスタ、二脚のグラス、二人分のテーブルセット、向かい側の空席。カラーテーマ：アンバー、濃い木目、赤の差し色。画像サイズ：1254*1254px。レイアウトイメージ：着席した一人称視点の正方形写真。 -->
+              <img src="images/hana-dinner.png" alt="料理が盛られた二皿のパスタと二人分のテーブル" width="1254" height="1254">
               <span class="post-hover"><span>♥ 36</span><span>● 5</span></span>
             </button>
             <button class="post-button" type="button" data-post="2" aria-label="旅行の投稿を開く">
-              <!-- 場面：SNSの小旅行投稿。ターゲット層：旅行やデートの投稿を見るSNS利用者。テーマ・コンセプト：写真嫌いなMくんと二人で列車に乗っているように見せる。含めたい要素：列車の窓、流れる緑の風景、二枚の無地の切符、空の隣席。カラーテーマ：青空、緑、ニュートラルグレー。画像サイズ：1024*1024px。レイアウトイメージ：車内テーブルと隣席を含む正方形のスナップ写真。 -->
-              <img src="images/hana-trip.png" alt="列車の窓辺に置かれた二枚の切符" width="1024" height="1024">
+              <!-- 場面：SNSの小旅行投稿。ターゲット層：旅行やデートの投稿を見るSNS利用者。テーマ・コンセプト：写真嫌いなMくんと二人で列車に乗っているように見せる。含めたい要素：窓際に座るHANA本人、列車の窓、流れる緑の風景、二枚の無地の切符、空の隣席。男性は写さない。カラーテーマ：青空、緑、ニュートラルグレー。画像サイズ：1254*1254px。レイアウトイメージ：HANAと空の隣席を含む正方形のスナップ写真。 -->
+              <img src="images/hana-trip.png" alt="列車の窓際に座るHANAと空の隣席" width="1254" height="1254">
               <span class="post-hover"><span>♥ 52</span><span>● 4</span></span>
             </button>
             <button class="post-button" type="button" data-post="3" aria-label="ピクニックの投稿を開く">
@@ -903,8 +946,8 @@
               <span class="post-hover"><span>♥ 63</span><span>● 7</span></span>
             </button>
             <button class="post-button" type="button" data-post="4" aria-label="カフェの投稿を開く">
-              <!-- 場面：SNSのカフェデート投稿。ターゲット層：カフェ巡りや恋人との日常を見るSNS利用者。テーマ・コンセプト：二人でケーキを食べた幸せな時間。含めたい要素：二杯のコーヒー、二皿の苺ケーキ、窓辺の木製テーブル、人物は写さない。カラーテーマ：クリーム、木目、淡いピンク。画像サイズ：1024*1024px。レイアウトイメージ：二人分のセット全体が分かる正方形写真。 -->
-              <img src="images/hana-cafe.png" alt="二人分のコーヒーとケーキ" width="1024" height="1024">
+              <!-- 場面：SNSのカフェデート投稿。ターゲット層：カフェ巡りや恋人との日常を見るSNS利用者。テーマ・コンセプト：二人でケーキを食べた幸せな時間。含めたい要素：HANA本人、二杯のコーヒー、二皿の苺ケーキ、窓辺の木製テーブル。男性は写さない。カラーテーマ：クリーム、木目、淡いピンク。画像サイズ：1254*1254px。レイアウトイメージ：向かい側から撮影されたHANAと二人分のセットが分かる正方形写真。 -->
+              <img src="images/hana-cafe.png" alt="カフェに座るHANAと二人分のコーヒーとケーキ" width="1254" height="1254">
               <span class="post-hover"><span>♥ 47</span><span>● 2</span></span>
             </button>
             <button class="post-button" type="button" data-post="5" aria-label="ブログ開設の投稿を開く">
@@ -969,15 +1012,15 @@
     const posts = [
       {
         image: 'images/hana-gift.png',
-        alt: 'テーブルに置かれた花束と贈り物',
-        caption: '今日はちょっとした記念日。\n帰ったら花束が置いてあってびっくりした🌷 Mくん、こういうところだけは本当にずるい。カードの中身はふたりだけの秘密。\n\n#記念日 #ありがとう #ふたりの時間',
+        alt: '花束を手にしたHANA',
+        caption: '今日はちょっとした記念日。\n花束をもらってびっくり🌷 Mくんが記念に撮ってくれました。こういうところだけは本当にずるい。カードの中身はふたりだけの秘密。\n\n#記念日 #ありがとう #ふたりの時間',
         likes: 41,
         date: '2026年8月3日',
         blog: false
       },
       {
         image: 'images/hana-dinner.png',
-        alt: '二人分用意されたレストランのテーブル',
+        alt: '料理が盛られた二皿のパスタと二人分のテーブル',
         caption: '久しぶりの夜ごはん。\n待ち合わせのことで少しだけ喧嘩したけど、最後はいつも通り仲直り。向かいにいるのに、写真を向けるとすぐ避けるMくん。たまには一緒に写ってほしいな。\n\n#デート #夜ごはん #仲直り',
         likes: 36,
         date: '2026年7月20日',
@@ -985,7 +1028,7 @@
       },
       {
         image: 'images/hana-trip.png',
-        alt: '列車の窓辺に置かれた二枚の切符',
+        alt: '列車の窓際に座るHANAと空の隣席',
         caption: 'Mくんと日帰り小旅行！\n切符はちゃんと2枚。なのに本人は「写真は恥ずかしい」って、また隣の席から逃げちゃった。景色がきれいだったから、まあいっか。\n\n#小旅行 #窓の外 #週末デート',
         likes: 52,
         date: '2026年6月14日',
@@ -1001,8 +1044,8 @@
       },
       {
         image: 'images/hana-cafe.png',
-        alt: '二人分のコーヒーとケーキ',
-        caption: '気になっていたカフェへ。\n私が白いケーキで、Mくんはピンク。写真を撮ろうとすると「食べ物だけにして」って顔を隠すの、徹底しすぎじゃない？笑\n\n#カフェ巡り #いちごケーキ #Mくん',
+        alt: 'カフェに座るHANAと二人分のコーヒーとケーキ',
+        caption: '気になっていたカフェへ。\n私が白いケーキで、Mくんはピンク。私の写真は撮るのに、自分へカメラを向けるとすぐ顔を隠すの、徹底しすぎじゃない？笑\n\n#カフェ巡り #いちごケーキ #Mくん',
         likes: 47,
         date: '2026年3月22日',
         blog: false
@@ -1031,10 +1074,12 @@
     const toast = document.getElementById('toast');
     const blogAddress = new URL('hana-blog.html', window.location.href).href;
     let activePost = null;
+    let activePostTrigger = null;
     let toastTimer = null;
 
-    function openPost(index) {
+    function openPost(index, trigger) {
       activePost = posts[index];
+      activePostTrigger = trigger;
       modalImage.src = activePost.image;
       modalImage.alt = activePost.alt;
       postCaption.textContent = activePost.caption;
@@ -1050,7 +1095,9 @@
       postClose.focus();
     }
 
-    function closePost() {
+    function closePost(restoreFocus = true) {
+      if (!postModal.classList.contains('is-open')) return;
+      if (restoreFocus && activePostTrigger) activePostTrigger.focus({ preventScroll: true });
       postModal.classList.remove('is-open');
       postModal.setAttribute('aria-hidden', 'true');
       document.body.classList.remove('modal-open');
@@ -1084,7 +1131,7 @@
 
     document.querySelectorAll('.post-button').forEach(function (button) {
       button.addEventListener('click', function () {
-        openPost(Number(button.dataset.post));
+        openPost(Number(button.dataset.post), button);
       });
     });
 
@@ -1113,7 +1160,7 @@
     const totalPages = 15;
     const currentPage = {
       number: 3,
-      title: 'HANA | 日々の記録',
+      title: 'HANAのSNS',
       href: 'hana-sns.html'
     };
 
@@ -1174,7 +1221,7 @@
     }
 
     function openArchive() {
-      closePost();
+      closePost(false);
       renderArchive();
       archiveOverlay.classList.add('is-open');
       archiveOverlay.setAttribute('aria-hidden', 'false');

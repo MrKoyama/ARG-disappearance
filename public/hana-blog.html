@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ハナが日々の出来事を記録している個人ブログ">
+  <title>ハナのブログ</title>
+  <style>
+    :root {
+      --ink: #564b50;
+      --muted: #8b7d83;
+      --line: #d9c8ce;
+      --paper: #fffdf9;
+      --cream: #f8f2e9;
+      --rose: #b8788f;
+      --rose-dark: #8f536a;
+      --rose-light: #f1dbe3;
+      --green: #839784;
+      --shadow: 0 5px 18px rgba(88, 66, 74, .12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      min-height: 100%;
+      background: #eee9e4;
+    }
+
+    body {
+      min-width: 320px;
+      min-height: 100vh;
+      margin: 0;
+      color: var(--ink);
+      background:
+        linear-gradient(rgba(255, 255, 255, .45) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, .45) 1px, transparent 1px),
+        #ede7e2;
+      background-size: 4px 4px;
+      font-family: "Yu Mincho", "YuMincho", "Hiragino Mincho ProN", "Hiragino Kaku Gothic ProN", serif;
+      line-height: 1.8;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    a {
+      color: var(--rose-dark);
+    }
+
+    a:hover {
+      color: #6f3f52;
+    }
+
+    .top-strip {
+      min-height: 28px;
+      border-bottom: 1px solid #8f536a;
+      color: #fff;
+      background: #a8627c;
+      font-family: "Yu Gothic", "YuGothic", sans-serif;
+      font-size: .68rem;
+    }
+
+    .top-strip-inner {
+      width: min(980px, calc(100% - 28px));
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 3px 0;
+    }
+
+    .top-strip p {
+      margin: 0;
+    }
+
+    .blog-header {
+      border-bottom: 1px solid #c9aeb8;
+      background:
+        radial-gradient(circle at 20% 30%, rgba(255, 255, 255, .92) 0 2px, transparent 3px),
+        radial-gradient(circle at 80% 70%, rgba(255, 255, 255, .82) 0 2px, transparent 3px),
+        linear-gradient(135deg, #f8e7ec, #efe2d8 58%, #e2eadf);
+      background-size: 32px 32px, 38px 38px, auto;
+    }
+
+    .header-inner {
+      width: min(980px, calc(100% - 28px));
+      min-height: 164px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 30px;
+      padding: 30px 12px;
+    }
+
+    .site-title {
+      margin: 0;
+      color: #77505f;
+      font-size: clamp(2rem, 5vw, 3.45rem);
+      font-weight: 500;
+      letter-spacing: .08em;
+      text-shadow: 0 2px 0 #fff;
+    }
+
+    .site-subtitle {
+      margin: 2px 0 0 5px;
+      color: #907782;
+      font-size: .82rem;
+      letter-spacing: .14em;
+    }
+
+    .header-decoration {
+      flex: 0 0 auto;
+      color: rgba(153, 94, 117, .52);
+      text-align: center;
+      font-size: 2.15rem;
+      line-height: 1.15;
+    }
+
+    .header-decoration small {
+      display: block;
+      color: #95888c;
+      font-family: Georgia, serif;
+      font-size: .62rem;
+      letter-spacing: .16em;
+    }
+
+    .global-nav {
+      border-bottom: 1px solid #c5aab5;
+      background: linear-gradient(#fffdfa, #f1e7e3);
+      box-shadow: 0 2px 7px rgba(82, 57, 66, .1);
+    }
+
+    .global-nav ul {
+      width: min(980px, 100%);
+      margin: 0 auto;
+      padding: 0;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      list-style: none;
+    }
+
+    .global-nav li + li {
+      border-left: 1px dotted #bea6af;
+    }
+
+    .global-nav a {
+      display: block;
+      padding: 9px 8px;
+      color: #765764;
+      text-align: center;
+      text-decoration: none;
+      font-size: .78rem;
+      letter-spacing: .08em;
+    }
+
+    .global-nav a:hover,
+    .global-nav a:focus-visible {
+      color: #fff;
+      background: #b87991;
+    }
+
+    .page-wrap {
+      width: min(980px, calc(100% - 28px));
+      margin: 25px auto 42px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 250px;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .main-column,
+    .side-box {
+      border: 1px solid #cdbbc1;
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+
+    .main-column {
+      min-height: 650px;
+      padding: 21px 24px 30px;
+    }
+
+    .breadcrumb {
+      margin: 0 0 15px;
+      padding-bottom: 7px;
+      border-bottom: 1px dotted #cab8be;
+      color: var(--muted);
+      font-family: "Yu Gothic", "YuGothic", sans-serif;
+      font-size: .7rem;
+    }
+
+    .breadcrumb a {
+      text-decoration: none;
+    }
+
+    .welcome-card {
+      margin-bottom: 26px;
+      padding: 20px 22px;
+      border: 1px solid #dcc4cd;
+      background: linear-gradient(135deg, #fffafa, #fbf5ef);
+    }
+
+    .welcome-card h2,
+    .section-title,
+    .view-title {
+      margin: 0;
+      color: #805769;
+      font-weight: 500;
+    }
+
+    .welcome-card h2 {
+      font-size: 1.25rem;
+    }
+
+    .welcome-card p {
+      margin: 12px 0 0;
+      font-size: .88rem;
+    }
+
+    .search-note {
+      padding: 12px 14px;
+      border-left: 4px solid #b87e94;
+      background: #f6e8ed;
+      color: #67565d;
+    }
+
+    .section-title,
+    .view-title {
+      padding: 6px 11px;
+      border-top: 1px solid #c9aab6;
+      border-bottom: 1px solid #c9aab6;
+      background: #f4e7eb;
+      font-size: 1.05rem;
+      letter-spacing: .08em;
+    }
+
+    .category-grid {
+      margin: 15px 0 28px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .category-card {
+      min-height: 128px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 15px;
+      border: 1px solid #d4c1c7;
+      color: var(--ink);
+      background: #fffcfa;
+      text-decoration: none;
+      box-shadow: 2px 2px 0 #eee2e5;
+    }
+
+    .category-card:hover,
+    .category-card:focus-visible {
+      border-color: #b8788f;
+      color: var(--ink);
+      background: #fff5f8;
+      transform: translateY(-1px);
+    }
+
+    .category-icon {
+      color: #ad7289;
+      font-size: 1.35rem;
+    }
+
+    .category-name {
+      display: block;
+      color: #76515f;
+      font-size: .92rem;
+      font-weight: 700;
+    }
+
+    .category-copy {
+      display: block;
+      color: var(--muted);
+      font-size: .7rem;
+      line-height: 1.55;
+    }
+
+    .entry-list {
+      display: grid;
+      gap: 0;
+    }
+
+    .entry-item {
+      display: grid;
+      grid-template-columns: 126px minmax(0, 1fr);
+      gap: 16px;
+      padding: 18px 5px;
+      border-bottom: 1px dotted #c8b7bd;
+    }
+
+    .entry-thumb {
+      display: block;
+      width: 126px;
+      height: 96px;
+      border: 4px solid #fff;
+      outline: 1px solid #cbbcc0;
+      object-fit: cover;
+      box-shadow: 2px 2px 5px rgba(60, 45, 50, .13);
+    }
+
+    .entry-date {
+      margin: 0 0 2px;
+      color: #9a858c;
+      font-family: Georgia, serif;
+      font-size: .67rem;
+    }
+
+    .entry-title {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 500;
+    }
+
+    .entry-title a {
+      text-decoration: none;
+      border-bottom: 1px dotted #ad7489;
+    }
+
+    .entry-excerpt {
+      margin: 7px 0 0;
+      font-size: .78rem;
+      line-height: 1.7;
+    }
+
+    .entry-tags {
+      margin: 7px 0 0;
+      color: #938087;
+      font-family: "Yu Gothic", "YuGothic", sans-serif;
+      font-size: .64rem;
+    }
+
+    .article-view {
+      padding: 6px 4px 20px;
+    }
+
+    .article-head {
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 3px double #ccb5be;
+    }
+
+    .article-head h2 {
+      margin: 2px 0;
+      color: #77505f;
+      font-size: 1.42rem;
+      font-weight: 500;
+    }
+
+    .article-image {
+      display: block;
+      width: min(100%, 560px);
+      max-height: 500px;
+      margin: 0 auto 20px;
+      border: 7px solid #fff;
+      outline: 1px solid #c8b5bc;
+      object-fit: cover;
+      box-shadow: 3px 4px 10px rgba(68, 47, 55, .16);
+    }
+
+    .article-body {
+      white-space: pre-line;
+      font-size: .9rem;
+      line-height: 2;
+    }
+
+    .article-footer {
+      margin-top: 24px;
+      padding: 12px;
+      border-top: 1px dotted #c8b7bd;
+      border-bottom: 1px dotted #c8b7bd;
+      color: var(--muted);
+      text-align: right;
+      font-size: .7rem;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 20px;
+      font-size: .78rem;
+    }
+
+    .empty-result {
+      margin: 20px 0;
+      padding: 25px 18px;
+      border: 1px dashed #c7b4bb;
+      background: #fbf7f4;
+      text-align: center;
+      font-size: .84rem;
+    }
+
+    .search-word {
+      color: #8f536a;
+      font-weight: 700;
+    }
+
+    .side-column {
+      display: grid;
+      gap: 15px;
+    }
+
+    .side-box h2 {
+      margin: 0;
+      padding: 7px 11px;
+      border-bottom: 1px solid #c9aeb8;
+      color: #fff;
+      background: linear-gradient(#b77a91, #9d647a);
+      font-family: "Yu Gothic", "YuGothic", sans-serif;
+      font-size: .77rem;
+      letter-spacing: .08em;
+    }
+
+    .side-content {
+      padding: 13px;
+    }
+
+    .search-form {
+      display: flex;
+      gap: 5px;
+    }
+
+    .search-input {
+      min-width: 0;
+      width: 100%;
+      padding: 7px 8px;
+      border: 1px solid #bca9af;
+      border-radius: 0;
+      color: #55484d;
+      background: #fff;
+      font-family: "Yu Gothic", "YuGothic", sans-serif;
+      font-size: .76rem;
+    }
+
+    .search-input:focus {
+      outline: 2px solid #e5c4d0;
+      outline-offset: 1px;
+    }
+
+    .search-button {
+      flex: 0 0 auto;
+      padding: 6px 10px;
+      border: 1px solid #885267;
+      color: #fff;
+      background: #a76880;
+      font-family: "Yu Gothic", "YuGothic", sans-serif;
+      font-size: .72rem;
+      cursor: pointer;
+    }
+
+    .search-button:hover,
+    .search-button:focus-visible {
+      background: #865166;
+    }
+
+    .search-help {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: .67rem;
+      line-height: 1.6;
+    }
+
+    .profile-mini {
+      display: grid;
+      grid-template-columns: 74px 1fr;
+      gap: 11px;
+      align-items: start;
+    }
+
+    .profile-mini img {
+      width: 74px;
+      height: 86px;
+      border: 4px solid #fff;
+      outline: 1px solid #c5b2b9;
+      object-fit: cover;
+    }
+
+    .profile-mini p {
+      margin: 0;
+      font-size: .71rem;
+      line-height: 1.7;
+    }
+
+    .profile-mini strong {
+      display: block;
+      margin-bottom: 2px;
+      color: #7e5665;
+      font-size: .84rem;
+    }
+
+    .side-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .side-list li {
+      border-bottom: 1px dotted #cbb9c0;
+    }
+
+    .side-list a {
+      display: block;
+      padding: 7px 3px;
+      text-decoration: none;
+      font-size: .73rem;
+    }
+
+    .counter {
+      display: flex;
+      justify-content: center;
+      gap: 2px;
+      padding: 3px 0 1px;
+    }
+
+    .counter span {
+      min-width: 18px;
+      padding: 1px 3px;
+      border: 1px inset #aaa;
+      color: #f4f4f4;
+      background: #4c484a;
+      text-align: center;
+      font-family: "Courier New", monospace;
+      font-size: .7rem;
+      line-height: 1.4;
+    }
+
+    .mail-back {
+      display: block;
+      padding: 9px 12px;
+      border: 1px solid #bba7ae;
+      color: #725461;
+      background: #fffaf7;
+      text-align: center;
+      text-decoration: none;
+      font-size: .72rem;
+    }
+
+    body.archive-open {
+      overflow: hidden;
+    }
+
+    .site-footer {
+      border-top: 1px solid #c7c2b7;
+      color: #575550;
+      background: #eeebe3;
+      font-family: "Yu Gothic", "YuGothic", sans-serif;
+    }
+
+    .footer-inner {
+      width: min(980px, calc(100% - 32px));
+      min-height: 76px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px 0;
+    }
+
+    .fiction-notice {
+      margin: 0;
+      font-size: .72rem;
+      line-height: 1.7;
+    }
+
+    .archive-button {
+      flex: 0 0 auto;
+      min-width: 128px;
+      padding: 10px 13px;
+      border: 1px solid #8f8a7f;
+      color: #353431;
+      background: #fff;
+      font-size: .76rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      cursor: pointer;
+    }
+
+    .archive-button:hover,
+    .archive-button:focus-visible {
+      border-color: var(--rose-dark);
+      color: var(--rose-dark);
+      background: #fffafa;
+    }
+
+    .archive-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      background: rgba(22, 22, 22, .7);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .18s ease, visibility .18s ease;
+    }
+
+    .archive-overlay.is-open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .archive-dialog {
+      width: min(520px, 100%);
+      max-height: min(680px, calc(100vh - 40px));
+      overflow: hidden;
+      border: 1px solid #aaa59a;
+      background: #f9f7f1;
+      box-shadow: 0 22px 60px rgba(0, 0, 0, .34);
+      transform: translateY(10px);
+      transition: transform .18s ease;
+      font-family: "Yu Gothic", "YuGothic", sans-serif;
+    }
+
+    .archive-overlay.is-open .archive-dialog {
+      transform: translateY(0);
+    }
+
+    .archive-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 16px 18px;
+      border-bottom: 1px solid #c9c4b9;
+      background: #ede9df;
+    }
+
+    .archive-header h2 {
+      margin: 0;
+      color: #343330;
+      font-size: 1rem;
+      letter-spacing: .06em;
+    }
+
+    .archive-close {
+      width: 34px;
+      height: 34px;
+      border: 1px solid #aaa59a;
+      color: #494743;
+      background: #fff;
+      font-size: 1.15rem;
+      cursor: pointer;
+    }
+
+    .archive-content {
+      max-height: calc(min(680px, 100vh - 40px) - 67px);
+      overflow-y: auto;
+      padding: 15px 18px 20px;
+    }
+
+    .archive-description {
+      margin: 0 0 13px;
+      color: #68655f;
+      font-size: .74rem;
+      line-height: 1.7;
+    }
+
+    .archive-list {
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 5px;
+      list-style: none;
+    }
+
+    .archive-entry {
+      min-height: 42px;
+      display: grid;
+      grid-template-columns: 44px minmax(0, 1fr);
+      align-items: center;
+      border: 1px solid #bbb6ab;
+      color: #343330;
+      background: #fff;
+      text-decoration: none;
+    }
+
+    .archive-entry:not(.is-locked):hover,
+    .archive-entry:not(.is-locked):focus-visible {
+      border-color: var(--rose-dark);
+      background: #fff8fa;
+    }
+
+    .archive-entry.is-locked {
+      color: #98958e;
+      background: #e6e3dc;
+      cursor: default;
+    }
+
+    .archive-number {
+      align-self: stretch;
+      display: grid;
+      place-items: center;
+      border-right: 1px solid #ccc7bc;
+      font-family: Georgia, serif;
+      font-size: .72rem;
+    }
+
+    .archive-title {
+      padding: 8px 11px;
+      font-size: .8rem;
+      line-height: 1.4;
+    }
+
+    .archive-entry.is-locked .archive-title {
+      letter-spacing: .18em;
+    }
+
+    @media (max-width: 760px) {
+      .top-strip-inner {
+        justify-content: center;
+      }
+
+      .top-strip-inner p:last-child {
+        display: none;
+      }
+
+      .header-inner {
+        min-height: 128px;
+        padding: 22px 4px;
+      }
+
+      .header-decoration {
+        display: none;
+      }
+
+      .global-nav a {
+        min-height: 50px;
+        display: grid;
+        place-items: center;
+        padding: 7px 4px;
+        font-size: .66rem;
+        line-height: 1.35;
+      }
+
+      .page-wrap {
+        margin-top: 14px;
+        grid-template-columns: 1fr;
+      }
+
+      .main-column {
+        min-height: 0;
+        padding: 16px 14px 24px;
+      }
+
+      .category-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .category-card {
+        min-height: 92px;
+      }
+
+      .entry-item {
+        grid-template-columns: 92px minmax(0, 1fr);
+        gap: 12px;
+      }
+
+      .entry-thumb {
+        width: 92px;
+        height: 82px;
+      }
+
+      .entry-excerpt {
+        display: -webkit-box;
+        overflow: hidden;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+      }
+
+      .side-column {
+        grid-row: 1;
+      }
+
+      .side-column .side-box:not(.search-box) {
+        display: none;
+      }
+
+      .search-box {
+        box-shadow: none;
+      }
+
+      .footer-inner {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 11px;
+      }
+
+      .archive-button {
+        width: 100%;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .archive-overlay,
+      .archive-dialog {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-strip">
+    <div class="top-strip-inner"><p>HANA'S PERSONAL WEBLOG</p><p>since 2025.11.03</p></div>
+  </div>
+
+  <header class="blog-header">
+    <div class="header-inner">
+      <div>
+        <h1 class="site-title">ハナのブログ</h1>
+        <p class="site-subtitle">小さなことを、ゆっくり記録。</p>
+      </div>
+      <div class="header-decoration" aria-hidden="true">❀　⌇　❀<small>everyday memories</small></div>
+    </div>
+  </header>
+
+  <nav class="global-nav" aria-label="ブログメニュー">
+    <ul>
+      <li><a href="hana-blog.html">トップ</a></li>
+      <li><a href="hana-blog.html?category=recent">最近の記事</a></li>
+      <li><a href="hana-blog.html?category=recommended">おすすめの記事</a></li>
+      <li><a href="hana-blog.html?category=about">私について</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-wrap">
+    <main class="main-column" id="mainContent" tabindex="-1">
+      <!-- 場面：個人ブログのプロフィール欄。ターゲット層：HANAの日常を調べるARGプレイヤー。テーマ・コンセプト：親しみやすく穏やかなブログ運営者の紹介。含めたい要素：公園で微笑む20代後半の日本人女性、ベージュの服、自然光。カラーテーマ：ベージュ、淡い緑、自然な肌色。画像サイズ：1122*1402px。レイアウトイメージ：顔と上半身が分かる縦長の写真を小さく掲載。 -->
+      <!-- 場面：ブログのカフェ記事。ターゲット層：日常系の個人ブログを読むユーザー。テーマ・コンセプト：恋人と穏やかな休日を過ごしているように見える記録。含めたい要素：HANA本人、二杯のコーヒー、二皿のケーキ、窓辺の席。カラーテーマ：クリーム、木目、淡いピンク。画像サイズ：1254*1254px。レイアウトイメージ：HANAと二人分の飲食物が写る正方形写真。 -->
+      <!-- 場面：ブログの小旅行記事。ターゲット層：旅行記や日常ブログを読むユーザー。テーマ・コンセプト：二人で列車旅行をしたように感じられる思い出写真。含めたい要素：HANA本人、車窓の緑、二枚の切符、空の隣席。カラーテーマ：青、緑、ベージュ。画像サイズ：1254*1254px。レイアウトイメージ：窓際のHANAと車内テーブルを収めた正方形写真。 -->
+      <!-- 場面：ブログの記念日記事。ターゲット層：恋愛や暮らしの個人ブログを読むユーザー。テーマ・コンセプト：恋人から花束を贈られた幸せな記録。含めたい要素：HANA本人、淡いピンクと白の花束、小さな贈り物箱、無地のカード。カラーテーマ：ピンク、白、ベージュ。画像サイズ：1254*1254px。レイアウトイメージ：HANAが花束を手にした正方形写真。 -->
+      <div id="viewRoot"></div>
+    </main>
+
+    <aside class="side-column">
+      <section class="side-box search-box">
+        <h2>ブログ内検索</h2>
+        <div class="side-content">
+          <form class="search-form" id="searchForm" action="hana-blog.html" method="get">
+            <label for="searchInput" hidden>検索ワード</label>
+            <input class="search-input" id="searchInput" name="q" type="search" placeholder="言葉を入力" autocomplete="off">
+            <button class="search-button" type="submit">検索</button>
+          </form>
+          <p class="search-help">覚えている言葉、場所、季節などから昔の記事を探せます。</p>
+        </div>
+      </section>
+
+      <section class="side-box">
+        <h2>PROFILE</h2>
+        <div class="side-content profile-mini">
+          <img src="images/missing-woman.png" alt="ブログを書いているHANA" width="1122" height="1402">
+          <p><strong>HANA</strong>カフェと小旅行が好き。毎日の小さな出来事を残しています。</p>
+        </div>
+      </section>
+
+      <section class="side-box">
+        <h2>CATEGORY</h2>
+        <div class="side-content">
+          <ul class="side-list">
+            <li><a href="hana-blog.html?category=recent">最近の記事</a></li>
+            <li><a href="hana-blog.html?category=recommended">おすすめの記事</a></li>
+            <li><a href="hana-blog.html?category=about">私について</a></li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="side-box">
+        <h2>COUNTER</h2>
+        <div class="side-content">
+          <div class="counter" aria-label="訪問者数 001842"><span>0</span><span>0</span><span>1</span><span>8</span><span>4</span><span>2</span></div>
+        </div>
+      </section>
+
+      <a class="mail-back" href="mail.html">← メール画面へ戻る</a>
+    </aside>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="fiction-notice">このサイトの内容はフィクションです。登場する人物・団体・名称等は架空のものであり、実在のものとは関係ありません。</p>
+      <button class="archive-button" id="archiveButton" type="button" aria-haspopup="dialog" aria-controls="archiveOverlay">04 / 15</button>
+    </div>
+  </footer>
+
+  <div class="archive-overlay" id="archiveOverlay" aria-hidden="true">
+    <section class="archive-dialog" role="dialog" aria-modal="true" aria-labelledby="archiveTitle">
+      <header class="archive-header"><h2 id="archiveTitle">ページアーカイブ</h2><button class="archive-close" id="archiveClose" type="button" aria-label="ページアーカイブを閉じる">×</button></header>
+      <div class="archive-content">
+        <p class="archive-description">一度訪れたページが記録されます。解放済みのページを選ぶと、そのページへ戻れます。未探索のページは「？？？」と表示されます。</p>
+        <ol class="archive-list" id="archiveList"></ol>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const articles = [
+      {
+        id: 'cafe-afternoon',
+        title: '窓辺でケーキ',
+        date: '2026年3月22日',
+        categories: ['recent', 'recommended'],
+        tags: ['カフェ', 'ケーキ', '休日', 'Mくん'],
+        searchWords: ['カフェ', '喫茶店', 'ケーキ', 'いちご', '珈琲', 'コーヒー', '休日', 'Mくん'],
+        image: 'images/hana-cafe.png',
+        alt: 'カフェに座るHANAと二人分のコーヒーとケーキ',
+        excerpt: '前から気になっていた窓辺のカフェへ。二人で違うケーキを選びました。',
+        body: '前から気になっていたカフェへ行きました。\n\n窓際の席は光がきれいで、置いてある小さなお花もかわいかったです。私は白いケーキ、Mくんはピンクのケーキ。少しずつ交換しようと思っていたのに、気づいたら自分の分をほとんど食べ終わっていました。\n\n写真を撮るのは好きなのに、撮られるのは苦手なMくん。今日も私の写真だけ増えました。いつか一緒に写ってくれたらいいな。'
+      },
+      {
+        id: 'little-trip',
+        title: '窓の外を眺めながら',
+        date: '2026年2月14日',
+        categories: ['recent', 'recommended'],
+        tags: ['小旅行', '列車', '週末', 'Mくん'],
+        searchWords: ['旅行', '小旅行', '列車', '電車', '切符', '週末', '景色', 'Mくん'],
+        image: 'images/hana-trip.png',
+        alt: '列車の窓際に座るHANAと二枚の切符',
+        excerpt: '少し早起きをして、列車で小さな旅へ。流れていく緑をずっと眺めていました。',
+        body: '少し早起きをして、列車で小さな旅へ。\n\n遠くまで行ったわけではないけれど、いつもの景色から離れるだけで気持ちが軽くなります。二枚の切符をテーブルに並べたら、ちゃんと思い出らしい写真になりました。\n\nMくんはカメラを向けると席を外してしまうので、今日も写っているのは私だけ。それでも、窓の外を一緒に見た時間は大切に覚えていたいです。'
+      },
+      {
+        id: 'small-anniversary',
+        title: '小さな記念日',
+        date: '2026年1月10日',
+        categories: ['recent'],
+        tags: ['記念日', '花束', 'プレゼント', 'Mくん'],
+        searchWords: ['記念日', '花', '花束', 'プレゼント', '贈り物', 'カード', 'Mくん'],
+        image: 'images/hana-gift.png',
+        alt: '淡い色の花束を手にしたHANA',
+        excerpt: '何でもない日だと思っていたのに、きれいな花束をもらいました。',
+        body: '何でもない日だと思っていたのに、きれいな花束をもらいました。\n\n淡いピンクと白でまとめられていて、私の好きな色ばかり。こういうことを急にするのはずるいと思います。\n\nカードに書いてあったことは秘密です。忘れないように、写真と一緒にここへ残しておきます。'
+      },
+      {
+        id: 'spring-picnic',
+        title: '春のお弁当',
+        date: '2025年12月18日',
+        categories: ['recommended'],
+        tags: ['春', 'お花見', 'ピクニック', '手作り'],
+        searchWords: ['春', '桜', '花見', 'お花見', 'ピクニック', '弁当', 'サンドイッチ'],
+        image: 'images/hana-picnic.png',
+        alt: '桜の川辺に並べた二人分のピクニック',
+        excerpt: 'お気に入りの川辺で、二人分のお弁当を広げた日の記録です。',
+        body: 'お気に入りの川辺へ、二人分のお弁当を持って行きました。\n\n少し風が強かったけれど、桜が水面へ流れていくところがきれいでした。サンドイッチは形が揃わなかったけれど、味はちゃんと褒めてもらえました。\n\n来年も同じ場所へ行けますように。'
+      },
+      {
+        id: 'about-this-blog',
+        title: 'このブログについて',
+        date: '2025年11月3日',
+        categories: ['about'],
+        tags: ['はじめまして', 'ブログ', '自己紹介'],
+        searchWords: ['はじめまして', 'ブログ', '自己紹介', 'HANA', 'ハナ', '日記'],
+        image: 'images/hana-blog-start.png',
+        alt: 'ブログ画面を開いたノートパソコンとノート',
+        excerpt: 'SNSに書ききれない毎日のことを、もう少しゆっくり残すために始めました。',
+        body: 'はじめまして、HANAです。\n\nSNSに書ききれない毎日のことを、もう少しゆっくり残したくて、このブログを始めました。カフェのこと、出かけた場所、うれしかったことなどを、忘れないうちに書いていきます。\n\n気まぐれに書いているので、カテゴリ分けはあまり上手ではありません。記事が増えて探しにくくなってきたため、昔の記事を読みたいときは「ブログ内検索」を使ってください。覚えている言葉や季節、場所などを入力すると、メニューに並んでいない過去の記事も見つかることがあります。\n\nここを読めば、私の好きなものや毎日のことを少しずつ知ってもらえると思います。どうぞよろしくお願いします。'
+      }
+    ];
+
+    const categoryNames = {
+      recent: '最近の記事',
+      recommended: 'おすすめの記事',
+      about: '私について'
+    };
+
+    const viewRoot = document.getElementById('viewRoot');
+    const mainContent = document.getElementById('mainContent');
+    const searchInput = document.getElementById('searchInput');
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function articleLink(article) {
+      return 'hana-blog.html?article=' + encodeURIComponent(article.id);
+    }
+
+    function createEntryList(entries) {
+      if (!entries.length) return '<div class="empty-result">該当する記事はありませんでした。<br>別の言葉でも試してみてください。</div>';
+      return '<div class="entry-list">' + entries.map(function (article) {
+        return '<article class="entry-item">' +
+          '<a href="' + articleLink(article) + '"><img class="entry-thumb" src="' + article.image + '" alt="' + escapeHtml(article.alt) + '" width="1254" height="1254"></a>' +
+          '<div><p class="entry-date">' + article.date + '</p><h3 class="entry-title"><a href="' + articleLink(article) + '">' + escapeHtml(article.title) + '</a></h3>' +
+          '<p class="entry-excerpt">' + escapeHtml(article.excerpt) + '</p><p class="entry-tags">' + article.tags.map(function (tag) { return '#' + tag; }).join('　') + '</p></div></article>';
+      }).join('') + '</div>';
+    }
+
+    function renderHome() {
+      const recent = articles.filter(function (article) { return article.categories.includes('recent'); }).slice(0, 3);
+      viewRoot.innerHTML = '<p class="breadcrumb">トップページ</p>' +
+        '<section class="welcome-card"><h2>このブログについて</h2><p>SNSでは短くなってしまう毎日のことを、写真と一緒にゆっくり残すために作りました。カフェや小旅行、Mくんとの思い出などを書いています。</p>' +
+        '<p class="search-note"><strong>過去の記事を探すときは、ブログ内検索を使ってください。</strong><br>覚えている言葉、場所、季節などを入力すると、さまざまな記事が見つかります。カテゴリに並んでいない昔の記事がヒットすることもあります。</p></section>' +
+        '<h2 class="section-title">カテゴリー</h2><div class="category-grid">' +
+        '<a class="category-card" href="hana-blog.html?category=recent"><span class="category-icon">✿</span><span><span class="category-name">最近の記事</span><span class="category-copy">新しく書いた日記から読む</span></span></a>' +
+        '<a class="category-card" href="hana-blog.html?category=recommended"><span class="category-icon">♡</span><span><span class="category-name">おすすめの記事</span><span class="category-copy">残しておきたい思い出</span></span></a>' +
+        '<a class="category-card" href="hana-blog.html?category=about"><span class="category-icon">⌂</span><span><span class="category-name">私について</span><span class="category-copy">ブログとHANAのこと</span></span></a></div>' +
+        '<h2 class="section-title">新着日記</h2>' + createEntryList(recent);
+      document.title = 'ハナのブログ';
+    }
+
+    function renderCategory(category) {
+      const categoryName = categoryNames[category];
+      if (!categoryName) {
+        renderHome();
+        return;
+      }
+      const entries = articles.filter(function (article) { return article.categories.includes(category); });
+      viewRoot.innerHTML = '<p class="breadcrumb"><a href="hana-blog.html">トップ</a> &gt; ' + escapeHtml(categoryName) + '</p>' +
+        '<h2 class="view-title">' + escapeHtml(categoryName) + '</h2>' + createEntryList(entries);
+      document.title = categoryName + ' | ハナのブログ';
+    }
+
+    function renderArticle(articleId) {
+      const article = articles.find(function (item) { return item.id === articleId; });
+      if (!article) {
+        viewRoot.innerHTML = '<p class="breadcrumb"><a href="hana-blog.html">トップ</a> &gt; 記事</p><div class="empty-result">記事が見つかりませんでした。</div><a class="back-link" href="hana-blog.html">← トップページへ戻る</a>';
+        document.title = '記事が見つかりません | ハナのブログ';
+        return;
+      }
+      viewRoot.innerHTML = '<p class="breadcrumb"><a href="hana-blog.html">トップ</a> &gt; ' + escapeHtml(article.title) + '</p>' +
+        '<article class="article-view"><header class="article-head"><p class="entry-date">' + article.date + '</p><h2>' + escapeHtml(article.title) + '</h2></header>' +
+        '<img class="article-image" src="' + article.image + '" alt="' + escapeHtml(article.alt) + '" width="1254" height="1254">' +
+        '<div class="article-body">' + escapeHtml(article.body) + '</div><footer class="article-footer">' + article.tags.map(function (tag) { return '#' + tag; }).join('　') + '</footer></article>' +
+        '<a class="back-link" href="hana-blog.html">← トップページへ戻る</a>';
+      document.title = article.title + ' | ハナのブログ';
+    }
+
+    function normalizeSearchWord(value) {
+      return value.trim().toLocaleLowerCase('ja-JP').replace(/[\s　]+/g, '');
+    }
+
+    function renderSearch(query) {
+      searchInput.value = query;
+      const normalized = normalizeSearchWord(query);
+      const results = normalized ? articles.filter(function (article) {
+        const searchable = [article.title, article.excerpt, article.body].concat(article.tags, article.searchWords).join('');
+        return normalizeSearchWord(searchable).includes(normalized);
+      }) : [];
+      viewRoot.innerHTML = '<p class="breadcrumb"><a href="hana-blog.html">トップ</a> &gt; 検索結果</p><h2 class="view-title">「<span class="search-word">' + escapeHtml(query || '未入力') + '</span>」の検索結果</h2>' +
+        (normalized ? createEntryList(results) : '<div class="empty-result">検索したい言葉を入力してください。</div>') +
+        '<a class="back-link" href="hana-blog.html">← トップページへ戻る</a>';
+      document.title = '検索結果 | ハナのブログ';
+    }
+
+    function renderCurrentView() {
+      const parameters = new URLSearchParams(window.location.search);
+      const article = parameters.get('article');
+      const category = parameters.get('category');
+      const query = parameters.get('q');
+      if (article) renderArticle(article);
+      else if (category) renderCategory(category);
+      else if (query !== null) renderSearch(query);
+      else renderHome();
+    }
+
+    renderCurrentView();
+
+    const archiveButton = document.getElementById('archiveButton');
+    const archiveOverlay = document.getElementById('archiveOverlay');
+    const archiveClose = document.getElementById('archiveClose');
+    const archiveList = document.getElementById('archiveList');
+    const archiveStorageKey = 'hanazono-page-archive-v1';
+    const totalPages = 15;
+    const currentPage = {
+      number: 4,
+      title: 'ハナのブログ',
+      href: 'hana-blog.html'
+    };
+
+    function loadArchive() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(archiveStorageKey) || '[]');
+        return Array.isArray(saved) ? saved : [];
+      } catch (error) {
+        return [];
+      }
+    }
+
+    function saveArchive(pages) {
+      try {
+        localStorage.setItem(archiveStorageKey, JSON.stringify(pages));
+      } catch (error) {
+        return;
+      }
+    }
+
+    function registerCurrentPage() {
+      const pages = loadArchive();
+      const existingIndex = pages.findIndex(function (page) { return page.number === currentPage.number; });
+      if (existingIndex >= 0) pages[existingIndex] = currentPage;
+      else pages.push(currentPage);
+      pages.sort(function (a, b) { return a.number - b.number; });
+      saveArchive(pages);
+      return pages;
+    }
+
+    function renderArchive() {
+      const pages = registerCurrentPage();
+      archiveList.textContent = '';
+      for (let pageNumber = 1; pageNumber <= totalPages; pageNumber += 1) {
+        const page = pages.find(function (savedPage) { return savedPage.number === pageNumber; });
+        const item = document.createElement('li');
+        const entry = document.createElement(page ? 'a' : 'div');
+        const number = document.createElement('span');
+        const title = document.createElement('span');
+        entry.className = 'archive-entry';
+        number.className = 'archive-number';
+        title.className = 'archive-title';
+        number.textContent = String(pageNumber).padStart(2, '0');
+        if (page) {
+          entry.href = page.href;
+          title.textContent = page.title;
+        } else {
+          entry.classList.add('is-locked');
+          entry.setAttribute('aria-label', String(pageNumber).padStart(2, '0') + ' 未探索');
+          title.textContent = '？？？';
+        }
+        entry.append(number, title);
+        item.appendChild(entry);
+        archiveList.appendChild(item);
+      }
+    }
+
+    function openArchive() {
+      renderArchive();
+      archiveOverlay.classList.add('is-open');
+      archiveOverlay.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('archive-open');
+      archiveClose.focus();
+    }
+
+    function closeArchive() {
+      archiveOverlay.classList.remove('is-open');
+      archiveOverlay.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('archive-open');
+      archiveButton.focus();
+    }
+
+    registerCurrentPage();
+    archiveButton.addEventListener('click', openArchive);
+    archiveClose.addEventListener('click', closeArchive);
+    archiveOverlay.addEventListener('click', function (event) {
+      if (event.target === archiveOverlay) closeArchive();
+    });
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape' && archiveOverlay.classList.contains('is-open')) closeArchive();
+    });
+  </script>
+</body>
+</html>
