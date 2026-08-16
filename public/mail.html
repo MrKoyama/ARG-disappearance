@@ -523,6 +523,65 @@
       cursor: pointer;
     }
 
+    .cloze-composer {
+      display: none;
+    }
+
+    .cloze-sentence {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 12px 13px;
+      border: 1px solid #dec46d;
+      border-radius: 13px;
+      background: #fff9e7;
+      font-size: .84rem;
+    }
+
+    .cloze-input {
+      width: 150px;
+      min-height: 38px;
+      padding: 7px 10px;
+      border: 1px solid #c9a928;
+      border-radius: 9px;
+      outline: none;
+      color: var(--ink);
+      background: #fff;
+      text-align: center;
+      font-weight: 700;
+    }
+
+    .cloze-input:focus {
+      box-shadow: 0 0 0 3px rgba(201, 169, 40, .15);
+    }
+
+    .cloze-send {
+      flex: 0 0 auto;
+      min-height: 38px;
+      margin-left: auto;
+      padding: 7px 14px;
+      border: 0;
+      border-radius: 999px;
+      color: #fff;
+      background: var(--blue);
+      font-size: .75rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .cloze-send:disabled {
+      opacity: .42;
+      cursor: default;
+    }
+
+    .cloze-feedback {
+      min-height: 20px;
+      margin: 5px 5px 0;
+      color: #a04949;
+      font-size: .7rem;
+    }
+
     .waiting-note {
       display: none;
       margin: 0;
@@ -822,6 +881,20 @@
         display: block;
       }
 
+      .cloze-sentence {
+        align-items: stretch;
+      }
+
+      .cloze-input {
+        flex: 1 1 120px;
+        width: auto;
+      }
+
+      .cloze-send {
+        flex: 1 1 100%;
+        margin-left: 0;
+      }
+
       .footer-inner {
         align-items: stretch;
         flex-direction: column;
@@ -905,6 +978,10 @@
               <button class="send-button" id="sendButton" type="button" aria-label="メッセージを送信" disabled>↑</button>
             </div>
             <button class="mobile-reply" id="mobileReply" type="button">捜索への協力を申し出る</button>
+            <div class="cloze-composer" id="clozeComposer">
+              <div class="cloze-sentence"><span id="clozePrefix"></span><input class="cloze-input" id="clozeInput" type="text" autocomplete="off" aria-label="空欄に入る言葉"><span id="clozeSuffix"></span><button class="cloze-send" id="clozeSend" type="button" disabled>送信</button></div>
+              <p class="cloze-feedback" id="clozeFeedback" role="status" aria-live="polite"></p>
+            </div>
             <p class="waiting-note" id="waitingNote">SNSでブログのURLを見つけたら、このメールに戻り、入力欄へ貼り付けてください。</p>
           </div>
         </section>
@@ -915,7 +992,7 @@
   <footer class="site-footer">
     <div class="footer-inner">
       <p class="fiction-notice">このサイトの内容はフィクションです。登場する人物・団体・名称等は架空のものであり、実在のものとは関係ありません。</p>
-      <button class="archive-button" id="archiveButton" type="button" aria-haspopup="dialog" aria-controls="archiveOverlay">02 / 15</button>
+      <button class="archive-button" id="archiveButton" type="button" aria-haspopup="dialog" aria-controls="archiveOverlay">02 / 13</button>
     </div>
   </footer>
 
@@ -941,7 +1018,7 @@
       },
       {
         outgoing: '情報は持っていません。ただ、インターネットで情報を調べることには自信があります。よければ、捜索に協力させてください。',
-        reply: 'ありがとう。本当に助かります。\n\n最後に彼女の動きが確認できたのは8月7日の夜です。SNSに「今日は少し疲れた。早く寝ようかな」と書いたあと、毎日続いていた投稿が止まりました。メッセージを何度送っても既読になりません。\n\n翌日から何度か家まで様子を見に行きましたが、夜になっても部屋の明かりはつきませんでした。僕は合鍵を持っていないので、中の様子までは確認できていません。\n\n僕たちの関係はあまり周りには話していませんでした。彼女がSNSで、日記のように僕たちのことを細々と発信する程度だったんです。共通の知り合いも、ご家族の連絡先も分からず、今は頼れる人がいなくて……。',
+        reply: 'ありがとう。本当に助かります。\n\n最後に彼女の動きが確認できたのは8月7日の夜です。SNSに「今日は少し疲れた。早く寝ようかな」と書いたあと、投稿だけでなく、返信やほかの人への反応もすべて止まりました。彼女は日記代わりにほとんど毎晩何か書いていて、休むときは先に一言知らせる人だったんです。それがもう一週間以上、メッセージを何度送っても既読になりません。\n\n翌日から何度か家まで様子を見に行きましたが、夜になっても部屋の明かりはつきませんでした。僕は合鍵を持っていないので、中の様子までは確認できていません。\n\n僕たちの関係はあまり周りには話していませんでした。彼女がSNSで、日記のように僕たちのことを細々と発信する程度だったんです。共通の知り合いも、ご家族の連絡先も分からず、今は頼れる人がいなくて……。',
         mobileLabel: '捜索への協力を申し出る'
       },
       {
@@ -953,7 +1030,7 @@
         outgoing: 'そのSNSを確認したいです。アカウントのURLを送ってもらえますか？',
         reply: 'もちろんです。下のURLです。\n\n彼女はブログも書いていて、前にSNSのどこかで紹介していた気がします。でも、URLを保存していなくて……。もしブログも見つけたら、そのURLをこのメールに送ってもらえませんか？',
         link: 'hana-sns.html',
-        linkLabel: 'HANA｜日々の記録',
+        linkLabel: 'HANAのSNS',
         mobileLabel: 'SNSのURLを送ってもらう'
       }
     ];
@@ -968,12 +1045,20 @@
     const composerGuide = document.getElementById('composerGuide');
     const desktopComposer = document.getElementById('desktopComposer');
     const waitingNote = document.getElementById('waitingNote');
+    const clozeComposer = document.getElementById('clozeComposer');
+    const clozePrefix = document.getElementById('clozePrefix');
+    const clozeInput = document.getElementById('clozeInput');
+    const clozeSuffix = document.getElementById('clozeSuffix');
+    const clozeSend = document.getElementById('clozeSend');
+    const clozeFeedback = document.getElementById('clozeFeedback');
     const threadStatus = document.getElementById('threadStatus');
     const resetButton = document.getElementById('resetButton');
     const conversationStorageKey = 'hanazono-mail-progress-v3';
     const conversationStartedStorageKey = 'hanazono-mail-started-at-v3';
     const blogFoundStorageKey = 'hanazono-mail-blog-found-v3';
     const blogUrlStorageKey = 'hanazono-mail-blog-url-v3';
+    const reportProgressStorageKey = 'hanazono-mail-report-progress-v1';
+    const discoveryStorageKey = 'hanazono-blog-discoveries-v1';
     const expectedBlogFile = 'hana-blog.html';
     const blogConfirmationReply = '確認します。\n\n……これで間違いないです。彼女のブログです。ブログの中に、行方につながる情報があるかもしれません。僕も確認してみます。何か見つけ次第、ここで連絡しましょう。';
     const wrongUrlReplies = [
@@ -982,10 +1067,35 @@
       'すみません。このURLには見覚えがありません。もう少し探してもらえると助かります。',
       '開いてみましたが、探しているブログとは違うと思います。SNSの投稿に別のリンクはありませんでしたか？'
     ];
+    const reportSteps = [
+      {
+        prefix: '彼女は誰かの（',
+        suffix: '）を感じていたようです。',
+        answers: ['視線'],
+        requires: 'uneasy-signs',
+        reply: '視線……そんなことを記事に書いていたんですね。僕には何も話してくれませんでした。コメント欄にも手がかりがないか、確認してもらえますか？'
+      },
+      {
+        prefix: 'コメントには（',
+        suffix: '）という名前が出ています。',
+        answers: ['マサミ'],
+        requires: 'uneasy-signs',
+        reply: 'マサミ……その名前が誰を指しているのか、まだ分かりませんね。ただ、彼女が怖がっていたことと関係があるかもしれません。'
+      },
+      {
+        prefix: '彼女は（',
+        suffix: '）におびえていたみたいです。',
+        answers: ['ストーカー', 'すとーかー'],
+        requires: 'uneasy-signs',
+        reply: 'そんなことがあったなんて……。彼女を早く見つけないと。もっと古い記事や、別のブログにつながる情報がないか調べてもらえますか？'
+      }
+    ];
+    const wrongReportMessages = ['どこか違う気がする……。', '記事の表現と合っていないようです。', 'もう一度、見つけた記事を読み返してみましょう。'];
     let currentStep = loadConversationProgress();
     let conversationStartedAt = loadConversationStartedAt();
     let blogFound = loadBlogFound();
     let confirmedBlogUrl = loadConfirmedBlogUrl();
+    let reportProgress = loadReportProgress();
     let typedLength = 0;
     let isReplying = false;
 
@@ -1064,6 +1174,45 @@
       }
     }
 
+    function loadReportProgress() {
+      try {
+        return Math.min(reportSteps.length, Number(localStorage.getItem(reportProgressStorageKey)) || 0);
+      } catch (error) {
+        return 0;
+      }
+    }
+
+    function saveReportProgress() {
+      try {
+        localStorage.setItem(reportProgressStorageKey, String(reportProgress));
+      } catch (error) {
+        return;
+      }
+    }
+
+    function loadDiscoveries() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(discoveryStorageKey) || '[]');
+        return Array.isArray(saved) ? saved : [];
+      } catch (error) {
+        return [];
+      }
+    }
+
+    function hasRequiredDiscovery(step) {
+      return !step.requires || loadDiscoveries().includes(step.requires);
+    }
+
+    function normalizeReportAnswer(value) {
+      return value.trim().toLocaleLowerCase('ja-JP').replace(/[\s　]+/g, '').replace(/[ァ-ヶ]/g, function (character) {
+        return String.fromCharCode(character.charCodeAt(0) - 96);
+      });
+    }
+
+    function completedReportText(step) {
+      return step.prefix + step.answers[0] + step.suffix;
+    }
+
     function createMessage(direction, text, link, linkLabel, animate, timestamp) {
       const row = document.createElement('div');
       const wrap = document.createElement('div');
@@ -1119,6 +1268,12 @@
         const blogReplyTime = baseTime + conversationSteps.length * 120000;
         createMessage('outgoing', confirmedBlogUrl, '', '', false, blogReplyTime);
         createMessage('incoming', blogConfirmationReply, expectedBlogFile, 'HANAのブログを開く', false, blogReplyTime + 45000);
+        for (let index = 0; index < reportProgress; index += 1) {
+          const report = reportSteps[index];
+          const reportTime = blogReplyTime + (index + 1) * 120000;
+          createMessage('outgoing', completedReportText(report), '', '', false, reportTime);
+          createMessage('incoming', report.reply, '', '', false, reportTime + 45000);
+        }
       }
     }
 
@@ -1130,8 +1285,15 @@
 
     function focusComposerIfReady() {
       if (!window.matchMedia('(min-width: 701px)').matches) return;
-      if (replyInput.disabled || isReplying) return;
+      if (isReplying) return;
       if (document.getElementById('archiveOverlay').classList.contains('is-open')) return;
+
+      if (clozeComposer.style.display === 'block') {
+        clozeInput.focus({ preventScroll: true });
+        return;
+      }
+
+      if (replyInput.disabled) return;
 
       window.requestAnimationFrame(function () {
         replyInput.focus({ preventScroll: true });
@@ -1141,6 +1303,11 @@
     }
 
     function updateComposer() {
+      clozeComposer.style.display = 'none';
+      clozeFeedback.textContent = '';
+      clozeInput.value = '';
+      clozeSend.disabled = true;
+
       if (currentStep >= conversationSteps.length) {
         composer.classList.add('url-mode');
         desktopComposer.style.display = '';
@@ -1150,14 +1317,31 @@
 
         if (blogFound) {
           composer.classList.remove('is-inputting', 'is-receiving');
-          composer.classList.add('is-receiving');
-          composerGuide.textContent = 'ブログのURLは確認済みです。';
-          waitingNote.textContent = '正しいブログが確認されました。';
-          replyInput.value = confirmedBlogUrl;
+          composer.classList.add('is-inputting');
+          desktopComposer.style.display = 'none';
           replyInput.disabled = true;
           sendButton.disabled = true;
           mobileReply.style.display = 'none';
-          threadStatus.textContent = 'URL確認済み';
+
+          const nextReport = reportSteps[reportProgress];
+          if (nextReport && hasRequiredDiscovery(nextReport)) {
+            composer.classList.remove('url-mode');
+            clozeComposer.style.display = 'block';
+            clozePrefix.textContent = nextReport.prefix;
+            clozeSuffix.textContent = nextReport.suffix;
+            composerGuide.textContent = 'ブログで確認した内容を、空欄へ入力して報告してください。';
+            waitingNote.style.display = 'none';
+            threadStatus.textContent = '調査内容の入力待ち';
+            focusComposerIfReady();
+          } else if (reportProgress >= reportSteps.length) {
+            composerGuide.textContent = '現在見つかっている情報は共有済みです。';
+            waitingNote.textContent = 'ブログに、さらに奥へ進める手がかりがないか調べてください。';
+            threadStatus.textContent = '追加情報を待っています';
+          } else {
+            composerGuide.textContent = 'ブログの調査を続けてください。';
+            waitingNote.textContent = 'SNSにあった言葉や、記事のハッシュタグをブログ内検索で試してみましょう。';
+            threadStatus.textContent = '調査結果を待っています';
+          }
         } else {
           composer.classList.remove('is-receiving');
           composer.classList.add('is-inputting');
@@ -1175,6 +1359,7 @@
       const step = conversationSteps[currentStep];
       composer.classList.remove('url-mode', 'is-receiving');
       composer.classList.add('is-inputting');
+      desktopComposer.style.display = '';
       typedLength = 0;
       replyInput.value = '';
       replyInput.placeholder = 'メッセージ';
@@ -1269,6 +1454,44 @@
       }, 850 + Math.floor(Math.random() * 500));
     }
 
+    function sendReport() {
+      if (isReplying || reportProgress >= reportSteps.length) return;
+      const step = reportSteps[reportProgress];
+      if (!hasRequiredDiscovery(step)) return;
+      const submitted = normalizeReportAnswer(clozeInput.value);
+      const correct = step.answers.some(function (answer) {
+        return normalizeReportAnswer(answer) === submitted;
+      });
+
+      if (!correct) {
+        clozeFeedback.textContent = wrongReportMessages[Math.floor(Math.random() * wrongReportMessages.length)];
+        clozeInput.setAttribute('aria-invalid', 'true');
+        clozeInput.focus();
+        return;
+      }
+
+      clozeInput.removeAttribute('aria-invalid');
+      clozeFeedback.textContent = '';
+      clozeInput.disabled = true;
+      clozeSend.disabled = true;
+      isReplying = true;
+      setReceivingState();
+      createMessage('outgoing', completedReportText(step), '', '', true);
+      typingRow.classList.add('is-visible');
+      scrollToLatest();
+
+      window.setTimeout(function () {
+        typingRow.classList.remove('is-visible');
+        createMessage('incoming', step.reply, '', '', true);
+        reportProgress += 1;
+        saveReportProgress();
+        clozeInput.disabled = false;
+        isReplying = false;
+        updateComposer();
+        scrollToLatest();
+      }, 900 + Math.min(1100, step.reply.length * 6));
+    }
+
     replyInput.addEventListener('keydown', function (event) {
       if (isReplying) {
         event.preventDefault();
@@ -1326,6 +1549,23 @@
 
     mobileReply.addEventListener('click', sendCurrentReply);
 
+    clozeInput.addEventListener('input', function () {
+      clozeFeedback.textContent = '';
+      clozeInput.removeAttribute('aria-invalid');
+      clozeSend.disabled = clozeInput.value.trim().length === 0;
+    });
+
+    clozeInput.addEventListener('keydown', function (event) {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        if (!clozeSend.disabled) sendReport();
+      }
+    });
+
+    clozeSend.addEventListener('click', function () {
+      if (!clozeSend.disabled) sendReport();
+    });
+
     resetButton.addEventListener('click', function () {
       const shouldReset = window.confirm('メールの会話を最初からやり直しますか？\nページアーカイブの記録は消去されません。');
       if (!shouldReset) return;
@@ -1335,6 +1575,7 @@
         localStorage.removeItem(conversationStartedStorageKey);
         localStorage.removeItem(blogFoundStorageKey);
         localStorage.removeItem(blogUrlStorageKey);
+        localStorage.removeItem(reportProgressStorageKey);
       } catch (error) {
         return;
       }
@@ -1347,7 +1588,7 @@
     const archiveClose = document.getElementById('archiveClose');
     const archiveList = document.getElementById('archiveList');
     const archiveStorageKey = 'hanazono-page-archive-v1';
-    const totalPages = 15;
+    const totalPages = 13;
     const currentPage = {
       number: 2,
       title: '捜索ページ管理者とのメール',

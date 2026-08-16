@@ -6,1248 +6,181 @@
   <meta name="description" content="@hana_daysのPictaプロフィール">
   <title>@hana_days | Picta</title>
   <style>
-    :root {
-      --white: #fff;
-      --ink: #19191c;
-      --muted: #73737b;
-      --line: #dedee3;
-      --soft: #f6f6f8;
-      --pink: #e44f87;
-      --violet: #7654d8;
-      --orange: #f29b50;
-      --red: #a92222;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      margin: 0;
-      color: var(--ink);
-      background: var(--white);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Yu Gothic UI", "Yu Gothic", sans-serif;
-      line-height: 1.6;
-    }
-
-    button,
-    input {
-      font: inherit;
-    }
-
-    button,
-    a {
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .app-shell {
-      min-height: 100vh;
-      display: grid;
-      grid-template-columns: 226px 1fr;
-    }
-
-    .side-nav {
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      padding: 32px 19px 24px;
-      border-right: 1px solid var(--line);
-      background: #fff;
-    }
-
-    .brand {
-      display: inline-flex;
-      align-items: center;
-      gap: 9px;
-      margin: 0 10px 35px;
-      color: var(--ink);
-      text-decoration: none;
-      font-family: Georgia, "Times New Roman", serif;
-      font-size: 1.7rem;
-      font-style: italic;
-      font-weight: 700;
-      letter-spacing: -.04em;
-    }
-
-    .brand-mark {
-      width: 25px;
-      height: 25px;
-      border-radius: 8px;
-      background: conic-gradient(from 210deg, var(--violet), var(--pink), var(--orange), var(--violet));
-      box-shadow: inset 0 0 0 6px #fff;
-      outline: 2px solid var(--pink);
-    }
-
-    .nav-list {
-      margin: 0;
-      padding: 0;
-      display: grid;
-      gap: 7px;
-      list-style: none;
-    }
-
-    .nav-item {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      min-height: 48px;
-      padding: 8px 12px;
-      border-radius: 11px;
-      color: #3e3e43;
-      text-decoration: none;
-      font-size: .91rem;
-    }
-
-    .nav-item:hover,
-    .nav-item.is-active {
-      background: var(--soft);
-    }
-
-    .nav-item.is-active {
-      font-weight: 700;
-    }
-
-    .nav-icon {
-      width: 25px;
-      text-align: center;
-      font-size: 1.2rem;
-    }
-
-    .mobile-header,
-    .mobile-nav {
-      display: none;
-    }
-
-    .content {
-      min-width: 0;
-      padding: 44px 30px 70px;
-    }
-
-    .profile {
-      width: min(860px, 100%);
-      margin: 0 auto 35px;
-    }
-
-    .profile-main {
-      display: grid;
-      grid-template-columns: 180px 1fr;
-      gap: 48px;
-      align-items: center;
-      padding: 0 34px 30px;
-    }
-
-    .avatar-ring {
-      width: 142px;
-      height: 142px;
-      margin: auto;
-      padding: 4px;
-      border-radius: 50%;
-      background: conic-gradient(var(--orange), var(--pink), var(--violet), var(--orange));
-    }
-
-    .avatar-ring img {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center 31%;
-      border: 4px solid #fff;
-      border-radius: 50%;
-    }
-
-    .profile-heading {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 17px;
-    }
-
-    .profile-heading h1 {
-      margin: 0;
-      font-size: 1.32rem;
-      font-weight: 550;
-    }
-
-    .follow-button {
-      padding: 7px 17px;
-      border: 0;
-      border-radius: 8px;
-      color: #fff;
-      background: #2285e5;
-      font-size: .78rem;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .follow-button.is-following {
-      color: #55555b;
-      background: #ededf0;
-    }
-
-    .stats {
-      margin: 0 0 17px;
-      padding: 0;
-      display: flex;
-      gap: 30px;
-      list-style: none;
-      font-size: .86rem;
-    }
-
-    .stats strong {
-      margin-right: 4px;
-    }
-
-    .display-name {
-      margin: 0 0 3px;
-      font-size: .87rem;
-      font-weight: 700;
-    }
-
-    .bio {
-      margin: 0;
-      font-size: .86rem;
-      white-space: pre-line;
-    }
-
-    .profile-tabs {
-      display: flex;
-      justify-content: center;
-      gap: 56px;
-      border-top: 1px solid var(--line);
-    }
-
-    .profile-tab {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      margin-top: -1px;
-      padding: 15px 5px 13px;
-      border-top: 1px solid var(--ink);
-      color: var(--ink);
-      font-size: .72rem;
-      font-weight: 700;
-      letter-spacing: .08em;
-    }
-
-    .post-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 4px;
-    }
-
-    .post-button {
-      position: relative;
-      aspect-ratio: 1;
-      padding: 0;
-      overflow: hidden;
-      border: 0;
-      background: #eee;
-      cursor: pointer;
-    }
-
-    .post-button img {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform .25s ease;
-    }
-
-    .post-button:hover img,
-    .post-button:focus-visible img {
-      transform: scale(1.035);
-    }
-
-    .post-hover {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 22px;
-      color: #fff;
-      background: rgba(0, 0, 0, .38);
-      opacity: 0;
-      font-size: .85rem;
-      font-weight: 700;
-      transition: opacity .2s ease;
-    }
-
-    .post-button:hover .post-hover,
-    .post-button:focus-visible .post-hover {
-      opacity: 1;
-    }
-
-    body.modal-open,
-    body.archive-open {
-      overflow: hidden;
-    }
-
-    .post-modal {
-      position: fixed;
-      inset: 0;
-      z-index: 900;
-      display: grid;
-      place-items: center;
-      padding: 28px;
-      background: rgba(14, 14, 17, .78);
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity .18s ease, visibility .18s ease;
-    }
-
-    .post-modal.is-open {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .post-dialog {
-      width: min(1040px, 100%);
-      max-height: calc(100vh - 56px);
-      display: grid;
-      grid-template-columns: minmax(0, 1.35fr) minmax(310px, .65fr);
-      overflow: hidden;
-      border-radius: 5px;
-      background: #fff;
-      box-shadow: 0 25px 80px rgba(0, 0, 0, .34);
-    }
-
-    .post-image-wrap {
-      display: grid;
-      place-items: center;
-      min-height: 500px;
-      background: #09090a;
-    }
-
-    .post-image-wrap img {
-      display: block;
-      width: 100%;
-      max-height: calc(100vh - 56px);
-      aspect-ratio: 1;
-      object-fit: contain;
-    }
-
-    .post-detail {
-      min-height: 0;
-      display: grid;
-      grid-template-rows: auto 1fr auto;
-    }
-
-    .post-owner {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 14px 15px;
-      border-bottom: 1px solid var(--line);
-      font-size: .82rem;
-      font-weight: 700;
-    }
-
-    .mini-avatar {
-      width: 34px;
-      height: 34px;
-      object-fit: cover;
-      object-position: center 31%;
-      border-radius: 50%;
-    }
-
-    .post-copy {
-      min-height: 0;
-      overflow-y: auto;
-      padding: 18px 17px;
-    }
-
-    .caption {
-      margin: 0;
-      font-size: .84rem;
-      line-height: 1.75;
-      white-space: pre-line;
-    }
-
-    .caption strong {
-      margin-right: 7px;
-    }
-
-    .blog-clue {
-      display: none;
-      margin-top: 18px;
-      padding: 13px;
-      border: 1px solid #e6b8cd;
-      border-radius: 10px;
-      background: #fff6fa;
-    }
-
-    .blog-clue.is-visible {
-      display: block;
-    }
-
-    .blog-clue-label {
-      margin: 0 0 5px;
-      color: #8b536a;
-      font-size: .7rem;
-      font-weight: 700;
-    }
-
-    .blog-url {
-      display: block;
-      margin-bottom: 10px;
-      color: #714a94;
-      font-family: Consolas, monospace;
-      font-size: .78rem;
-      overflow-wrap: anywhere;
-      user-select: all;
-    }
-
-    .copy-button {
-      width: 100%;
-      padding: 9px 12px;
-      border: 0;
-      border-radius: 8px;
-      color: #fff;
-      background: linear-gradient(100deg, var(--violet), var(--pink));
-      font-size: .77rem;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .post-actions {
-      padding: 12px 15px 15px;
-      border-top: 1px solid var(--line);
-    }
-
-    .action-row {
-      display: flex;
-      gap: 17px;
-      margin-bottom: 7px;
-    }
-
-    .icon-button {
-      padding: 0;
-      border: 0;
-      background: transparent;
-      font-size: 1.28rem;
-      cursor: pointer;
-    }
-
-    .icon-button.is-liked {
-      color: #e23b62;
-    }
-
-    .like-count {
-      margin: 0 0 4px;
-      font-size: .78rem;
-      font-weight: 700;
-    }
-
-    .post-date {
-      margin: 0;
-      color: #8c8c93;
-      font-size: .67rem;
-    }
-
-    .post-close {
-      position: fixed;
-      top: 16px;
-      right: 18px;
-      z-index: 910;
-      width: 42px;
-      height: 42px;
-      padding: 0;
-      border: 0;
-      color: #fff;
-      background: transparent;
-      font-size: 2rem;
-      cursor: pointer;
-    }
-
-    .toast {
-      position: fixed;
-      left: 50%;
-      bottom: 28px;
-      z-index: 1200;
-      padding: 10px 16px;
-      border-radius: 999px;
-      color: #fff;
-      background: rgba(28, 28, 31, .92);
-      opacity: 0;
-      pointer-events: none;
-      transform: translate(-50%, 12px);
-      transition: opacity .18s ease, transform .18s ease;
-      font-size: .78rem;
-    }
-
-    .toast.is-visible {
-      opacity: 1;
-      transform: translate(-50%, 0);
-    }
-
-    .site-footer {
-      border-top: 1px solid #c7c2b7;
-      background: #eeebe3;
-      color: #575550;
-    }
-
-    .footer-inner {
-      width: min(1080px, calc(100% - 32px));
-      min-height: 76px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 24px;
-      padding: 16px 0;
-    }
-
-    .fiction-notice {
-      margin: 0;
-      font-size: .72rem;
-      line-height: 1.7;
-    }
-
-    .archive-button {
-      flex: 0 0 auto;
-      min-width: 128px;
-      padding: 10px 13px;
-      border: 1px solid #8f8a7f;
-      color: #353431;
-      background: #fff;
-      font-size: .76rem;
-      font-weight: 700;
-      letter-spacing: .08em;
-      cursor: pointer;
-    }
-
-    .archive-button:hover,
-    .archive-button:focus-visible {
-      border-color: var(--red);
-      color: var(--red);
-      background: #fffafa;
-    }
-
-    .archive-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 1000;
-      display: grid;
-      place-items: center;
-      padding: 20px;
-      background: rgba(22, 22, 22, .7);
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity .18s ease, visibility .18s ease;
-    }
-
-    .archive-overlay.is-open {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .archive-dialog {
-      width: min(520px, 100%);
-      max-height: min(680px, calc(100vh - 40px));
-      overflow: hidden;
-      border: 1px solid #aaa59a;
-      background: #f9f7f1;
-      box-shadow: 0 22px 60px rgba(0, 0, 0, .34);
-      transform: translateY(10px);
-      transition: transform .18s ease;
-    }
-
-    .archive-overlay.is-open .archive-dialog {
-      transform: translateY(0);
-    }
-
-    .archive-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-      padding: 19px 20px;
-      border-bottom: 1px solid #c8c3b7;
-      color: #fff;
-      background: #292a2c;
-    }
-
-    .archive-header h2 {
-      margin: 0;
-      font-family: "Yu Mincho", "Hiragino Mincho ProN", serif;
-      font-size: 1.12rem;
-      letter-spacing: .08em;
-    }
-
-    .archive-close {
-      width: 36px;
-      height: 36px;
-      padding: 0;
-      border: 1px solid #747577;
-      color: #fff;
-      background: transparent;
-      font-size: 1.45rem;
-      line-height: 1;
-      cursor: pointer;
-    }
-
-    .archive-content {
-      padding: 20px;
-    }
-
-    .archive-description {
-      margin: 0 0 15px;
-      color: #68655f;
-      font-size: .8rem;
-      line-height: 1.7;
-    }
-
-    .archive-list {
-      max-height: 390px;
-      margin: 0;
-      padding: 0;
-      overflow-y: auto;
-      border-top: 1px solid #cbc6bb;
-      list-style: none;
-    }
-
-    .archive-entry {
-      display: grid;
-      grid-template-columns: 64px 1fr;
-      align-items: center;
-      gap: 12px;
-      padding: 13px 11px;
-      border-bottom: 1px solid #d8d3c8;
-      color: #272623;
-      background: #fff;
-      text-decoration: none;
-    }
-
-    a.archive-entry:hover,
-    a.archive-entry:focus-visible {
-      background: #fff4f4;
-    }
-
-    .archive-entry.is-locked {
-      color: #99958d;
-      background: #efede7;
-      cursor: default;
-      user-select: none;
-    }
-
-    .archive-number {
-      color: var(--red);
-      font-family: Consolas, monospace;
-      font-size: .78rem;
-      font-weight: 700;
-    }
-
-    .archive-entry.is-locked .archive-number {
-      color: #8c8880;
-    }
-
-    .archive-title {
-      font-size: .88rem;
-      line-height: 1.5;
-    }
-
-    .archive-entry.is-locked .archive-title {
-      letter-spacing: .18em;
-    }
-
-    @media (max-width: 760px) {
-      .app-shell {
-        display: block;
-        padding-bottom: 58px;
-      }
-
-      .side-nav {
-        display: none;
-      }
-
-      .mobile-header {
-        position: sticky;
-        top: 0;
-        z-index: 100;
-        min-height: 53px;
-        padding: 0 16px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        border-bottom: 1px solid var(--line);
-        background: rgba(255, 255, 255, .96);
-        backdrop-filter: blur(16px);
-      }
-
-      .mobile-header .brand {
-        margin: 0;
-        font-size: 1.45rem;
-      }
-
-      .mobile-header .brand-mark {
-        width: 21px;
-        height: 21px;
-      }
-
-      .mobile-header-icon {
-        font-size: 1.2rem;
-      }
-
-      .mobile-nav {
-        position: fixed;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        z-index: 110;
-        height: 58px;
-        display: flex;
-        align-items: center;
-        justify-content: space-around;
-        border-top: 1px solid var(--line);
-        background: rgba(255, 255, 255, .97);
-        backdrop-filter: blur(16px);
-      }
-
-      .mobile-nav span {
-        font-size: 1.22rem;
-      }
-
-      .content {
-        padding: 25px 0 38px;
-      }
-
-      .profile {
-        margin-bottom: 18px;
-      }
-
-      .profile-main {
-        grid-template-columns: 92px 1fr;
-        gap: 17px;
-        padding: 0 16px 22px;
-      }
-
-      .avatar-ring {
-        width: 82px;
-        height: 82px;
-        padding: 3px;
-      }
-
-      .profile-heading {
-        align-items: flex-start;
-        flex-direction: column;
-        gap: 9px;
-        margin-bottom: 12px;
-      }
-
-      .profile-heading h1 {
-        font-size: 1.08rem;
-      }
-
-      .follow-button {
-        padding: 6px 20px;
-      }
-
-      .stats {
-        gap: 13px;
-        font-size: .72rem;
-      }
-
-      .profile-copy {
-        grid-column: 1 / -1;
-        margin-top: -5px;
-      }
-
-      .profile-tabs {
-        gap: 75px;
-      }
-
-      .post-grid {
-        gap: 2px;
-      }
-
-      .post-hover {
-        display: none;
-      }
-
-      .post-modal {
-        padding: 0;
-        display: block;
-        overflow-y: auto;
-        background: #fff;
-      }
-
-      .post-modal.is-open {
-        display: block;
-      }
-
-      .post-dialog {
-        width: 100%;
-        max-height: none;
-        min-height: 100dvh;
-        display: grid;
-        grid-template-columns: minmax(0, 1fr);
-        grid-template-rows: auto auto auto auto;
-        grid-template-areas:
-          "owner"
-          "image"
-          "copy"
-          "actions";
-        overflow: visible;
-        border-radius: 0;
-        box-shadow: none;
-      }
-
-      .post-image-wrap {
-        grid-area: image;
-        width: 100%;
-        min-height: 0;
-        aspect-ratio: 1;
-      }
-
-      .post-image-wrap img {
-        width: 100%;
-        height: 100%;
-        max-height: none;
-        aspect-ratio: auto;
-        object-fit: cover;
-      }
-
-      .post-detail {
-        display: contents;
-      }
-
-      .post-owner {
-        position: sticky;
-        top: 0;
-        z-index: 3;
-        grid-area: owner;
-        min-height: 57px;
-        padding-right: 62px;
-        background: #fff;
-      }
-
-      .post-copy {
-        grid-area: copy;
-        overflow: visible;
-        background: #fff;
-      }
-
-      .post-actions {
-        grid-area: actions;
-        background: #fff;
-      }
-
-      .post-close {
-        top: 7px;
-        right: 9px;
-        z-index: 5;
-        border-radius: 50%;
-        color: #333339;
-        background: #ededf0;
-      }
-
-      .footer-inner {
-        align-items: stretch;
-        flex-direction: column;
-        gap: 11px;
-      }
-
-      .site-footer {
-        padding-bottom: 58px;
-      }
-
-      .archive-button {
-        width: 100%;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      html {
-        scroll-behavior: auto;
-      }
-
-      .post-button img,
-      .post-hover,
-      .post-modal,
-      .toast,
-      .archive-overlay,
-      .archive-dialog {
-        transition: none;
-      }
-    }
+    :root { --ink:#202124; --muted:#6f7379; --line:#dadde2; --blue:#397cc6; --soft-blue:#eef6ff; --paper:#fff; --shell:#f4f6f8; --red:#a44747; }
+    * { box-sizing:border-box; }
+    html { min-height:100%; background:var(--shell); }
+    body { min-width:320px; min-height:100vh; margin:0; color:var(--ink); background:var(--shell); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Yu Gothic UI","Yu Gothic",sans-serif; line-height:1.55; }
+    button,input { font:inherit; }
+    a { color:inherit; }
+    .app-header { position:sticky; top:0; z-index:100; border-bottom:1px solid var(--line); background:rgba(255,255,255,.96); backdrop-filter:blur(14px); }
+    .header-inner { width:min(1040px,100%); min-height:58px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:20px; padding:0 20px; }
+    .brand { display:flex; align-items:center; gap:9px; color:#2c3035; text-decoration:none; font-size:1.25rem; font-weight:750; letter-spacing:-.04em; }
+    .brand-mark { width:28px; height:28px; display:grid; place-items:center; border-radius:9px 4px 9px 4px; color:#fff; background:linear-gradient(145deg,#65a6de,#875ab5); font-size:.88rem; }
+    .header-note { color:var(--muted); font-size:.72rem; }
+    .layout { width:min(1040px,100%); margin:0 auto; display:grid; grid-template-columns:210px minmax(0,600px) 230px; align-items:start; border-left:1px solid var(--line); border-right:1px solid var(--line); background:var(--paper); }
+    .left-nav,.right-column { position:sticky; top:58px; min-height:calc(100vh - 58px); padding:24px 15px; background:#fafbfc; }
+    .left-nav { border-right:1px solid var(--line); }
+    .nav-list { margin:0; padding:0; display:grid; gap:7px; list-style:none; }
+    .nav-item { display:flex; align-items:center; gap:12px; padding:10px 12px; border-radius:999px; color:#363a3f; text-decoration:none; font-size:.88rem; }
+    .nav-item.is-active { color:#1d68b3; background:var(--soft-blue); font-weight:700; }
+    .nav-icon { width:22px; text-align:center; font-size:1.05rem; }
+    .profile-column { min-width:0; border-right:1px solid var(--line); }
+    .profile-bar { min-height:54px; display:flex; align-items:center; gap:12px; padding:8px 17px; border-bottom:1px solid var(--line); background:rgba(255,255,255,.96); }
+    .back-mark { color:var(--blue); font-size:1.15rem; }
+    .profile-bar h1 { margin:0; font-size:1rem; line-height:1.25; }
+    .profile-bar p { margin:1px 0 0; color:var(--muted); font-size:.67rem; }
+    .cover { height:146px; background:radial-gradient(circle at 18% 28%,rgba(255,255,255,.78) 0 4px,transparent 5px),radial-gradient(circle at 78% 62%,rgba(255,255,255,.7) 0 3px,transparent 4px),linear-gradient(135deg,#d8ebef,#eadde8 52%,#dfe8d8); background-size:46px 46px,41px 41px,auto; }
+    .profile-info { position:relative; padding:0 18px 17px; border-bottom:1px solid var(--line); }
+    .profile-avatar { width:98px; height:98px; margin-top:-49px; display:block; border:5px solid #fff; border-radius:50%; object-fit:cover; box-shadow:0 1px 5px rgba(0,0,0,.12); }
+    .follow-row { min-height:42px; display:flex; justify-content:flex-end; align-items:center; }
+    .follow-button { padding:7px 18px; border:1px solid var(--blue); border-radius:999px; color:var(--blue); background:#fff; font-size:.76rem; font-weight:700; cursor:pointer; }
+    .follow-button.is-following { color:#fff; background:var(--blue); }
+    .profile-name { margin:3px 0 0; font-size:1.22rem; }
+    .profile-handle,.joined { margin:0; color:var(--muted); font-size:.75rem; }
+    .bio { margin:11px 0 7px; white-space:pre-line; font-size:.83rem; }
+    .stats { margin:10px 0 0; display:flex; gap:18px; color:var(--muted); font-size:.72rem; }
+    .stats strong { color:var(--ink); font-size:.8rem; }
+    .tabs { display:grid; grid-template-columns:repeat(3,1fr); border-bottom:1px solid var(--line); }
+    .tab { padding:13px 5px 11px; color:var(--muted); text-align:center; font-size:.73rem; }
+    .tab.is-active { border-bottom:3px solid var(--blue); color:var(--ink); font-weight:700; }
+    .post { display:grid; grid-template-columns:45px minmax(0,1fr); gap:11px; padding:14px 17px 10px; border-bottom:1px solid var(--line); background:#fff; }
+    .post:hover { background:#fafcff; }
+    .post-avatar { width:45px; height:45px; border-radius:50%; object-fit:cover; }
+    .post-main { min-width:0; }
+    .post-meta { margin:0 0 3px; display:flex; align-items:baseline; flex-wrap:wrap; gap:4px; font-size:.76rem; }
+    .post-meta strong { font-size:.82rem; }
+    .handle,.post-time { color:var(--muted); }
+    .pin-label { margin:0 0 7px; color:var(--muted); font-size:.66rem; font-weight:700; }
+    .post-text { margin:0; white-space:pre-line; overflow-wrap:anywhere; font-size:.84rem; line-height:1.7; }
+    .post-text a { color:#2771bb; text-decoration:none; }
+    .post-image { display:block; width:min(100%,430px); max-height:430px; margin-top:10px; border:1px solid #cfd3d8; border-radius:15px; object-fit:cover; }
+    .link-card { width:min(100%,430px); margin-top:10px; overflow:hidden; border:1px solid #ccd1d7; border-radius:13px; background:#fff; }
+    .link-card a { display:block; padding:11px 13px; color:var(--ink); text-decoration:none; }
+    .link-host { display:block; color:var(--muted); font-size:.66rem; }
+    .link-title { display:block; margin-top:2px; font-size:.83rem; font-weight:700; }
+    .link-copy { width:100%; padding:8px 12px; border:0; border-top:1px solid #d8dce1; color:var(--blue); background:#f7fbff; text-align:left; font-size:.72rem; font-weight:700; cursor:pointer; }
+    .post-actions { max-width:410px; margin-top:9px; display:flex; justify-content:space-between; color:#7c8187; font-size:.68rem; }
+    .action { display:inline-flex; align-items:center; gap:5px; }
+    .last-post { background:#fffdf8; }
+    .right-column { display:grid; gap:15px; }
+    .side-card { overflow:hidden; border:1px solid var(--line); border-radius:14px; background:#fff; }
+    .side-card h2 { margin:0; padding:12px 14px; border-bottom:1px solid var(--line); font-size:.85rem; }
+    .side-card p { margin:0; padding:12px 14px; color:var(--muted); font-size:.7rem; line-height:1.7; }
+    .trend-list { margin:0; padding:0; list-style:none; }
+    .trend-list li { padding:10px 14px; border-bottom:1px solid #eceef1; font-size:.72rem; }
+    .trend-list small { display:block; color:var(--muted); font-size:.62rem; }
+    .toast { position:fixed; left:50%; bottom:26px; z-index:1100; padding:10px 16px; border-radius:999px; color:#fff; background:rgba(30,34,39,.92); opacity:0; pointer-events:none; transform:translate(-50%,10px); transition:opacity .18s ease,transform .18s ease; font-size:.75rem; }
+    .toast.is-visible { opacity:1; transform:translate(-50%,0); }
+    body.archive-open { overflow:hidden; }
+    .site-footer { border-top:1px solid #c7c2b7; color:#575550; background:#eeebe3; }
+    .footer-inner { width:min(1040px,calc(100% - 32px)); min-height:76px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:24px; padding:16px 0; }
+    .fiction-notice { margin:0; font-size:.72rem; line-height:1.7; }
+    .archive-button { flex:0 0 auto; min-width:128px; padding:10px 13px; border:1px solid #8f8a7f; color:#353431; background:#fff; font-size:.76rem; font-weight:700; letter-spacing:.08em; cursor:pointer; }
+    .archive-button:hover,.archive-button:focus-visible { border-color:var(--red); color:var(--red); background:#fffafa; }
+    .archive-overlay { position:fixed; inset:0; z-index:1000; display:grid; place-items:center; padding:20px; background:rgba(22,22,22,.7); opacity:0; visibility:hidden; transition:opacity .18s ease,visibility .18s ease; }
+    .archive-overlay.is-open { opacity:1; visibility:visible; }
+    .archive-dialog { width:min(520px,100%); max-height:min(680px,calc(100vh - 40px)); overflow:hidden; border:1px solid #aaa59a; background:#f9f7f1; box-shadow:0 22px 60px rgba(0,0,0,.34); transform:translateY(10px); transition:transform .18s ease; }
+    .archive-overlay.is-open .archive-dialog { transform:translateY(0); }
+    .archive-header { display:flex; align-items:center; justify-content:space-between; gap:20px; padding:16px 18px; border-bottom:1px solid #c9c4b9; background:#ede9df; }
+    .archive-header h2 { margin:0; font-size:1rem; letter-spacing:.06em; }
+    .archive-close { width:34px; height:34px; border:1px solid #aaa59a; color:#494743; background:#fff; font-size:1.15rem; cursor:pointer; }
+    .archive-content { max-height:calc(min(680px,100vh - 40px) - 67px); overflow-y:auto; padding:15px 18px 20px; }
+    .archive-description { margin:0 0 13px; color:#68655f; font-size:.74rem; line-height:1.7; }
+    .archive-list { margin:0; padding:0; display:grid; gap:5px; list-style:none; }
+    .archive-entry { min-height:42px; display:grid; grid-template-columns:44px minmax(0,1fr); align-items:center; border:1px solid #bbb6ab; color:#343330; background:#fff; text-decoration:none; }
+    .archive-entry:not(.is-locked):hover,.archive-entry:not(.is-locked):focus-visible { border-color:var(--red); background:#fff8f8; }
+    .archive-entry.is-locked { color:#98958e; background:#e6e3dc; cursor:default; }
+    .archive-number { align-self:stretch; display:grid; place-items:center; border-right:1px solid #ccc7bc; font-family:Georgia,serif; font-size:.72rem; }
+    .archive-title { padding:8px 11px; font-size:.8rem; }
+    .archive-entry.is-locked .archive-title { letter-spacing:.18em; }
+    @media (max-width:900px) {
+      .layout { grid-template-columns:72px minmax(0,1fr) 215px; }
+      .left-nav { padding-inline:8px; }
+      .nav-item { justify-content:center; padding-inline:5px; }
+      .nav-label { display:none; }
+    }
+    @media (max-width:700px) {
+      .header-inner { min-height:52px; padding-inline:14px; }
+      .header-note { display:none; }
+      .layout { display:block; border:0; }
+      .left-nav,.right-column { display:none; }
+      .profile-column { border-right:0; }
+      .cover { height:122px; }
+      .profile-info { padding-inline:15px; }
+      .profile-avatar { width:88px; height:88px; margin-top:-44px; }
+      .post { grid-template-columns:40px minmax(0,1fr); gap:9px; padding:12px 13px 9px; }
+      .post-avatar { width:40px; height:40px; }
+      .post-image,.link-card { width:100%; }
+      .footer-inner { align-items:stretch; flex-direction:column; gap:11px; }
+      .archive-button { width:100%; }
+    }
+    @media (prefers-reduced-motion:reduce) { .archive-overlay,.archive-dialog,.toast { transition:none; } }
   </style>
 </head>
 <body>
-  <div class="app-shell">
-    <aside class="side-nav">
-      <a class="brand" href="hana-sns.html"><span class="brand-mark" aria-hidden="true"></span>Picta</a>
-      <nav aria-label="メインメニュー">
-        <ul class="nav-list">
-          <li><a class="nav-item" href="hana-sns.html"><span class="nav-icon" aria-hidden="true">⌂</span>ホーム</a></li>
-          <li><span class="nav-item"><span class="nav-icon" aria-hidden="true">⌕</span>検索</span></li>
-          <li><span class="nav-item"><span class="nav-icon" aria-hidden="true">◇</span>見つける</span></li>
-          <li><span class="nav-item"><span class="nav-icon" aria-hidden="true">♡</span>お知らせ</span></li>
-          <li><span class="nav-item is-active"><span class="nav-icon" aria-hidden="true">●</span>プロフィール</span></li>
-        </ul>
-      </nav>
-    </aside>
-
-    <div>
-      <header class="mobile-header">
-        <a class="brand" href="hana-sns.html"><span class="brand-mark" aria-hidden="true"></span>Picta</a>
-        <span class="mobile-header-icon" aria-hidden="true">♡</span>
-      </header>
-
-      <main class="content">
-        <section class="profile" aria-labelledby="profileName">
-          <div class="profile-main">
-            <div class="avatar-ring">
-              <!-- 場面：SNSのプロフィール画像。ターゲット層：HANAの投稿を調査するARGプレイヤー。テーマ・コンセプト：本人が公開している親しみやすい日常の自撮り。含めたい要素：公園で微笑む20代後半の日本人女性、暗い肩下の髪、ベージュのコート。カラーテーマ：自然光、ベージュ、淡い緑。画像サイズ：1122*1402px。レイアウトイメージ：顔を中心に円形へトリミング。 -->
-              <img src="images/missing-woman.png" alt="HANAのプロフィール写真" width="1122" height="1402">
-            </div>
-            <div>
-              <div class="profile-heading">
-                <h1 id="profileName">hana_days</h1>
-                <button class="follow-button" id="followButton" type="button">フォロー</button>
-              </div>
-              <ul class="stats">
-                <li><strong>6</strong>投稿</li>
-                <li><strong>184</strong>フォロワー</li>
-                <li><strong>96</strong>フォロー中</li>
-              </ul>
-              <div class="profile-copy">
-                <p class="display-name">HANA</p>
-                <p class="bio">好きなものを、好きなだけ。🌷
-カフェと小旅行、ときどきMくん。</p>
-              </div>
-            </div>
-          </div>
-          <div class="profile-tabs"><span class="profile-tab">▦ 投稿</span></div>
-
-          <div class="post-grid" id="postGrid">
-            <button class="post-button" type="button" data-post="0" aria-label="花束の投稿を開く">
-              <!-- 場面：SNSの記念日投稿。ターゲット層：恋人との幸せな生活に関心を持つSNS利用者。テーマ・コンセプト：Mくんから贈られたように演出したロマンチックなプレゼント。含めたい要素：HANA本人、淡いピンクと白の花束、小さな無地の贈り物箱、裏返したカード。男性は写さない。カラーテーマ：ピンク、白、ベージュ、セージグリーン。画像サイズ：1254*1254px。レイアウトイメージ：HANAが花束を手にしている自然な正方形写真。 -->
-              <img src="images/hana-gift.png" alt="花束を手にしたHANA" width="1254" height="1254">
-              <span class="post-hover"><span>♥ 41</span><span>● 3</span></span>
-            </button>
-            <button class="post-button" type="button" data-post="1" aria-label="夕食の投稿を開く">
-              <!-- 場面：SNSのデート投稿。ターゲット層：恋人との日常を見るSNS利用者。テーマ・コンセプト：二人で夕食を楽しんだように見えるが、人物は一切写らない。含めたい要素：料理の入った二皿のパスタ、二脚のグラス、二人分のテーブルセット、向かい側の空席。カラーテーマ：アンバー、濃い木目、赤の差し色。画像サイズ：1254*1254px。レイアウトイメージ：着席した一人称視点の正方形写真。 -->
-              <img src="images/hana-dinner.png" alt="料理が盛られた二皿のパスタと二人分のテーブル" width="1254" height="1254">
-              <span class="post-hover"><span>♥ 36</span><span>● 5</span></span>
-            </button>
-            <button class="post-button" type="button" data-post="2" aria-label="旅行の投稿を開く">
-              <!-- 場面：SNSの小旅行投稿。ターゲット層：旅行やデートの投稿を見るSNS利用者。テーマ・コンセプト：写真嫌いなMくんと二人で列車に乗っているように見せる。含めたい要素：窓際に座るHANA本人、列車の窓、流れる緑の風景、二枚の無地の切符、空の隣席。男性は写さない。カラーテーマ：青空、緑、ニュートラルグレー。画像サイズ：1254*1254px。レイアウトイメージ：HANAと空の隣席を含む正方形のスナップ写真。 -->
-              <img src="images/hana-trip.png" alt="列車の窓際に座るHANAと空の隣席" width="1254" height="1254">
-              <span class="post-hover"><span>♥ 52</span><span>● 4</span></span>
-            </button>
-            <button class="post-button" type="button" data-post="3" aria-label="ピクニックの投稿を開く">
-              <!-- 場面：SNSの休日デート投稿。ターゲット層：季節の行楽写真を楽しむSNS利用者。テーマ・コンセプト：桜の下で二人がピクニックをしたように見せる。含めたい要素：二つのサンドイッチ、二本の無地ボトル、二枚のナプキン、桜と川。カラーテーマ：新緑、クリーム、淡い青、桜色。画像サイズ：1024*1024px。レイアウトイメージ：二人分の食事が分かる斜め上からの正方形写真。 -->
-              <img src="images/hana-picnic.png" alt="桜の川辺に用意された二人分のピクニック" width="1024" height="1024">
-              <span class="post-hover"><span>♥ 63</span><span>● 7</span></span>
-            </button>
-            <button class="post-button" type="button" data-post="4" aria-label="カフェの投稿を開く">
-              <!-- 場面：SNSのカフェデート投稿。ターゲット層：カフェ巡りや恋人との日常を見るSNS利用者。テーマ・コンセプト：二人でケーキを食べた幸せな時間。含めたい要素：HANA本人、二杯のコーヒー、二皿の苺ケーキ、窓辺の木製テーブル。男性は写さない。カラーテーマ：クリーム、木目、淡いピンク。画像サイズ：1254*1254px。レイアウトイメージ：向かい側から撮影されたHANAと二人分のセットが分かる正方形写真。 -->
-              <img src="images/hana-cafe.png" alt="カフェに座るHANAと二人分のコーヒーとケーキ" width="1254" height="1254">
-              <span class="post-hover"><span>♥ 47</span><span>● 2</span></span>
-            </button>
-            <button class="post-button" type="button" data-post="5" aria-label="ブログ開設の投稿を開く">
-              <!-- 場面：SNSのブログ開設報告。ターゲット層：HANAの過去投稿を調査しているARGプレイヤー。テーマ・コンセプト：日々の記録を残す個人ブログを作り始めた穏やかな時間。含めたい要素：開いたノートパソコン、文字の読めない淡いピンクのWeb画面、ノート、マグカップ、小さな植物。カラーテーマ：白、淡いピンク、明るい木目。画像サイズ：1024*1024px。レイアウトイメージ：窓辺の机を斜め上から撮影した正方形写真。 -->
-              <img src="images/hana-blog-start.png" alt="ブログ画面を開いたノートパソコン" width="1024" height="1024">
-              <span class="post-hover"><span>♥ 28</span><span>● 6</span></span>
-            </button>
-          </div>
-        </section>
-      </main>
-
-      <nav class="mobile-nav" aria-label="モバイルメニュー"><span>⌂</span><span>⌕</span><span>◇</span><span>♡</span><span>●</span></nav>
-    </div>
+  <header class="app-header"><div class="header-inner"><a class="brand" href="hana-sns.html"><span class="brand-mark" aria-hidden="true">P</span>Picta</a><span class="header-note">日常を、言葉と写真で。</span></div></header>
+  <div class="layout">
+    <aside class="left-nav"><nav aria-label="メインメニュー"><ul class="nav-list"><li><a class="nav-item is-active" href="hana-sns.html"><span class="nav-icon" aria-hidden="true">⌂</span><span class="nav-label">ホーム</span></a></li><li><span class="nav-item"><span class="nav-icon" aria-hidden="true">⌕</span><span class="nav-label">検索</span></span></li><li><span class="nav-item"><span class="nav-icon" aria-hidden="true">♢</span><span class="nav-label">見つける</span></span></li><li><span class="nav-item"><span class="nav-icon" aria-hidden="true">♡</span><span class="nav-label">通知</span></span></li></ul></nav></aside>
+    <main class="profile-column">
+      <header class="profile-bar"><span class="back-mark" aria-hidden="true">←</span><div><h1>HANA</h1><p>104件の投稿</p></div></header>
+      <div class="cover" aria-hidden="true"></div>
+      <section class="profile-info" aria-labelledby="profileName">
+        <!-- 場面：短文SNSのプロフィール画像。ターゲット層：HANAの投稿を調査するARGプレイヤー。テーマ・コンセプト：本人が公開している親しみやすい日常の自撮り。含めたい要素：公園で微笑む20代後半の日本人女性、暗い肩下の髪、ベージュの服。カラーテーマ：自然光、ベージュ、淡い緑。画像サイズ：1122*1402px。レイアウトイメージ：顔を中心に円形へトリミング。 -->
+        <img class="profile-avatar" src="images/missing-woman.png" alt="HANAのプロフィール写真" width="1122" height="1402">
+        <div class="follow-row"><button class="follow-button" id="followButton" type="button">フォロー</button></div>
+        <h2 class="profile-name" id="profileName">HANA</h2><p class="profile-handle">@hana_days</p><p class="bio">日記代わりに、ほぼ毎晩ひとこと。🌷
+カフェと小旅行、ときどきMくん。</p><p class="joined">▣ 2026年4月からPictaを利用</p><div class="stats"><span><strong>96</strong> フォロー中</span><span><strong>184</strong> フォロワー</span></div>
+      </section>
+      <nav class="tabs" aria-label="プロフィール表示"><span class="tab is-active">投稿</span><span class="tab">返信</span><span class="tab">メディア</span></nav>
+      <section aria-label="HANAの投稿">
+        <article class="post"><img class="post-avatar" src="images/missing-woman.png" alt="" width="1122" height="1402"><div class="post-main"><p class="pin-label">⌖ 固定された投稿</p><p class="post-meta"><strong>HANA</strong><span class="handle">@hana_days</span><span>·</span><time class="post-time" datetime="2026-04-18">4月18日</time></p><p class="post-text">アカウントを作り直しました。
+スマホを替えたら前のアカウントに入れなくなってしまったので、これからはこちらを使います。昔の日記や写真はブログに残しています🌷</p><div class="link-card"><a href="hana-blog.html"><span class="link-host">hana-blog.html</span><span class="link-title">ハナのブログ｜小さなことを、ゆっくり記録。</span></a><button class="link-copy" id="copyBlogButton" type="button">ブログのURLをコピー</button></div><div class="post-actions"><span class="action">◇ 4</span><span class="action">♢ 7</span><span class="action">♡ 38</span><span class="action">▱</span></div></div></article>
+        <article class="post last-post"><img class="post-avatar" src="images/missing-woman.png" alt="" width="1122" height="1402"><div class="post-main"><p class="post-meta"><strong>HANA</strong><span class="handle">@hana_days</span><span>·</span><time class="post-time" datetime="2026-08-07T21:13">8月7日 21:13</time></p><p class="post-text">今日は少し疲れた。早く寝ようかな。</p><div class="post-actions"><span class="action">◇ 1</span><span class="action">♢ 0</span><span class="action">♡ 12</span><span class="action">▱</span></div></div></article>
+        <article class="post"><img class="post-avatar" src="images/missing-woman.png" alt="" width="1122" height="1402"><div class="post-main"><p class="post-meta"><strong>HANA</strong><span class="handle">@hana_days</span><span>·</span><time class="post-time" datetime="2026-08-07T12:24">8月7日 12:24</time></p><p class="post-text">お昼は昨日の残りもの。午後もゆっくり頑張ろう。</p><div class="post-actions"><span class="action">◇ 0</span><span class="action">♢ 1</span><span class="action">♡ 9</span><span class="action">▱</span></div></div></article>
+        <article class="post"><img class="post-avatar" src="images/missing-woman.png" alt="" width="1122" height="1402"><div class="post-main"><p class="post-meta"><strong>HANA</strong><span class="handle">@hana_days</span><span>·</span><time class="post-time" datetime="2026-08-06T20:42">8月6日 20:42</time></p><p class="post-text">新しく買った紅茶、思っていたより香りが強い。でも夜に飲むならこれくらいが好きかも。</p><div class="post-actions"><span class="action">◇ 2</span><span class="action">♢ 0</span><span class="action">♡ 17</span><span class="action">▱</span></div></div></article>
+        <article class="post"><img class="post-avatar" src="images/missing-woman.png" alt="" width="1122" height="1402"><div class="post-main"><p class="post-meta"><strong>HANA</strong><span class="handle">@hana_days</span><span>·</span><time class="post-time" datetime="2026-08-05T22:05">8月5日 22:05</time></p><p class="post-text">雨の音が大きくて眠れない。明日の朝には止んでいますように。</p><div class="post-actions"><span class="action">◇ 1</span><span class="action">♢ 0</span><span class="action">♡ 14</span><span class="action">▱</span></div></div></article>
+        <article class="post"><img class="post-avatar" src="images/missing-woman.png" alt="" width="1122" height="1402"><div class="post-main"><p class="post-meta"><strong>HANA</strong><span class="handle">@hana_days</span><span>·</span><time class="post-time" datetime="2026-08-04T19:31">8月4日 19:31</time></p><p class="post-text">夕方の空がきれいだった。写真を撮る前に色が変わっちゃったので、今日は言葉だけ。</p><div class="post-actions"><span class="action">◇ 0</span><span class="action">♢ 1</span><span class="action">♡ 21</span><span class="action">▱</span></div></div></article>
+        <article class="post"><img class="post-avatar" src="images/missing-woman.png" alt="" width="1122" height="1402"><div class="post-main"><p class="post-meta"><strong>HANA</strong><span class="handle">@hana_days</span><span>·</span><time class="post-time" datetime="2026-08-03T21:02">8月3日 21:02</time></p><p class="post-text">今日はちょっとした記念日。忘れたふりをしていたのに、ちゃんと覚えていてくれました🌷</p><!-- 場面：短文SNSの記念日投稿。ターゲット層：HANAの日常を調査するARGプレイヤー。テーマ・コンセプト：恋人から花束を贈られたように見える幸せな記録。含めたい要素：HANA本人、淡いピンクと白の花束、小さな贈り物箱、無地のカード。カラーテーマ：ピンク、白、ベージュ。画像サイズ：1254*1254px。レイアウトイメージ：HANAが花束を手にした正方形写真。 --><img class="post-image" src="images/hana-gift.png" alt="花束を手にしたHANA" width="1254" height="1254"><div class="post-actions"><span class="action">◇ 3</span><span class="action">♢ 2</span><span class="action">♡ 41</span><span class="action">▱</span></div></div></article>
+        <article class="post"><img class="post-avatar" src="images/missing-woman.png" alt="" width="1122" height="1402"><div class="post-main"><p class="post-meta"><strong>HANA</strong><span class="handle">@hana_days</span><span>·</span><time class="post-time" datetime="2026-08-02T20:18">8月2日 20:18</time></p><p class="post-text">部屋の片づけを始めたら、昔の写真ばかり見てしまって全然進まなかった。</p><div class="post-actions"><span class="action">◇ 1</span><span class="action">♢ 0</span><span class="action">♡ 13</span><span class="action">▱</span></div></div></article>
+        <article class="post"><img class="post-avatar" src="images/missing-woman.png" alt="" width="1122" height="1402"><div class="post-main"><p class="post-meta"><strong>HANA</strong><span class="handle">@hana_days</span><span>·</span><time class="post-time" datetime="2026-08-01T17:46">8月1日 17:46</time></p><p class="post-text">気になっていたカフェへ。Mくんは撮られるのが苦手なので、今日も私だけです。笑</p><!-- 場面：短文SNSのカフェ投稿。ターゲット層：HANAの日常を調査するARGプレイヤー。テーマ・コンセプト：二人でカフェへ行ったように見える休日の記録。含めたい要素：HANA本人、二杯のコーヒー、二皿のケーキ、窓辺の席。カラーテーマ：クリーム、木目、淡いピンク。画像サイズ：1254*1254px。レイアウトイメージ：HANAと二人分の飲食物が写る正方形写真。 --><img class="post-image" src="images/hana-cafe.png" alt="カフェに座るHANAと二人分のケーキ" width="1254" height="1254"><div class="post-actions"><span class="action">◇ 2</span><span class="action">♢ 3</span><span class="action">♡ 47</span><span class="action">▱</span></div></div></article>
+        <article class="post"><img class="post-avatar" src="images/missing-woman.png" alt="" width="1122" height="1402"><div class="post-main"><p class="post-meta"><strong>HANA</strong><span class="handle">@hana_days</span><span>·</span><time class="post-time" datetime="2026-07-31T22:16">7月31日 22:16</time></p><p class="post-text">今月もおつかれさまでした。明日は少しだけ朝寝坊する。</p><div class="post-actions"><span class="action">◇ 1</span><span class="action">♢ 0</span><span class="action">♡ 18</span><span class="action">▱</span></div></div></article>
+        <article class="post"><img class="post-avatar" src="images/missing-woman.png" alt="" width="1122" height="1402"><div class="post-main"><p class="post-meta"><strong>HANA</strong><span class="handle">@hana_days</span><span>·</span><time class="post-time" datetime="2026-07-30T20:54">7月30日 20:54</time></p><p class="post-text">冷たいものばかり飲んでしまう。ちゃんと温かいごはんも食べないと。</p><div class="post-actions"><span class="action">◇ 0</span><span class="action">♢ 0</span><span class="action">♡ 11</span><span class="action">▱</span></div></div></article>
+        <article class="post"><img class="post-avatar" src="images/missing-woman.png" alt="" width="1122" height="1402"><div class="post-main"><p class="post-meta"><strong>HANA</strong><span class="handle">@hana_days</span><span>·</span><time class="post-time" datetime="2026-07-29T23:08">7月29日 23:08</time></p><p class="post-text">今日はブログのほうに長めの日記を書きました。ここに書ききれないことは、たまに #ひとりごと で残しています。</p><div class="post-actions"><span class="action">◇ 0</span><span class="action">♢ 1</span><span class="action">♡ 8</span><span class="action">▱</span></div></div></article>
+        <article class="post"><img class="post-avatar" src="images/missing-woman.png" alt="" width="1122" height="1402"><div class="post-main"><p class="post-meta"><strong>HANA</strong><span class="handle">@hana_days</span><span>·</span><time class="post-time" datetime="2026-07-28T21:37">7月28日 21:37</time></p><p class="post-text">帰りに遠回りしてパン屋さんへ。最後のひとつが買えてうれしい。</p><div class="post-actions"><span class="action">◇ 1</span><span class="action">♢ 0</span><span class="action">♡ 16</span><span class="action">▱</span></div></div></article>
+        <article class="post"><img class="post-avatar" src="images/missing-woman.png" alt="" width="1122" height="1402"><div class="post-main"><p class="post-meta"><strong>HANA</strong><span class="handle">@hana_days</span><span>·</span><time class="post-time" datetime="2026-07-27T19:44">7月27日 19:44</time></p><p class="post-text">月曜日から予定がずれてばかり。こういう日は早めに休もう。</p><div class="post-actions"><span class="action">◇ 0</span><span class="action">♢ 0</span><span class="action">♡ 10</span><span class="action">▱</span></div></div></article>
+        <article class="post"><img class="post-avatar" src="images/missing-woman.png" alt="" width="1122" height="1402"><div class="post-main"><p class="post-meta"><strong>HANA</strong><span class="handle">@hana_days</span><span>·</span><time class="post-time" datetime="2026-07-26T18:12">7月26日 18:12</time></p><p class="post-text">窓の外の雲が夏らしかった。洗濯物もすぐ乾いて助かる。</p><div class="post-actions"><span class="action">◇ 0</span><span class="action">♢ 1</span><span class="action">♡ 15</span><span class="action">▱</span></div></div></article>
+        <article class="post"><img class="post-avatar" src="images/missing-woman.png" alt="" width="1122" height="1402"><div class="post-main"><p class="post-meta"><strong>HANA</strong><span class="handle">@hana_days</span><span>·</span><time class="post-time" datetime="2026-07-25T22:28">7月25日 22:28</time></p><p class="post-text">Mくんと夜ごはん。少し言い合いになったけど、最後はいつも通り。</p><!-- 場面：短文SNSの夕食投稿。ターゲット層：HANAの日常を調査するARGプレイヤー。テーマ・コンセプト：二人で夕食を楽しんだように見える記録。含めたい要素：料理が盛られた二皿のパスタ、二脚のグラス、二人分のカトラリー、人物は写さない。カラーテーマ：アンバー、濃い木目、赤。画像サイズ：1254*1254px。レイアウトイメージ：着席した一人称視点の正方形写真。 --><img class="post-image" src="images/hana-dinner.png" alt="料理が盛られた二皿のパスタ" width="1254" height="1254"><div class="post-actions"><span class="action">◇ 5</span><span class="action">♢ 1</span><span class="action">♡ 36</span><span class="action">▱</span></div></div></article>
+        <article class="post"><img class="post-avatar" src="images/missing-woman.png" alt="" width="1122" height="1402"><div class="post-main"><p class="post-meta"><strong>HANA</strong><span class="handle">@hana_days</span><span>·</span><time class="post-time" datetime="2026-06-14T16:22">6月14日</time></p><p class="post-text">日帰り小旅行。二枚の切符も、流れていく景色も、ちゃんとブログに残しておこう。</p><!-- 場面：短文SNSの小旅行投稿。ターゲット層：HANAの日常を調査するARGプレイヤー。テーマ・コンセプト：二人で列車旅行をしたように見える記録。含めたい要素：HANA本人、車窓の緑、二枚の切符、空の隣席。カラーテーマ：青、緑、ベージュ。画像サイズ：1254*1254px。レイアウトイメージ：窓際のHANAと車内テーブルを収めた正方形写真。 --><img class="post-image" src="images/hana-trip.png" alt="列車の窓際に座るHANAと二枚の切符" width="1254" height="1254"><div class="post-actions"><span class="action">◇ 4</span><span class="action">♢ 3</span><span class="action">♡ 52</span><span class="action">▱</span></div></div></article>
+      </section>
+    </main>
+    <aside class="right-column"><section class="side-card"><h2>このプロフィールについて</h2><p>現在表示されているのは、@hana_daysが公開している投稿です。</p></section><section class="side-card"><h2>話題を見つける</h2><ul class="trend-list"><li><small>暮らし</small>#夏の夜</li><li><small>写真</small>#カフェ巡り</li><li><small>旅行</small>#小旅行</li></ul></section></aside>
   </div>
-
-  <footer class="site-footer">
-    <div class="footer-inner">
-      <p class="fiction-notice">このサイトの内容はフィクションです。登場する人物・団体・名称等は架空のものであり、実在のものとは関係ありません。</p>
-      <button class="archive-button" id="archiveButton" type="button" aria-haspopup="dialog" aria-controls="archiveOverlay">03 / 15</button>
-    </div>
-  </footer>
-
-  <div class="post-modal" id="postModal" aria-hidden="true">
-    <button class="post-close" id="postClose" type="button" aria-label="投稿を閉じる">×</button>
-    <article class="post-dialog" role="dialog" aria-modal="true" aria-labelledby="postCaption">
-      <div class="post-image-wrap"><img id="modalImage" src="images/hana-gift.png" alt=""></div>
-      <div class="post-detail">
-        <header class="post-owner">
-          <img class="mini-avatar" src="images/missing-woman.png" alt="" width="1122" height="1402">
-          <span>hana_days</span>
-        </header>
-        <div class="post-copy">
-          <p class="caption" id="postCaption"></p>
-          <div class="blog-clue" id="blogClue">
-            <p class="blog-clue-label">投稿に記載されたURL</p>
-            <code class="blog-url" id="blogUrl"></code>
-            <button class="copy-button" id="copyButton" type="button">ブログのURLをコピー</button>
-          </div>
-        </div>
-        <footer class="post-actions">
-          <div class="action-row"><button class="icon-button" id="likeButton" type="button" aria-label="いいね">♡</button><button class="icon-button" type="button" aria-label="コメント">◇</button></div>
-          <p class="like-count" id="likeCount"></p>
-          <p class="post-date" id="postDate"></p>
-        </footer>
-      </div>
-    </article>
-  </div>
-
-  <div class="archive-overlay" id="archiveOverlay" aria-hidden="true">
-    <section class="archive-dialog" role="dialog" aria-modal="true" aria-labelledby="archiveTitle">
-      <header class="archive-header"><h2 id="archiveTitle">ページアーカイブ</h2><button class="archive-close" id="archiveClose" type="button" aria-label="ページアーカイブを閉じる">×</button></header>
-      <div class="archive-content">
-        <p class="archive-description">一度訪れたページが記録されます。解放済みのページを選ぶと、そのページへ戻れます。未探索のページは「？？？」と表示されます。</p>
-        <ol class="archive-list" id="archiveList"></ol>
-      </div>
-    </section>
-  </div>
-
-  <div class="toast" id="toast" role="status" aria-live="polite">URLをコピーしました</div>
-
+  <footer class="site-footer"><div class="footer-inner"><p class="fiction-notice">このサイトの内容はフィクションです。登場する人物・団体・名称等は架空のものであり、実在のものとは関係ありません。</p><button class="archive-button" id="archiveButton" type="button" aria-haspopup="dialog" aria-controls="archiveOverlay">03 / 13</button></div></footer>
+  <div class="archive-overlay" id="archiveOverlay" aria-hidden="true"><section class="archive-dialog" role="dialog" aria-modal="true" aria-labelledby="archiveTitle"><header class="archive-header"><h2 id="archiveTitle">ページアーカイブ</h2><button class="archive-close" id="archiveClose" type="button" aria-label="ページアーカイブを閉じる">×</button></header><div class="archive-content"><p class="archive-description">一度訪れたページが記録されます。解放済みのページを選ぶと、そのページへ戻れます。未探索のページは「？？？」と表示されます。</p><ol class="archive-list" id="archiveList"></ol></div></section></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script>
-    const posts = [
-      {
-        image: 'images/hana-gift.png',
-        alt: '花束を手にしたHANA',
-        caption: '今日はちょっとした記念日。\n花束をもらってびっくり🌷 Mくんが記念に撮ってくれました。こういうところだけは本当にずるい。カードの中身はふたりだけの秘密。\n\n#記念日 #ありがとう #ふたりの時間',
-        likes: 41,
-        date: '2026年8月3日',
-        blog: false
-      },
-      {
-        image: 'images/hana-dinner.png',
-        alt: '料理が盛られた二皿のパスタと二人分のテーブル',
-        caption: '久しぶりの夜ごはん。\n待ち合わせのことで少しだけ喧嘩したけど、最後はいつも通り仲直り。向かいにいるのに、写真を向けるとすぐ避けるMくん。たまには一緒に写ってほしいな。\n\n#デート #夜ごはん #仲直り',
-        likes: 36,
-        date: '2026年7月20日',
-        blog: false
-      },
-      {
-        image: 'images/hana-trip.png',
-        alt: '列車の窓際に座るHANAと空の隣席',
-        caption: 'Mくんと日帰り小旅行！\n切符はちゃんと2枚。なのに本人は「写真は恥ずかしい」って、また隣の席から逃げちゃった。景色がきれいだったから、まあいっか。\n\n#小旅行 #窓の外 #週末デート',
-        likes: 52,
-        date: '2026年6月14日',
-        blog: false
-      },
-      {
-        image: 'images/hana-picnic.png',
-        alt: '桜の川辺に用意された二人分のピクニック',
-        caption: '今年も一緒にお花見できた🌸\n朝からふたり分のお弁当を作るの、ちょっと大変だったけど楽しかった。Mくんはサンドイッチを褒めてくれました。\n\n#お花見 #ピクニック #手作り',
-        likes: 63,
-        date: '2026年4月5日',
-        blog: false
-      },
-      {
-        image: 'images/hana-cafe.png',
-        alt: 'カフェに座るHANAと二人分のコーヒーとケーキ',
-        caption: '気になっていたカフェへ。\n私が白いケーキで、Mくんはピンク。私の写真は撮るのに、自分へカメラを向けるとすぐ顔を隠すの、徹底しすぎじゃない？笑\n\n#カフェ巡り #いちごケーキ #Mくん',
-        likes: 47,
-        date: '2026年3月22日',
-        blog: false
-      },
-      {
-        image: 'images/hana-blog-start.png',
-        alt: 'ブログ画面を開いたノートパソコン',
-        caption: 'ブログを作りました！\nSNSには書ききれないことや、毎日のことをゆっくり残していくつもりです。Mくんとの思い出も、こっちならもう少し長く書けるかな。\n\nよかったら遊びに来てください🌷',
-        likes: 28,
-        date: '2025年11月3日',
-        blog: true
-      }
-    ];
-
-    const postModal = document.getElementById('postModal');
-    const postClose = document.getElementById('postClose');
-    const modalImage = document.getElementById('modalImage');
-    const postCaption = document.getElementById('postCaption');
-    const likeCount = document.getElementById('likeCount');
-    const postDate = document.getElementById('postDate');
-    const blogClue = document.getElementById('blogClue');
-    const blogUrl = document.getElementById('blogUrl');
-    const copyButton = document.getElementById('copyButton');
-    const likeButton = document.getElementById('likeButton');
-    const followButton = document.getElementById('followButton');
-    const toast = document.getElementById('toast');
-    const blogAddress = new URL('hana-blog.html', window.location.href).href;
-    let activePost = null;
-    let activePostTrigger = null;
-    let toastTimer = null;
-
-    function openPost(index, trigger) {
-      activePost = posts[index];
-      activePostTrigger = trigger;
-      modalImage.src = activePost.image;
-      modalImage.alt = activePost.alt;
-      postCaption.textContent = activePost.caption;
-      likeCount.textContent = 'いいね！ ' + activePost.likes + '件';
-      postDate.textContent = activePost.date;
-      blogClue.classList.toggle('is-visible', activePost.blog);
-      blogUrl.textContent = activePost.blog ? blogAddress : '';
-      likeButton.classList.remove('is-liked');
-      likeButton.textContent = '♡';
-      postModal.classList.add('is-open');
-      postModal.setAttribute('aria-hidden', 'false');
-      document.body.classList.add('modal-open');
-      postClose.focus();
-    }
-
-    function closePost(restoreFocus = true) {
-      if (!postModal.classList.contains('is-open')) return;
-      if (restoreFocus && activePostTrigger) activePostTrigger.focus({ preventScroll: true });
-      postModal.classList.remove('is-open');
-      postModal.setAttribute('aria-hidden', 'true');
-      document.body.classList.remove('modal-open');
-    }
-
-    function showToast(message) {
-      toast.textContent = message;
-      toast.classList.add('is-visible');
-      window.clearTimeout(toastTimer);
-      toastTimer = window.setTimeout(function () {
-        toast.classList.remove('is-visible');
-      }, 1800);
-    }
-
-    async function copyBlogUrl() {
-      try {
-        await navigator.clipboard.writeText(blogAddress);
-      } catch (error) {
-        const temporaryInput = document.createElement('textarea');
-        temporaryInput.value = blogAddress;
-        temporaryInput.setAttribute('readonly', '');
-        temporaryInput.style.position = 'fixed';
-        temporaryInput.style.opacity = '0';
-        document.body.appendChild(temporaryInput);
-        temporaryInput.select();
-        document.execCommand('copy');
-        temporaryInput.remove();
-      }
-      showToast('ブログのURLをコピーしました。アーカイブからメールへ戻って送信してください。');
-    }
-
-    document.querySelectorAll('.post-button').forEach(function (button) {
-      button.addEventListener('click', function () {
-        openPost(Number(button.dataset.post), button);
-      });
-    });
-
-    postClose.addEventListener('click', closePost);
-    postModal.addEventListener('click', function (event) {
-      if (event.target === postModal) closePost();
-    });
-    copyButton.addEventListener('click', copyBlogUrl);
-
-    likeButton.addEventListener('click', function () {
-      const liked = likeButton.classList.toggle('is-liked');
-      likeButton.textContent = liked ? '♥' : '♡';
-      if (activePost) likeCount.textContent = 'いいね！ ' + (activePost.likes + (liked ? 1 : 0)) + '件';
-    });
-
-    followButton.addEventListener('click', function () {
-      const following = followButton.classList.toggle('is-following');
-      followButton.textContent = following ? 'フォロー中' : 'フォロー';
-    });
-
-    const archiveButton = document.getElementById('archiveButton');
-    const archiveOverlay = document.getElementById('archiveOverlay');
-    const archiveClose = document.getElementById('archiveClose');
-    const archiveList = document.getElementById('archiveList');
-    const archiveStorageKey = 'hanazono-page-archive-v1';
-    const totalPages = 15;
-    const currentPage = {
-      number: 3,
-      title: 'HANAのSNS',
-      href: 'hana-sns.html'
-    };
-
-    function loadArchive() {
-      try {
-        const saved = JSON.parse(localStorage.getItem(archiveStorageKey) || '[]');
-        return Array.isArray(saved) ? saved : [];
-      } catch (error) {
-        return [];
-      }
-    }
-
-    function saveArchive(pages) {
-      try {
-        localStorage.setItem(archiveStorageKey, JSON.stringify(pages));
-      } catch (error) {
-        return;
-      }
-    }
-
-    function registerCurrentPage() {
-      const pages = loadArchive();
-      const existingIndex = pages.findIndex(function (page) {
-        return page.number === currentPage.number;
-      });
-      if (existingIndex >= 0) pages[existingIndex] = currentPage;
-      else pages.push(currentPage);
-      pages.sort(function (a, b) { return a.number - b.number; });
-      saveArchive(pages);
-      return pages;
-    }
-
-    function renderArchive() {
-      const pages = registerCurrentPage();
-      archiveList.textContent = '';
-      for (let pageNumber = 1; pageNumber <= totalPages; pageNumber += 1) {
-        const page = pages.find(function (savedPage) { return savedPage.number === pageNumber; });
-        const item = document.createElement('li');
-        const entry = document.createElement(page ? 'a' : 'div');
-        const number = document.createElement('span');
-        const title = document.createElement('span');
-        entry.className = 'archive-entry';
-        number.className = 'archive-number';
-        title.className = 'archive-title';
-        number.textContent = String(pageNumber).padStart(2, '0');
-        if (page) {
-          entry.href = page.href;
-          title.textContent = page.title;
-        } else {
-          entry.classList.add('is-locked');
-          entry.setAttribute('aria-label', String(pageNumber).padStart(2, '0') + ' 未探索');
-          title.textContent = '？？？';
-        }
-        entry.append(number, title);
-        item.appendChild(entry);
-        archiveList.appendChild(item);
-      }
-    }
-
-    function openArchive() {
-      closePost(false);
-      renderArchive();
-      archiveOverlay.classList.add('is-open');
-      archiveOverlay.setAttribute('aria-hidden', 'false');
-      document.body.classList.add('archive-open');
-      archiveClose.focus();
-    }
-
-    function closeArchive() {
-      archiveOverlay.classList.remove('is-open');
-      archiveOverlay.setAttribute('aria-hidden', 'true');
-      document.body.classList.remove('archive-open');
-      archiveButton.focus();
-    }
-
-    registerCurrentPage();
-    archiveButton.addEventListener('click', openArchive);
-    archiveClose.addEventListener('click', closeArchive);
-    archiveOverlay.addEventListener('click', function (event) {
-      if (event.target === archiveOverlay) closeArchive();
-    });
-
-    document.addEventListener('keydown', function (event) {
-      if (event.key !== 'Escape') return;
-      if (archiveOverlay.classList.contains('is-open')) closeArchive();
-      else if (postModal.classList.contains('is-open')) closePost();
-    });
+    const followButton=document.getElementById('followButton');
+    const copyBlogButton=document.getElementById('copyBlogButton');
+    const toast=document.getElementById('toast');
+    const blogAddress=new URL('hana-blog.html',window.location.href).href;
+    let toastTimer=null;
+    function showToast(message){toast.textContent=message;toast.classList.add('is-visible');window.clearTimeout(toastTimer);toastTimer=window.setTimeout(function(){toast.classList.remove('is-visible');},1900);}
+    followButton.addEventListener('click',function(){const following=followButton.classList.toggle('is-following');followButton.textContent=following?'フォロー中':'フォロー';});
+    copyBlogButton.addEventListener('click',async function(){try{await navigator.clipboard.writeText(blogAddress);}catch(error){const temporaryInput=document.createElement('textarea');temporaryInput.value=blogAddress;temporaryInput.setAttribute('readonly','');temporaryInput.style.position='fixed';temporaryInput.style.opacity='0';document.body.appendChild(temporaryInput);temporaryInput.select();document.execCommand('copy');temporaryInput.remove();}showToast('ブログのURLをコピーしました。アーカイブからメールへ戻って送信できます。');});
+    const archiveButton=document.getElementById('archiveButton');
+    const archiveOverlay=document.getElementById('archiveOverlay');
+    const archiveClose=document.getElementById('archiveClose');
+    const archiveList=document.getElementById('archiveList');
+    const archiveStorageKey='hanazono-page-archive-v1';
+    const totalPages=13;
+    const currentPage={number:3,title:'HANAのSNS',href:'hana-sns.html'};
+    function loadArchive(){try{const saved=JSON.parse(localStorage.getItem(archiveStorageKey)||'[]');return Array.isArray(saved)?saved:[];}catch(error){return[];}}
+    function saveArchive(pages){try{localStorage.setItem(archiveStorageKey,JSON.stringify(pages));}catch(error){return;}}
+    function registerCurrentPage(){const pages=loadArchive();const existingIndex=pages.findIndex(function(page){return page.number===currentPage.number;});if(existingIndex>=0)pages[existingIndex]=currentPage;else pages.push(currentPage);pages.sort(function(a,b){return a.number-b.number;});saveArchive(pages);return pages;}
+    function renderArchive(){const pages=registerCurrentPage();archiveList.textContent='';for(let pageNumber=1;pageNumber<=totalPages;pageNumber+=1){const page=pages.find(function(savedPage){return savedPage.number===pageNumber;});const item=document.createElement('li');const entry=document.createElement(page?'a':'div');const number=document.createElement('span');const title=document.createElement('span');entry.className='archive-entry';number.className='archive-number';title.className='archive-title';number.textContent=String(pageNumber).padStart(2,'0');if(page){entry.href=page.href;title.textContent=page.title;}else{entry.classList.add('is-locked');entry.setAttribute('aria-label',String(pageNumber).padStart(2,'0')+' 未探索');title.textContent='？？？';}entry.append(number,title);item.appendChild(entry);archiveList.appendChild(item);}}
+    function openArchive(){renderArchive();archiveOverlay.classList.add('is-open');archiveOverlay.setAttribute('aria-hidden','false');document.body.classList.add('archive-open');archiveClose.focus();}
+    function closeArchive(){archiveOverlay.classList.remove('is-open');archiveOverlay.setAttribute('aria-hidden','true');document.body.classList.remove('archive-open');archiveButton.focus();}
+    registerCurrentPage();archiveButton.addEventListener('click',openArchive);archiveClose.addEventListener('click',closeArchive);archiveOverlay.addEventListener('click',function(event){if(event.target===archiveOverlay)closeArchive();});document.addEventListener('keydown',function(event){if(event.key==='Escape'&&archiveOverlay.classList.contains('is-open'))closeArchive();});
   </script>
 </body>
 </html>
