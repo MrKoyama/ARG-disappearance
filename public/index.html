@@ -511,6 +511,15 @@
       line-height: 1.5;
     }
 
+    .archive-tools { margin-top: 15px; padding-top: 14px; border-top: 1px solid #d2cdc2; }
+    .archive-reset-button { padding: 9px 12px; border: 1px solid #a98787; color: #824c4c; background: #fff7f7; font-size: .76rem; cursor: pointer; }
+    .archive-reset-confirm { margin-top: 11px; padding: 13px; border: 1px solid #c8a4a4; background: #fff8f7; }
+    .archive-reset-confirm[hidden] { display: none; }
+    .archive-reset-confirm p { margin: 0 0 10px; color: #5f5551; font-size: .78rem; }
+    .confirm-actions { display: flex; justify-content: flex-end; gap: 8px; }
+    .confirm-actions button { padding: 8px 12px; border: 1px solid #aaa59a; background: #fff; cursor: pointer; }
+    .confirm-actions .danger { border-color: #995c5c; color: #fff; background: #995c5c; }
+
     @media (max-width: 700px) {
       .header-inner {
         align-items: flex-start;
@@ -682,6 +691,13 @@
       <div class="archive-content">
         <p class="archive-description">一度訪れたページが記録されます。解放済みのページを選ぶと、そのページへ戻れます。未探索のページは「？？？」と表示されます。</p>
         <ol class="archive-list" id="archiveList"></ol>
+        <div class="archive-tools">
+          <button class="archive-reset-button" id="archiveResetButton" type="button">アーカイブをリセット</button>
+          <div class="archive-reset-confirm" id="archiveResetConfirm" role="alertdialog" aria-labelledby="archiveResetTitle" hidden>
+            <p id="archiveResetTitle">探索済みページの記録を消去しますか？ メールの会話は消去されません。</p>
+            <div class="confirm-actions"><button id="archiveResetCancel" type="button">キャンセル</button><button class="danger" id="archiveResetConfirmButton" type="button">リセットする</button></div>
+          </div>
+        </div>
       </div>
     </section>
   </div>
@@ -692,6 +708,10 @@
     const archiveOverlay = document.getElementById('archiveOverlay');
     const archiveClose = document.getElementById('archiveClose');
     const archiveList = document.getElementById('archiveList');
+    const archiveResetButton = document.getElementById('archiveResetButton');
+    const archiveResetConfirm = document.getElementById('archiveResetConfirm');
+    const archiveResetCancel = document.getElementById('archiveResetCancel');
+    const archiveResetConfirmButton = document.getElementById('archiveResetConfirmButton');
     const archiveStorageKey = 'hanazono-page-archive-v1';
     const totalPages = 13;
     const currentPage = {
@@ -771,6 +791,7 @@
 
     function openArchive() {
       renderArchive();
+      archiveResetConfirm.hidden = true;
       archiveOverlay.classList.add('is-open');
       archiveOverlay.setAttribute('aria-hidden', 'false');
       document.body.classList.add('archive-open');
@@ -778,6 +799,7 @@
     }
 
     function closeArchive() {
+      archiveResetConfirm.hidden = true;
       archiveOverlay.classList.remove('is-open');
       archiveOverlay.setAttribute('aria-hidden', 'true');
       document.body.classList.remove('archive-open');
@@ -788,6 +810,24 @@
 
     archiveButton.addEventListener('click', openArchive);
     archiveClose.addEventListener('click', closeArchive);
+    archiveResetButton.addEventListener('click', function () {
+      archiveResetConfirm.hidden = false;
+      archiveResetCancel.focus();
+    });
+    archiveResetCancel.addEventListener('click', function () {
+      archiveResetConfirm.hidden = true;
+      archiveResetButton.focus();
+    });
+    archiveResetConfirmButton.addEventListener('click', function () {
+      try {
+        localStorage.removeItem(archiveStorageKey);
+        localStorage.removeItem('hanazono-hidden-blog-lead-v1');
+        localStorage.removeItem('hanazono-about-mail-notification-v1');
+      } catch (error) {
+        return;
+      }
+      window.location.href = 'index.html';
+    });
 
     archiveOverlay.addEventListener('click', function (event) {
       if (event.target === archiveOverlay) closeArchive();
@@ -795,7 +835,12 @@
 
     document.addEventListener('keydown', function (event) {
       if (event.key === 'Escape' && archiveOverlay.classList.contains('is-open')) {
-        closeArchive();
+        if (!archiveResetConfirm.hidden) {
+          archiveResetConfirm.hidden = true;
+          archiveResetButton.focus();
+        } else {
+          closeArchive();
+        }
       }
     });
 

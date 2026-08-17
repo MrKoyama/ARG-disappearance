@@ -55,7 +55,7 @@
     .post-text a { color:#2771bb; text-decoration:none; }
     .post-image { display:block; width:min(100%,430px); max-height:430px; margin-top:10px; border:1px solid #cfd3d8; border-radius:15px; object-fit:cover; }
     .link-card { width:min(100%,430px); margin-top:10px; overflow:hidden; border:1px solid #ccd1d7; border-radius:13px; background:#fff; }
-    .link-card a { display:block; padding:11px 13px; color:var(--ink); text-decoration:none; }
+    .link-preview { display:block; padding:11px 13px; color:var(--ink); }
     .link-host { display:block; color:var(--muted); font-size:.66rem; }
     .link-title { display:block; margin-top:2px; font-size:.83rem; font-weight:700; }
     .link-copy { width:100%; padding:8px 12px; border:0; border-top:1px solid #d8dce1; color:var(--blue); background:#f7fbff; text-align:left; font-size:.72rem; font-weight:700; cursor:pointer; }
@@ -93,6 +93,7 @@
     .archive-number { align-self:stretch; display:grid; place-items:center; border-right:1px solid #ccc7bc; font-family:Georgia,serif; font-size:.72rem; }
     .archive-title { padding:8px 11px; font-size:.8rem; }
     .archive-entry.is-locked .archive-title { letter-spacing:.18em; }
+    .archive-tools{margin-top:14px;padding-top:13px;border-top:1px solid #d2cdc2}.archive-reset-button{padding:8px 11px;border:1px solid #a98787;color:#824c4c;background:#fff7f7;font-size:.72rem;cursor:pointer}.archive-reset-confirm{margin-top:11px;padding:13px;border:1px solid #c8a4a4;background:#fff8f7}.archive-reset-confirm[hidden]{display:none}.archive-reset-confirm p{margin:0 0 10px;font-size:.76rem}.confirm-actions{display:flex;justify-content:flex-end;gap:7px}.confirm-actions button{padding:7px 12px;border:1px solid #aaa59a;background:#fff;cursor:pointer}.confirm-actions .danger{border-color:#995c5c;color:#fff;background:#995c5c}
     @media (max-width:900px) {
       .layout { grid-template-columns:72px minmax(0,1fr) 215px; }
       .left-nav { padding-inline:8px; }
@@ -152,13 +153,13 @@
         <article class="post"><img class="post-avatar" src="images/missing-woman.png" alt="" width="1122" height="1402"><div class="post-main"><p class="post-meta"><strong>HANA</strong><span class="handle">@hana_days</span><span>·</span><time class="post-time" datetime="2026-06-24T21:06">6月24日 21:06</time></p><p class="post-text">来週は仕事が立て込むため、一週間くらいSNSは更新しません！　ごめんなさい！　落ち着いたらまた戻ってきます🌷</p><div class="post-actions"><span class="action">◇ 5</span><span class="action">♢ 2</span><span class="action">♡ 34</span><span class="action">▱</span></div></div></article>
         <article class="post"><img class="post-avatar" src="images/missing-woman.png" alt="" width="1122" height="1402"><div class="post-main"><p class="post-meta"><strong>HANA</strong><span class="handle">@hana_days</span><span>·</span><time class="post-time" datetime="2026-06-14T16:22">6月14日</time></p><p class="post-text">日帰り小旅行。二枚の切符も、流れていく景色も、ちゃんとブログに残しておこう。</p><!-- 場面：短文SNSの小旅行投稿。ターゲット層：HANAの日常を調査するARGプレイヤー。テーマ・コンセプト：二人で列車旅行をしたように見える記録。含めたい要素：HANA本人、車窓の緑、二枚の切符、空の隣席。カラーテーマ：青、緑、ベージュ。画像サイズ：1254*1254px。レイアウトイメージ：窓際のHANAと車内テーブルを収めた正方形写真。 --><img class="post-image" src="images/hana-trip.png" alt="列車の窓際に座るHANAと二枚の切符" width="1254" height="1254"><div class="post-actions"><span class="action">◇ 4</span><span class="action">♢ 3</span><span class="action">♡ 52</span><span class="action">▱</span></div></div></article>
         <article class="post"><img class="post-avatar" src="images/missing-woman.png" alt="" width="1122" height="1402"><div class="post-main"><p class="post-meta"><strong>HANA</strong><span class="handle">@hana_days</span><span>·</span><time class="post-time" datetime="2026-04-18T19:42">4月18日 19:42</time></p><p class="post-text">アカウントを作り直しました！
-スマホを替えたら前のアカウントに入れなくなってしまったので、これからはこちらを使います。前のアカウントに載せていた思い出や、もっと昔の日記と写真はブログに残しています🌷</p><div class="link-card"><a href="hana-blog.html"><span class="link-host">hana-blog.html</span><span class="link-title">ハナのブログ｜小さなことを、ゆっくり記録。</span></a><button class="link-copy" id="copyBlogButton" type="button">ブログのURLをコピー</button></div><div class="post-actions"><span class="action">◇ 4</span><span class="action">♢ 7</span><span class="action">♡ 38</span><span class="action">▱</span></div></div></article>
+スマホを替えたら前のアカウントに入れなくなってしまったので、これからはこちらを使います。前のアカウントに載せていた思い出や、もっと昔の日記と写真はブログに残しています🌷</p><div class="link-card"><div class="link-preview"><span class="link-host">hana-blog.html</span><span class="link-title">ハナのブログ｜小さなことを、ゆっくり記録。</span></div><button class="link-copy" id="copyBlogButton" type="button">ブログのURLをコピー</button></div><div class="post-actions"><span class="action">◇ 4</span><span class="action">♢ 7</span><span class="action">♡ 38</span><span class="action">▱</span></div></div></article>
       </section>
     </main>
     <aside class="right-column"><section class="side-card"><h2>このプロフィールについて</h2><p>現在表示されているのは、@hana_daysが公開している投稿です。</p></section><section class="side-card"><h2>話題を見つける</h2><ul class="trend-list"><li><small>暮らし</small>#夏の夜</li><li><small>写真</small>#カフェ巡り</li><li><small>旅行</small>#小旅行</li></ul></section></aside>
   </div>
   <footer class="site-footer"><div class="footer-inner"><p class="fiction-notice">このサイトの内容はフィクションです。登場する人物・団体・名称等は架空のものであり、実在のものとは関係ありません。</p><button class="archive-button" id="archiveButton" type="button" aria-haspopup="dialog" aria-controls="archiveOverlay">03 / 13</button></div></footer>
-  <div class="archive-overlay" id="archiveOverlay" aria-hidden="true"><section class="archive-dialog" role="dialog" aria-modal="true" aria-labelledby="archiveTitle"><header class="archive-header"><h2 id="archiveTitle">ページアーカイブ</h2><button class="archive-close" id="archiveClose" type="button" aria-label="ページアーカイブを閉じる">×</button></header><div class="archive-content"><p class="archive-description">一度訪れたページが記録されます。解放済みのページを選ぶと、そのページへ戻れます。未探索のページは「？？？」と表示されます。</p><ol class="archive-list" id="archiveList"></ol></div></section></div>
+  <div class="archive-overlay" id="archiveOverlay" aria-hidden="true"><section class="archive-dialog" role="dialog" aria-modal="true" aria-labelledby="archiveTitle"><header class="archive-header"><h2 id="archiveTitle">ページアーカイブ</h2><button class="archive-close" id="archiveClose" type="button" aria-label="ページアーカイブを閉じる">×</button></header><div class="archive-content"><p class="archive-description">一度訪れたページが記録されます。解放済みのページを選ぶと、そのページへ戻れます。未探索のページは「？？？」と表示されます。</p><ol class="archive-list" id="archiveList"></ol><div class="archive-tools"><button class="archive-reset-button" id="archiveResetButton" type="button">アーカイブをリセット</button><div class="archive-reset-confirm" id="archiveResetConfirm" role="alertdialog" aria-labelledby="archiveResetTitle" hidden><p id="archiveResetTitle">探索済みページの記録を消去しますか？ メールの会話は消去されません。</p><div class="confirm-actions"><button id="archiveResetCancel" type="button">キャンセル</button><button class="danger" id="archiveResetConfirmButton" type="button">リセットする</button></div></div></div></div></section></div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script>
     const followButton=document.getElementById('followButton');
@@ -173,6 +174,10 @@
     const archiveOverlay=document.getElementById('archiveOverlay');
     const archiveClose=document.getElementById('archiveClose');
     const archiveList=document.getElementById('archiveList');
+    const archiveResetButton=document.getElementById('archiveResetButton');
+    const archiveResetConfirm=document.getElementById('archiveResetConfirm');
+    const archiveResetCancel=document.getElementById('archiveResetCancel');
+    const archiveResetConfirmButton=document.getElementById('archiveResetConfirmButton');
     const archiveStorageKey='hanazono-page-archive-v1';
     const totalPages=13;
     const currentPage={number:3,title:'HANAのSNS',href:'hana-sns.html'};
@@ -180,9 +185,9 @@
     function saveArchive(pages){try{localStorage.setItem(archiveStorageKey,JSON.stringify(pages));}catch(error){return;}}
     function registerCurrentPage(){const pages=loadArchive();const existingIndex=pages.findIndex(function(page){return page.number===currentPage.number;});if(existingIndex>=0)pages[existingIndex]=currentPage;else pages.push(currentPage);pages.sort(function(a,b){return a.number-b.number;});saveArchive(pages);return pages;}
     function renderArchive(){const pages=registerCurrentPage();archiveList.textContent='';for(let pageNumber=1;pageNumber<=totalPages;pageNumber+=1){const page=pages.find(function(savedPage){return savedPage.number===pageNumber;});const item=document.createElement('li');const entry=document.createElement(page?'a':'div');const number=document.createElement('span');const title=document.createElement('span');entry.className='archive-entry';number.className='archive-number';title.className='archive-title';number.textContent=String(pageNumber).padStart(2,'0');if(page){entry.href=page.href;title.textContent=page.title;}else{entry.classList.add('is-locked');entry.setAttribute('aria-label',String(pageNumber).padStart(2,'0')+' 未探索');title.textContent='？？？';}entry.append(number,title);item.appendChild(entry);archiveList.appendChild(item);}}
-    function openArchive(){renderArchive();archiveOverlay.classList.add('is-open');archiveOverlay.setAttribute('aria-hidden','false');document.body.classList.add('archive-open');archiveClose.focus();}
-    function closeArchive(){archiveOverlay.classList.remove('is-open');archiveOverlay.setAttribute('aria-hidden','true');document.body.classList.remove('archive-open');archiveButton.focus();}
-    registerCurrentPage();archiveButton.addEventListener('click',openArchive);archiveClose.addEventListener('click',closeArchive);archiveOverlay.addEventListener('click',function(event){if(event.target===archiveOverlay)closeArchive();});document.addEventListener('keydown',function(event){if(event.key==='Escape'&&archiveOverlay.classList.contains('is-open'))closeArchive();});
+    function openArchive(){renderArchive();archiveResetConfirm.hidden=true;archiveOverlay.classList.add('is-open');archiveOverlay.setAttribute('aria-hidden','false');document.body.classList.add('archive-open');archiveClose.focus();}
+    function closeArchive(){archiveResetConfirm.hidden=true;archiveOverlay.classList.remove('is-open');archiveOverlay.setAttribute('aria-hidden','true');document.body.classList.remove('archive-open');archiveButton.focus();}
+    registerCurrentPage();archiveButton.addEventListener('click',openArchive);archiveClose.addEventListener('click',closeArchive);archiveOverlay.addEventListener('click',function(event){if(event.target===archiveOverlay)closeArchive();});archiveResetButton.addEventListener('click',function(){archiveResetConfirm.hidden=false;archiveResetCancel.focus();});archiveResetCancel.addEventListener('click',function(){archiveResetConfirm.hidden=true;archiveResetButton.focus();});archiveResetConfirmButton.addEventListener('click',function(){try{localStorage.removeItem(archiveStorageKey);localStorage.removeItem('hanazono-hidden-blog-lead-v1');localStorage.removeItem('hanazono-about-mail-notification-v1');}catch(error){}window.location.href='index.html';});document.addEventListener('keydown',function(event){if(event.key==='Escape'&&archiveOverlay.classList.contains('is-open')){if(!archiveResetConfirm.hidden){archiveResetConfirm.hidden=true;archiveResetButton.focus();}else closeArchive();}});
   </script>
 </body>
 </html>

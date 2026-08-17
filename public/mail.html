@@ -768,6 +768,91 @@
       letter-spacing: .18em;
     }
 
+    .archive-tools {
+      margin-top: 15px;
+      padding-top: 14px;
+      border-top: 1px solid #d2cdc2;
+    }
+
+    .archive-reset-button {
+      padding: 9px 12px;
+      border: 1px solid #a98787;
+      color: #824c4c;
+      background: #fff7f7;
+      font-size: .76rem;
+      cursor: pointer;
+    }
+
+    .confirm-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1200;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      background: rgba(22, 22, 22, .72);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .18s ease, visibility .18s ease;
+    }
+
+    .confirm-overlay.is-open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .confirm-dialog {
+      width: min(430px, 100%);
+      overflow: hidden;
+      border: 1px solid #aaa59a;
+      background: #faf8f3;
+      box-shadow: 0 22px 60px rgba(0, 0, 0, .36);
+      font-family: "Yu Gothic", "YuGothic", sans-serif;
+    }
+
+    .confirm-dialog h2 {
+      margin: 0;
+      padding: 16px 18px;
+      color: #fff;
+      background: #292a2c;
+      font-family: "Yu Mincho", "Hiragino Mincho ProN", serif;
+      font-size: 1rem;
+      letter-spacing: .06em;
+    }
+
+    .confirm-body {
+      padding: 18px;
+    }
+
+    .confirm-message {
+      margin: 0;
+      color: #53514c;
+      font-size: .84rem;
+      line-height: 1.75;
+      white-space: pre-line;
+    }
+
+    .confirm-actions {
+      margin-top: 18px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .confirm-actions button {
+      padding: 9px 14px;
+      border: 1px solid #aaa59a;
+      color: #3e3d39;
+      background: #fff;
+      cursor: pointer;
+    }
+
+    .confirm-actions .confirm-danger {
+      border-color: #9a5757;
+      color: #fff;
+      background: #9a5757;
+    }
+
     @keyframes message-in {
       from {
         opacity: 0;
@@ -1005,6 +1090,17 @@
       <div class="archive-content">
         <p class="archive-description">一度訪れたページが記録されます。解放済みのページを選ぶと、そのページへ戻れます。未探索のページは「？？？」と表示されます。</p>
         <ol class="archive-list" id="archiveList"></ol>
+        <div class="archive-tools"><button class="archive-reset-button" id="archiveResetButton" type="button">アーカイブをリセット</button></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="confirm-overlay" id="confirmOverlay" aria-hidden="true">
+    <section class="confirm-dialog" role="alertdialog" aria-modal="true" aria-labelledby="confirmTitle" aria-describedby="confirmMessage">
+      <h2 id="confirmTitle">確認</h2>
+      <div class="confirm-body">
+        <p class="confirm-message" id="confirmMessage"></p>
+        <div class="confirm-actions"><button id="confirmCancel" type="button">キャンセル</button><button class="confirm-danger" id="confirmAccept" type="button">リセットする</button></div>
       </div>
     </section>
   </div>
@@ -1053,19 +1149,37 @@
     const clozeFeedback = document.getElementById('clozeFeedback');
     const threadStatus = document.getElementById('threadStatus');
     const resetButton = document.getElementById('resetButton');
+    const confirmOverlay = document.getElementById('confirmOverlay');
+    const confirmTitle = document.getElementById('confirmTitle');
+    const confirmMessage = document.getElementById('confirmMessage');
+    const confirmCancel = document.getElementById('confirmCancel');
+    const confirmAccept = document.getElementById('confirmAccept');
     const conversationStorageKey = 'hanazono-mail-progress-v3';
     const conversationStartedStorageKey = 'hanazono-mail-started-at-v3';
     const blogFoundStorageKey = 'hanazono-mail-blog-found-v3';
     const blogUrlStorageKey = 'hanazono-mail-blog-url-v3';
     const reportProgressStorageKey = 'hanazono-mail-report-progress-v1';
     const discoveryStorageKey = 'hanazono-blog-discoveries-v1';
+    const hiddenBlogLeadStorageKey = 'hanazono-hidden-blog-lead-v1';
+    const hiddenBlogMessageStorageKey = 'hanazono-mail-hidden-blog-message-v1';
+    const hiddenBlogFoundStorageKey = 'hanazono-mail-hidden-blog-found-v1';
+    const hiddenBlogUrlStorageKey = 'hanazono-mail-hidden-blog-url-v1';
     const expectedBlogFile = 'hana-blog.html';
+    const expectedHiddenBlogFile = 'hana-blog-hidden.html';
     const blogConfirmationReply = '確認します。\n\n……これで間違いないです。彼女のブログです。ブログの中に、行方につながる情報があるかもしれません。僕も確認してみます。何か見つけ次第、ここで連絡しましょう。';
+    const hiddenBlogLeadReply = 'このブログを読んでいて気づいたのですが、どうやら表にはない裏のブログが隠されているみたいです。\n\n僕も少し探してみます。あなたも見つけたら、そのURLをここに送ってください。';
+    const hiddenBlogConfirmationReply = '確認しました。これが表から隠されていたブログで間違いなさそうです。中に手がかりがないか、僕も読んでみます。';
     const wrongUrlReplies = [
       'これではないような……。彼女が書いていたブログとは雰囲気が違います。',
       '確認しましたが、彼女のブログではありませんね……。ほかに心当たりはありませんか？',
       'すみません。このURLには見覚えがありません。もう少し探してもらえると助かります。',
       '開いてみましたが、探しているブログとは違うと思います。SNSの投稿に別のリンクはありませんでしたか？'
+    ];
+    const wrongHiddenBlogUrlReplies = [
+      '確認しましたが、探している裏のブログではないようです。',
+      'このURLではなさそうです。ブログに隠された入口を、もう一度探してみてください。',
+      '開いてみましたが、彼女が隠したブログとは違うと思います。',
+      'これではないような……。検索結果の中に、別の入口はありませんでしたか？'
     ];
     const reportSteps = [
       {
@@ -1096,8 +1210,13 @@
     let blogFound = loadBlogFound();
     let confirmedBlogUrl = loadConfirmedBlogUrl();
     let reportProgress = loadReportProgress();
+    let hiddenBlogMessageDelivered = loadHiddenBlogMessageDelivered();
+    let hiddenBlogFound = loadHiddenBlogFound();
+    let confirmedHiddenBlogUrl = loadConfirmedHiddenBlogUrl();
     let typedLength = 0;
     let isReplying = false;
+    let pendingConfirmAction = null;
+    let confirmReturnTarget = null;
 
     function loadConversationProgress() {
       try {
@@ -1169,6 +1288,60 @@
       try {
         localStorage.setItem(blogFoundStorageKey, 'true');
         localStorage.setItem(blogUrlStorageKey, url);
+      } catch (error) {
+        return;
+      }
+    }
+
+    function hiddenBlogLeadIsKnown() {
+      try {
+        if (localStorage.getItem(hiddenBlogLeadStorageKey) === 'true') return true;
+        const archivedPages = JSON.parse(localStorage.getItem('hanazono-page-archive-v1') || '[]');
+        return Array.isArray(archivedPages) && archivedPages.some(function (page) { return page.number === 6; });
+      } catch (error) {
+        return false;
+      }
+    }
+
+    function loadHiddenBlogMessageDelivered() {
+      try {
+        return localStorage.getItem(hiddenBlogMessageStorageKey) === 'true';
+      } catch (error) {
+        return false;
+      }
+    }
+
+    function saveHiddenBlogMessageDelivered() {
+      hiddenBlogMessageDelivered = true;
+      try {
+        localStorage.setItem(hiddenBlogMessageStorageKey, 'true');
+      } catch (error) {
+        return;
+      }
+    }
+
+    function loadHiddenBlogFound() {
+      try {
+        return localStorage.getItem(hiddenBlogFoundStorageKey) === 'true';
+      } catch (error) {
+        return false;
+      }
+    }
+
+    function loadConfirmedHiddenBlogUrl() {
+      try {
+        return localStorage.getItem(hiddenBlogUrlStorageKey) || expectedHiddenBlogFile;
+      } catch (error) {
+        return expectedHiddenBlogFile;
+      }
+    }
+
+    function saveHiddenBlogFound(url) {
+      hiddenBlogFound = true;
+      confirmedHiddenBlogUrl = url;
+      try {
+        localStorage.setItem(hiddenBlogFoundStorageKey, 'true');
+        localStorage.setItem(hiddenBlogUrlStorageKey, url);
       } catch (error) {
         return;
       }
@@ -1268,11 +1441,12 @@
         const blogReplyTime = baseTime + conversationSteps.length * 120000;
         createMessage('outgoing', confirmedBlogUrl, '', '', false, blogReplyTime);
         createMessage('incoming', blogConfirmationReply, expectedBlogFile, 'HANAのブログを開く', false, blogReplyTime + 45000);
-        for (let index = 0; index < reportProgress; index += 1) {
-          const report = reportSteps[index];
-          const reportTime = blogReplyTime + (index + 1) * 120000;
-          createMessage('outgoing', completedReportText(report), '', '', false, reportTime);
-          createMessage('incoming', report.reply, '', '', false, reportTime + 45000);
+        if (hiddenBlogMessageDelivered) {
+          createMessage('incoming', hiddenBlogLeadReply, '', '', false, blogReplyTime + 90000);
+        }
+        if (hiddenBlogFound) {
+          createMessage('outgoing', confirmedHiddenBlogUrl, '', '', false, blogReplyTime + 135000);
+          createMessage('incoming', hiddenBlogConfirmationReply, '', '', false, blogReplyTime + 180000);
         }
       }
     }
@@ -1325,25 +1499,31 @@
           sendButton.disabled = true;
           mobileReply.style.display = 'none';
 
-          const nextReport = reportSteps[reportProgress];
-          if (nextReport && hasRequiredDiscovery(nextReport)) {
-            composer.classList.remove('url-mode');
-            clozeComposer.style.display = 'block';
-            clozePrefix.textContent = nextReport.prefix;
-            clozeSuffix.textContent = nextReport.suffix;
-            composerGuide.textContent = 'ブログで確認した内容を、空欄へ入力して報告してください。';
-            waitingNote.style.display = 'none';
-            threadStatus.textContent = '調査内容の入力待ち';
+          if (hiddenBlogMessageDelivered && !hiddenBlogFound) {
+            desktopComposer.style.display = '';
+            replyInput.value = '';
+            replyInput.placeholder = '発見した裏ブログのURLを貼り付け';
+            replyInput.readOnly = false;
+            replyInput.setAttribute('inputmode', 'url');
+            replyInput.disabled = false;
+            sendButton.disabled = true;
+            composerGuide.textContent = '発見した裏ブログのURLを貼り付け、Enterキーまたは送信ボタンで送ってください。';
+            waitingNote.textContent = '「このブログについて」に書かれていた手がかりから、隠された入口を探してください。';
+            threadStatus.textContent = '裏ブログURLの入力待ち';
             focusComposerIfReady();
-          } else if (reportProgress >= reportSteps.length) {
-            composerGuide.textContent = '現在見つかっている情報は共有済みです。';
-            waitingNote.textContent = 'ブログに、さらに奥へ進める手がかりがないか調べてください。';
-            threadStatus.textContent = '追加情報を待っています';
-          } else {
-            composerGuide.textContent = 'ブログの調査を続けてください。';
-            waitingNote.textContent = 'SNSにあった言葉や、記事のハッシュタグをブログ内検索で試してみましょう。';
-            threadStatus.textContent = '調査結果を待っています';
+            return;
           }
+
+          if (hiddenBlogFound) {
+            composerGuide.textContent = '裏ブログのURLは共有済みです。';
+            waitingNote.textContent = '管理者がブログの内容を確認しています。';
+            threadStatus.textContent = '確認中';
+            return;
+          }
+
+          composerGuide.textContent = 'ブログを探索しましょう。';
+          waitingNote.textContent = '管理者から送られた「HANAのブログを開く」リンクからブログへ移動し、隠された記録につながる手がかりを探してください。';
+          threadStatus.textContent = 'ブログの調査待ち';
         } else {
           composer.classList.remove('is-receiving');
           composer.classList.add('is-inputting');
@@ -1425,6 +1605,35 @@
       }
     }
 
+    function isCorrectHiddenBlogUrl(value) {
+      try {
+        const parsed = new URL(value, window.location.href);
+        const fileName = parsed.pathname.split('/').filter(Boolean).pop() || '';
+        return fileName.toLowerCase() === expectedHiddenBlogFile;
+      } catch (error) {
+        return false;
+      }
+    }
+
+    function deliverHiddenBlogLead(delay) {
+      if (!blogFound || !hiddenBlogLeadIsKnown() || hiddenBlogMessageDelivered) return;
+      saveHiddenBlogMessageDelivered();
+      isReplying = true;
+      replyInput.disabled = true;
+      sendButton.disabled = true;
+      setReceivingState();
+      typingRow.classList.add('is-visible');
+      scrollToLatest();
+
+      window.setTimeout(function () {
+        typingRow.classList.remove('is-visible');
+        createMessage('incoming', hiddenBlogLeadReply, '', '', true);
+        isReplying = false;
+        updateComposer();
+        scrollToLatest();
+      }, typeof delay === 'number' ? delay : 900);
+    }
+
     function sendBlogUrl() {
       if (isReplying || blogFound) return;
       const submittedUrl = replyInput.value.trim();
@@ -1456,8 +1665,43 @@
 
         updateComposer();
         scrollToLatest();
+        if (isCorrect) deliverHiddenBlogLead(650);
+        else replyInput.focus();
+      }, 850 + Math.floor(Math.random() * 500));
+    }
+
+    function sendHiddenBlogUrl() {
+      if (isReplying || !blogFound || !hiddenBlogMessageDelivered || hiddenBlogFound) return;
+      const submittedUrl = replyInput.value.trim();
+      if (!submittedUrl) return;
+      const isCorrect = isCorrectHiddenBlogUrl(submittedUrl);
+      const reply = isCorrect
+        ? hiddenBlogConfirmationReply
+        : wrongHiddenBlogUrlReplies[Math.floor(Math.random() * wrongHiddenBlogUrlReplies.length)];
+
+      isReplying = true;
+      replyInput.disabled = true;
+      sendButton.disabled = true;
+      setReceivingState();
+      createMessage('outgoing', submittedUrl, '', '', true);
+      replyInput.value = '';
+      typingRow.classList.add('is-visible');
+      scrollToLatest();
+
+      window.setTimeout(function () {
+        typingRow.classList.remove('is-visible');
+        createMessage('incoming', reply, '', '', true);
+        isReplying = false;
+        if (isCorrect) saveHiddenBlogFound(submittedUrl);
+        updateComposer();
+        scrollToLatest();
         if (!isCorrect) replyInput.focus();
       }, 850 + Math.floor(Math.random() * 500));
+    }
+
+    function sendUrlForCurrentStage() {
+      if (!blogFound) sendBlogUrl();
+      else if (hiddenBlogMessageDelivered && !hiddenBlogFound) sendHiddenBlogUrl();
     }
 
     function sendReport() {
@@ -1507,7 +1751,7 @@
       if (currentStep >= conversationSteps.length) {
         if (event.key === 'Enter' && !event.shiftKey) {
           event.preventDefault();
-          sendBlogUrl();
+          sendUrlForCurrentStage();
         }
         return;
       }
@@ -1541,7 +1785,7 @@
     });
 
     replyInput.addEventListener('input', function () {
-      if (currentStep >= conversationSteps.length && !blogFound) {
+      if (currentStep >= conversationSteps.length && (!blogFound || (hiddenBlogMessageDelivered && !hiddenBlogFound))) {
         sendButton.disabled = replyInput.value.trim().length === 0;
       }
     });
@@ -1549,7 +1793,7 @@
     sendButton.addEventListener('click', function () {
       if (sendButton.disabled) return;
       if (currentStep >= conversationSteps.length) {
-        sendBlogUrl();
+        sendUrlForCurrentStage();
       } else {
         sendCurrentReply();
       }
@@ -1574,27 +1818,65 @@
       if (!clozeSend.disabled) sendReport();
     });
 
+    function openConfirmDialog(options) {
+      confirmTitle.textContent = options.title;
+      confirmMessage.textContent = options.message;
+      confirmAccept.textContent = options.acceptLabel || 'リセットする';
+      pendingConfirmAction = options.onAccept;
+      confirmReturnTarget = options.returnTarget || null;
+      confirmOverlay.classList.add('is-open');
+      confirmOverlay.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('archive-open');
+      confirmCancel.focus();
+    }
+
+    function closeConfirmDialog() {
+      confirmOverlay.classList.remove('is-open');
+      confirmOverlay.setAttribute('aria-hidden', 'true');
+      pendingConfirmAction = null;
+      if (!archiveOverlay.classList.contains('is-open')) document.body.classList.remove('archive-open');
+      if (confirmReturnTarget) confirmReturnTarget.focus();
+      confirmReturnTarget = null;
+    }
+
     resetButton.addEventListener('click', function () {
-      const shouldReset = window.confirm('メールの会話を最初からやり直しますか？\nページアーカイブの記録は消去されません。');
-      if (!shouldReset) return;
+      openConfirmDialog({
+        title: 'メールをリセット',
+        message: 'メールの会話を最初からやり直しますか？\nページアーカイブの記録は消去されません。',
+        returnTarget: resetButton,
+        onAccept: function () {
+          try {
+            localStorage.removeItem(conversationStorageKey);
+            localStorage.removeItem(conversationStartedStorageKey);
+            localStorage.removeItem(blogFoundStorageKey);
+            localStorage.removeItem(blogUrlStorageKey);
+            localStorage.removeItem(reportProgressStorageKey);
+            localStorage.removeItem(hiddenBlogMessageStorageKey);
+            localStorage.removeItem(hiddenBlogFoundStorageKey);
+            localStorage.removeItem(hiddenBlogUrlStorageKey);
+          } catch (error) {
+            return;
+          }
+          window.location.reload();
+        }
+      });
+    });
 
-      try {
-        localStorage.removeItem(conversationStorageKey);
-        localStorage.removeItem(conversationStartedStorageKey);
-        localStorage.removeItem(blogFoundStorageKey);
-        localStorage.removeItem(blogUrlStorageKey);
-        localStorage.removeItem(reportProgressStorageKey);
-      } catch (error) {
-        return;
-      }
-
-      window.location.reload();
+    confirmCancel.addEventListener('click', closeConfirmDialog);
+    confirmAccept.addEventListener('click', function () {
+      const action = pendingConfirmAction;
+      closeConfirmDialog();
+      if (typeof action === 'function') action();
+    });
+    confirmOverlay.addEventListener('click', function (event) {
+      if (event.target === confirmOverlay) closeConfirmDialog();
     });
 
     const archiveButton = document.getElementById('archiveButton');
     const archiveOverlay = document.getElementById('archiveOverlay');
     const archiveClose = document.getElementById('archiveClose');
     const archiveList = document.getElementById('archiveList');
+    const archiveResetButton = document.getElementById('archiveResetButton');
     const archiveStorageKey = 'hanazono-page-archive-v1';
     const totalPages = 13;
     const currentPage = {
@@ -1696,15 +1978,37 @@
     restoreConversation();
     updateComposer();
     scrollToLatest();
+    deliverHiddenBlogLead(650);
 
     archiveButton.addEventListener('click', openArchive);
     archiveClose.addEventListener('click', closeArchive);
+    archiveResetButton.addEventListener('click', function () {
+      openConfirmDialog({
+        title: 'ページアーカイブをリセット',
+        message: '探索済みページの記録を消去しますか？\nメールの会話は消去されません。',
+        returnTarget: archiveResetButton,
+        onAccept: function () {
+          try {
+            localStorage.removeItem(archiveStorageKey);
+            localStorage.removeItem(hiddenBlogLeadStorageKey);
+            localStorage.removeItem('hanazono-about-mail-notification-v1');
+          } catch (error) {
+            return;
+          }
+          window.location.href = 'index.html';
+        }
+      });
+    });
 
     archiveOverlay.addEventListener('click', function (event) {
       if (event.target === archiveOverlay) closeArchive();
     });
 
     document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape' && confirmOverlay.classList.contains('is-open')) {
+        closeConfirmDialog();
+        return;
+      }
       if (event.key === 'Escape' && archiveOverlay.classList.contains('is-open')) {
         closeArchive();
       }
