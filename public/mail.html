@@ -1319,6 +1319,8 @@
           composer.classList.remove('is-inputting', 'is-receiving');
           composer.classList.add('is-inputting');
           desktopComposer.style.display = 'none';
+          replyInput.readOnly = false;
+          replyInput.removeAttribute('inputmode');
           replyInput.disabled = true;
           sendButton.disabled = true;
           mobileReply.style.display = 'none';
@@ -1347,6 +1349,8 @@
           composer.classList.add('is-inputting');
           composerGuide.textContent = '発見したブログのURLを貼り付け、Enterキーまたは送信ボタンで送ってください。';
           replyInput.value = '';
+          replyInput.readOnly = false;
+          replyInput.setAttribute('inputmode', 'url');
           replyInput.disabled = false;
           sendButton.disabled = true;
           mobileReply.style.display = 'none';
@@ -1363,6 +1367,8 @@
       typedLength = 0;
       replyInput.value = '';
       replyInput.placeholder = 'メッセージ';
+      replyInput.readOnly = true;
+      replyInput.setAttribute('inputmode', 'none');
       replyInput.disabled = false;
       sendButton.disabled = true;
       mobileReply.disabled = false;
@@ -1506,22 +1512,24 @@
         return;
       }
 
-      if (event.key === 'Tab') return;
-      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'a') return;
-      event.preventDefault();
-
       if (event.key === 'Enter') {
+        event.preventDefault();
         if (!sendButton.disabled) sendCurrentReply();
         return;
       }
 
+      if (event.key === 'Tab') return;
+      if (event.ctrlKey || event.metaKey || event.altKey) return;
+
+      const typingCodes = /^(?:Key[A-Z]|Digit[0-9]|Numpad[0-9]|NumpadAdd|NumpadSubtract|NumpadMultiply|NumpadDivide|NumpadDecimal)$/;
+      const punctuationCodes = new Set(['Space', 'Minus', 'Equal', 'BracketLeft', 'BracketRight', 'Backslash', 'Semicolon', 'Quote', 'Comma', 'Period', 'Slash', 'Backquote', 'IntlBackslash', 'IntlRo', 'IntlYen']);
+      const isTypingKey = typingCodes.test(event.code) || punctuationCodes.has(event.code) || event.key.length === 1 || event.key === 'Process' || event.key === 'Dead' || event.key === 'Unidentified';
+      if (!isTypingKey) return;
+
+      event.preventDefault();
       const targetText = conversationSteps[currentStep].outgoing;
       const characterCount = Math.floor(Math.random() * 3) + 2;
-      if (event.key === 'Backspace') {
-        typedLength = Math.max(0, typedLength - characterCount);
-      } else if (!event.ctrlKey && !event.metaKey && !event.altKey && event.key !== 'Shift' && event.key !== 'Control' && event.key !== 'Alt' && event.key !== 'Meta' && event.key !== 'CapsLock') {
-        typedLength = Math.min(targetText.length, typedLength + characterCount);
-      }
+      typedLength = Math.min(targetText.length, typedLength + characterCount);
 
       replyInput.value = targetText.slice(0, typedLength);
       sendButton.disabled = typedLength < targetText.length;
