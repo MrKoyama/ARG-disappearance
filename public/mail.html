@@ -1168,7 +1168,7 @@
     const expectedHiddenBlogFile = 'hana-blog-hidden.html';
     const blogConfirmationReply = '確認します。\n\n……これで間違いないです。彼女のブログです。ブログの中に、行方につながる情報があるかもしれません。僕も確認してみます。何か見つけ次第、ここで連絡しましょう。';
     const hiddenBlogLeadReply = 'このブログを読んでいて気づいたのですが、どうやら表にはない裏のブログが隠されているみたいです。\n\n僕も少し探してみます。あなたも見つけたら、そのURLをここに送ってください。';
-    const hiddenBlogConfirmationReply = '確認しました。これが表から隠されていたブログで間違いなさそうです。中に手がかりがないか、僕も読んでみます。';
+    const hiddenBlogConfirmationReply = 'こんな場所にも記録を残していたんですね。知りませんでした。\n\nわざわざ見えないようにしていたということは、何か理由があるのかもしれません。私にも話せないことがあったのでしょうか。\n\n中に何が書かれているのか、確認してみましょう。';
     const wrongUrlReplies = [
       'これではないような……。彼女が書いていたブログとは雰囲気が違います。',
       '確認しましたが、彼女のブログではありませんね……。ほかに心当たりはありませんか？',
@@ -1446,7 +1446,7 @@
         }
         if (hiddenBlogFound) {
           createMessage('outgoing', confirmedHiddenBlogUrl, '', '', false, blogReplyTime + 135000);
-          createMessage('incoming', hiddenBlogConfirmationReply, '', '', false, blogReplyTime + 180000);
+          createMessage('incoming', hiddenBlogConfirmationReply, expectedHiddenBlogFile, '裏ブログを開く', false, blogReplyTime + 180000);
         }
       }
     }
@@ -1690,7 +1690,7 @@
 
       window.setTimeout(function () {
         typingRow.classList.remove('is-visible');
-        createMessage('incoming', reply, '', '', true);
+        createMessage('incoming', reply, isCorrect ? expectedHiddenBlogFile : '', isCorrect ? '裏ブログを開く' : '', true);
         isReplying = false;
         if (isCorrect) saveHiddenBlogFound(submittedUrl);
         updateComposer();
