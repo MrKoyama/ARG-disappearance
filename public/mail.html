@@ -1158,7 +1158,7 @@
     const conversationStartedStorageKey = 'hanazono-mail-started-at-v3';
     const blogFoundStorageKey = 'hanazono-mail-blog-found-v3';
     const blogUrlStorageKey = 'hanazono-mail-blog-url-v3';
-    const reportProgressStorageKey = 'hanazono-mail-report-progress-v1';
+    const reportProgressStorageKey = 'hanazono-mail-report-progress-v2';
     const discoveryStorageKey = 'hanazono-blog-discoveries-v1';
     const hiddenBlogLeadStorageKey = 'hanazono-hidden-blog-lead-v1';
     const hiddenBlogMessageStorageKey = 'hanazono-mail-hidden-blog-message-v1';
@@ -1168,7 +1168,7 @@
     const expectedHiddenBlogFile = 'hana-blog-hidden.html';
     const blogConfirmationReply = '確認します。\n\n……これで間違いないです。彼女のブログです。ブログの中に、行方につながる情報があるかもしれません。僕も確認してみます。何か見つけ次第、ここで連絡しましょう。';
     const hiddenBlogLeadReply = 'このブログを読んでいて気づいたのですが、どうやら表にはない裏のブログが隠されているみたいです。\n\n僕も少し探してみます。あなたも見つけたら、そのURLをここに送ってください。';
-    const hiddenBlogConfirmationReply = 'こんな場所にも記録を残していたんですね。知りませんでした。\n\nわざわざ見えないようにしていたということは、何か理由があるのかもしれません。私にも話せないことがあったのでしょうか。\n\n中に何が書かれているのか、確認してみましょう。';
+    const hiddenBlogConfirmationReply = '確認しました。表のブログからは見えないようにしていた記録なんですね。\n\n僕も読み進めてみます。彼女がいなくなる前に何を考えていたのか、分かったことがあれば教えてください。';
     const wrongUrlReplies = [
       'これではないような……。彼女が書いていたブログとは雰囲気が違います。',
       '確認しましたが、彼女のブログではありませんね……。ほかに心当たりはありませんか？',
@@ -1183,25 +1183,11 @@
     ];
     const reportSteps = [
       {
-        prefix: '彼女は誰かの（',
-        suffix: '）を感じていたようです。',
-        answers: ['視線'],
-        requires: 'uneasy-signs',
-        reply: '視線……そんなことを記事に書いていたんですね。僕には何も話してくれませんでした。コメント欄にも手がかりがないか、確認してもらえますか？'
-      },
-      {
-        prefix: 'コメントには（',
-        suffix: '）という名前が出ています。',
-        answers: ['マサミ'],
-        requires: 'uneasy-signs',
-        reply: 'マサミ……その名前が誰を指しているのか、まだ分かりませんね。ただ、彼女が怖がっていたことと関係があるかもしれません。'
-      },
-      {
         prefix: '彼女は（',
-        suffix: '）におびえていたみたいです。',
-        answers: ['ストーカー', 'すとーかー'],
-        requires: 'uneasy-signs',
-        reply: 'そんなことがあったなんて……。彼女を早く見つけないと。もっと古い記事や、別のブログにつながる情報がないか調べてもらえますか？'
+        suffix: '）をするつもりだったようです。',
+        answers: ['引っ越し', '引越し', '引越', '転居'],
+        requiresArchivePage: 20,
+        reply: '私も今、同じ記事を確認しました。\n\n引っ越すことは決めていたようですが、行き先までは書かれていませんね。別の記録が残っていないか、もう少し調べてもらえませんか。'
       }
     ];
     const wrongReportMessages = ['どこか違う気がする……。', '記事の表現と合っていないようです。', 'もう一度、見つけた記事を読み返してみましょう。'];
@@ -1373,6 +1359,14 @@
     }
 
     function hasRequiredDiscovery(step) {
+      if (step.requiresArchivePage) {
+        try {
+          const pages = JSON.parse(localStorage.getItem('hanazono-page-archive-v1') || '[]');
+          return Array.isArray(pages) && pages.some(function (page) { return page.number === step.requiresArchivePage; });
+        } catch (error) {
+          return false;
+        }
+      }
       return !step.requires || loadDiscoveries().includes(step.requires);
     }
 
@@ -1447,6 +1441,12 @@
         if (hiddenBlogFound) {
           createMessage('outgoing', confirmedHiddenBlogUrl, '', '', false, blogReplyTime + 135000);
           createMessage('incoming', hiddenBlogConfirmationReply, expectedHiddenBlogFile, '裏ブログを開く', false, blogReplyTime + 180000);
+          for (let reportIndex = 0; reportIndex < reportProgress; reportIndex += 1) {
+            const reportStep = reportSteps[reportIndex];
+            const reportTime = blogReplyTime + 240000 + reportIndex * 120000;
+            createMessage('outgoing', completedReportText(reportStep), '', '', false, reportTime);
+            createMessage('incoming', reportStep.reply, '', '', false, reportTime + 45000);
+          }
         }
       }
     }
@@ -1515,9 +1515,28 @@
           }
 
           if (hiddenBlogFound) {
-            composerGuide.textContent = '裏ブログのURLは共有済みです。';
-            waitingNote.textContent = '管理者がブログの内容を確認しています。';
-            threadStatus.textContent = '確認中';
+            const reportStep = reportSteps[reportProgress];
+            if (reportStep && hasRequiredDiscovery(reportStep)) {
+              clozePrefix.textContent = reportStep.prefix;
+              clozeSuffix.textContent = reportStep.suffix;
+              clozeComposer.style.display = 'block';
+              composerGuide.textContent = '記事から分かった内容を、空欄に入力して送ってください。';
+              waitingNote.textContent = '「引っ越すことにしました」の記事に書かれていた内容を報告してください。';
+              threadStatus.textContent = '調査結果の入力待ち';
+              focusComposerIfReady();
+              return;
+            }
+
+            if (reportProgress >= reportSteps.length) {
+              composerGuide.textContent = '引っ越し先につながる記録を探してください。';
+              waitingNote.textContent = '裏ブログや鍵付きの記録を調べ、彼女が移動した場所を特定してください。';
+              threadStatus.textContent = '引っ越し先の調査待ち';
+              return;
+            }
+
+            composerGuide.textContent = '裏ブログを読み進めましょう。';
+            waitingNote.textContent = '記事に書かれた言葉を検索し、彼女がいなくなる前に何を決めていたのか調べてください。';
+            threadStatus.textContent = '裏ブログの調査待ち';
             return;
           }
 
