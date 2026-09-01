@@ -1332,7 +1332,7 @@
         answers: ['高知'],
         secondAnswers: ['旭'],
         completed: '彼女は高知県旭町に引っ越したようです。',
-        requiresArchivePages: [25, 26],
+        requiresArchivePage: 25,
         guide: '引っ越し先の県名と町名を入力してください。',
         note: '引っ越し先の情報を入力してください。',
         reply: 'ありがとうございます。高知県旭町ですね。\n\nここまで場所を絞り込んでもらえれば、あとは僕が確かめられます。すぐに準備して、実際に行ってみます。\n\n本当にありがとうございました。彼女を見つけたら、必ず連絡します。'
@@ -2317,6 +2317,7 @@
             localStorage.removeItem(privatePromptStorageKey);
             localStorage.removeItem('hanazono-private-notification-shown-v1');
             localStorage.removeItem('hanazono-private-notification-shown-v2');
+            localStorage.removeItem('hanazono-private-move-notification-v1');
           } catch (error) {
             return;
           }
