@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="images/favicon-cloud.svg">
+  <title>花園雅巳のクラウド | Cloudfile</title>
+  <style>
+    :root{--blue:#4f7fe8;--ink:#242830;--muted:#70757e;--line:#dde1e7;--soft:#f5f7fa;--side:#f8f9fb}
+    *{box-sizing:border-box}
+    html,body{min-height:100%;margin:0}
+    body{display:flex;min-height:100vh;flex-direction:column;color:var(--ink);background:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Yu Gothic UI","Yu Gothic",sans-serif}
+    button,a{font:inherit}
+    .topbar{display:flex;height:68px;align-items:center;gap:18px;padding:10px 20px;border-bottom:1px solid var(--line);background:#fff}
+    .brand{display:flex;min-width:206px;align-items:center;gap:10px;font-weight:700}
+    .brand-mark{display:grid;width:34px;height:34px;place-items:center;border-radius:10px;color:#fff;background:linear-gradient(145deg,#6e9fff,#7d68e8);font-weight:800}
+    .search{flex:1;max-width:670px;padding:11px 15px;border:1px solid #e1e4e9;border-radius:12px;color:#777;background:#f3f5f8;font-size:.83rem}
+    .account{display:flex;margin-left:auto;align-items:center;gap:10px}
+    .account-text{text-align:right}.account-name{margin:0;font-size:.75rem;font-weight:700}.account-mail{margin:2px 0 0;color:var(--muted);font-size:.62rem}
+    .avatar{display:grid;width:42px;height:42px;place-items:center;border-radius:50%;color:#fff;background:linear-gradient(145deg,#7b68ad,#4f436f);font-size:.73rem;font-weight:700}
+    .app{display:grid;flex:1;grid-template-columns:230px 1fr;min-height:620px}
+    .sidebar{padding:21px 14px;border-right:1px solid var(--line);background:var(--side)}
+    .new-button{width:100%;padding:11px;border:1px solid #cbd6ec;border-radius:11px;color:#315fae;background:#fff;font-weight:700;box-shadow:0 2px 7px rgba(42,62,92,.08)}
+    .nav{display:grid;gap:4px;margin-top:20px}.nav a{padding:10px 13px;border-radius:8px;color:#50555f;text-decoration:none;font-size:.8rem}.nav a.active{color:#2f62bb;background:#eaf1ff;font-weight:700}
+    .storage{margin:28px 8px 0;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:.68rem;line-height:1.7}
+    main{padding:30px clamp(20px,5vw,64px) 48px;overflow:hidden}
+    .breadcrumb{margin:0 0 8px;color:var(--muted);font-size:.72rem}.page-title{margin:0;font-size:1.45rem}.owner-line{margin:6px 0 28px;color:var(--muted);font-size:.75rem}.owner-line strong{color:#4d435f}
+    .section-title{margin:0 0 12px;font-size:.82rem}.folders{display:grid;grid-template-columns:repeat(2,minmax(180px,290px));gap:14px;margin-bottom:34px}
+    .folder{display:flex;min-height:88px;align-items:center;gap:13px;padding:16px;border:1px solid var(--line);border-radius:12px;color:var(--ink);background:#fff;box-shadow:0 3px 11px rgba(40,47,59,.05);text-decoration:none}
+    a.folder:hover,a.folder:focus-visible{border-color:#aebfe7;background:#f7faff;box-shadow:0 5px 16px rgba(40,72,130,.1)}
+    .folder-icon{position:relative;width:43px;height:31px;border-radius:4px;background:#e1b851}.folder-icon:before{position:absolute;top:-7px;left:3px;width:21px;height:10px;border-radius:4px 4px 0 0;background:#e1b851;content:""}.folder-name{font-size:.82rem;font-weight:700}.folder-info{margin-top:3px;color:var(--muted);font-size:.66rem}
+    .recent{display:grid;grid-template-columns:minmax(160px,230px);gap:14px}.file-card{overflow:hidden;border:1px solid var(--line);border-radius:12px;background:#fff}.file-preview{display:grid;height:160px;place-items:center;background:#eceef2}.file-preview img{width:100%;height:100%;object-fit:cover;object-position:center 42%}.file-detail{padding:11px}.file-detail strong{display:block;font-size:.76rem}.file-detail span{color:var(--muted);font-size:.64rem}
+    .completion-card{display:none;max-width:610px;margin:34px 0 0;padding:19px 21px;border:1px solid #c7b8b8;border-left:4px solid #9d3434;border-radius:10px;background:#fffafa}.completion-card.is-visible{display:block}.completion-card p{margin:0 0 13px;color:#655b5b;font-size:.78rem;line-height:1.75}.completion-link{display:inline-block;padding:9px 15px;border-radius:7px;color:#fff;background:#873030;font-size:.78rem;font-weight:700;text-decoration:none}.completion-link:hover,.completion-link:focus-visible{background:#6d2222}
+    .site-footer{border-top:1px solid var(--line);background:#f7f8fa}.footer-inner{display:flex;max-width:1320px;margin:auto;align-items:center;gap:20px;padding:14px 20px}.fiction-notice{margin:0 auto 0 0;color:#777b83;font-size:.66rem;line-height:1.65}.archive-button{padding:7px 12px;border:1px solid #b9bec7;border-radius:8px;background:#fff;cursor:pointer;font-weight:700;letter-spacing:.08em}
+    .archive-overlay{position:fixed;inset:0;z-index:50;display:none;place-items:center;padding:18px;background:rgba(25,27,31,.62)}.archive-overlay.is-open{display:grid}.archive-dialog{width:min(600px,100%);max-height:90vh;overflow:hidden;border-radius:16px;background:#fff;box-shadow:0 24px 80px rgba(0,0,0,.35)}.archive-header{display:flex;align-items:center;padding:16px 18px;border-bottom:1px solid var(--line)}.archive-header h2{margin:0 auto 0 0;font-size:1rem}.archive-close{width:34px;height:34px;border:0;border-radius:50%;background:#f0f1f3;cursor:pointer;font-size:1.25rem}.archive-content{max-height:calc(90vh - 68px);overflow:auto;padding:18px}.archive-description{margin:0 0 15px;color:#696c73;font-size:.76rem;line-height:1.7}.archive-list{display:grid;gap:6px;margin:0;padding:0;list-style:none}.archive-entry{display:grid;grid-template-columns:42px 1fr;gap:10px;padding:9px 11px;border-radius:8px;color:#303238;background:#f6f7f8;text-decoration:none}.archive-entry:not(.is-locked):hover{background:#eaf1ff}.archive-entry.is-locked{color:#aaaeb5}.archive-number{font-variant-numeric:tabular-nums;font-weight:700}.archive-tools{margin-top:18px;padding-top:15px;border-top:1px solid #e3e4e7}.archive-reset-button{padding:8px 11px;border:1px solid #c9a5a5;border-radius:7px;color:#934e4e;background:#fff8f8;cursor:pointer}.reset-confirm{margin-top:10px;padding:12px;border-radius:9px;background:#fff3f3;font-size:.75rem}.reset-confirm p{margin:0 0 10px}.reset-actions{display:flex;justify-content:flex-end;gap:8px}.reset-actions button{padding:7px 10px;border:1px solid #bbb;border-radius:6px;background:#fff;cursor:pointer}.reset-actions .danger{color:#fff;background:#9d4c4c;border-color:#9d4c4c}
+    @media(max-width:760px){.topbar{padding:9px 12px}.brand{min-width:auto}.brand span:last-child,.search,.account-text{display:none}.app{grid-template-columns:1fr}.sidebar{display:none}main{padding:24px 16px 36px}.folders{grid-template-columns:1fr}.footer-inner{align-items:flex-end}.fiction-notice{font-size:.58rem}}
+  </style>
+  <style>
+    body.archive-open{overflow:hidden}
+    .archive-button{flex:0 0 auto;min-width:128px;padding:10px 13px;border:1px solid #8f8a7f;border-radius:0;color:#353431;background:#fff;font-size:.76rem;font-weight:700;letter-spacing:.08em;cursor:pointer}
+    .archive-button:hover,.archive-button:focus-visible{border-color:#9b1c1c;color:#9b1c1c;background:#fffafa}
+    .archive-overlay{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:20px;background:rgba(22,22,22,.7);opacity:0;visibility:hidden;transition:opacity .18s ease,visibility .18s ease}
+    .archive-overlay.is-open{display:grid;opacity:1;visibility:visible}
+    .archive-dialog{width:min(520px,100%);max-height:min(680px,calc(100vh - 40px));overflow:hidden;border:1px solid #aaa59a;border-radius:0;color:#272623;background:#f9f7f1;box-shadow:0 22px 60px rgba(0,0,0,.34);transform:translateY(10px);transition:transform .18s ease}
+    .archive-overlay.is-open .archive-dialog{transform:translateY(0)}
+    .archive-header{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:19px 20px;border-bottom:1px solid #c8c3b7;color:#fff;background:#292a2c}
+    .archive-header h2{margin:0;font-family:"Yu Mincho","Hiragino Mincho ProN",serif;font-size:1.12rem;letter-spacing:.08em}
+    .archive-close{width:36px;height:36px;padding:0;border:1px solid #747577;border-radius:0;color:#fff;background:transparent;font-size:1.45rem;line-height:1;cursor:pointer}
+    .archive-content{max-height:calc(100vh - 118px);overflow:auto;padding:20px}
+    .archive-description{margin:0 0 15px;color:#68655f;font-size:.8rem;line-height:1.7}
+    .archive-list{display:block;max-height:390px;margin:0;padding:0;overflow-y:auto;border-top:1px solid #cbc6bb;list-style:none}
+    .archive-list li{margin:0}
+    .archive-entry{display:grid;grid-template-columns:64px 1fr;align-items:center;gap:12px;padding:13px 11px;border:0;border-bottom:1px solid #d8d3c8;border-radius:0;color:#272623;background:#fff;text-decoration:none}
+    a.archive-entry:hover,a.archive-entry:focus-visible{background:#fff4f4}
+    .archive-entry.is-locked{color:#99958d;background:#efede7;cursor:default;user-select:none}
+    .archive-number{color:#9b1c1c;font-family:Consolas,monospace;font-size:.78rem;font-weight:700}
+    .archive-entry.is-locked .archive-number{color:#8c8880}
+    .archive-title{font-size:.88rem;line-height:1.5}
+    .archive-entry.is-locked .archive-title{letter-spacing:.18em}
+    .archive-tools{margin-top:15px;padding-top:14px;border-top:1px solid #d2cdc2}
+    .archive-reset-button{padding:9px 12px;border:1px solid #a98787;border-radius:0;color:#824c4c;background:#fff7f7;font-size:.76rem;cursor:pointer}
+    .reset-confirm{margin-top:14px;padding:14px;border:1px solid #c9c3b7;border-radius:0;color:#53514c;background:#faf8f3;font-size:.8rem;line-height:1.7}
+    .reset-confirm p{margin:0 0 12px}
+    .reset-actions{display:flex;justify-content:flex-end;gap:8px}
+    .reset-actions button{padding:8px 12px;border:1px solid #aaa59a;border-radius:0;color:#3e3d39;background:#fff;cursor:pointer}
+    .reset-actions .danger{border-color:#9a5757;color:#fff;background:#9a5757}
+  </style>
+</head>
+<body>
+  <header class="topbar"><div class="brand"><span class="brand-mark">C</span><span>Cloudfile</span></div><div class="search">クラウド内を検索</div><div class="account"><div class="account-text"><p class="account-name">花園 雅巳</p><p class="account-mail">個人用クラウド</p></div><span class="avatar">雅巳</span></div></header>
+  <div class="app">
+    <aside class="sidebar"><button class="new-button" type="button">＋ 新規</button><nav class="nav"><a class="active" href="masami-cloud.html">マイドライブ</a><a href="#recent">最近使用したファイル</a><a href="#folders">共有アイテム</a><a href="#storage">ゴミ箱</a></nav><p class="storage" id="storage">ストレージ<br>4.2 GB / 15 GB 使用中</p></aside>
+    <main><p class="breadcrumb">Cloudfile › マイドライブ</p><h1 class="page-title">マイドライブ</h1><p class="owner-line">所有者：<strong>花園 雅巳</strong></p><h2 class="section-title" id="folders">フォルダ</h2><div class="folders"><a class="folder" href="masami-cloud-girlfriend.html"><span class="folder-icon" aria-hidden="true"></span><div><div class="folder-name">健気な彼女</div><div class="folder-info">写真と動画</div></div></a><a class="folder" href="masami-cloud-obstacles.html"><span class="folder-icon" aria-hidden="true"></span><div><div class="folder-name">確認資料</div><div class="folder-info">フォルダとドキュメント</div></div></a></div><h2 class="section-title" id="recent">最近使用したファイル</h2><div class="recent"><div class="file-card"><div class="file-preview"><img src="images/hana-found.png" alt="住宅街を歩く女性の後ろ姿"></div><div class="file-detail"><strong>IMG_0817_0714.png</strong><span>たった今更新</span></div></div></div><section class="completion-card" id="completionCard"><p>二つのフォルダから、この捜索の真相を確認しました。</p><a class="completion-link" href="clear.html">捜索を完了する</a></section></main>
+  </div>
+  <footer class="site-footer"><div class="footer-inner"><p class="fiction-notice">このサイトの内容はフィクションです。登場する人物・団体・名称等は架空のものであり、実在のものとは関係ありません。</p><button class="archive-button" id="archiveButton" type="button">28 / 30</button></div></footer>
+  <div class="archive-overlay" id="archiveOverlay" aria-hidden="true"><section class="archive-dialog" role="dialog" aria-modal="true" aria-labelledby="archiveTitle"><header class="archive-header"><h2 id="archiveTitle">ページアーカイブ</h2><button class="archive-close" id="archiveClose" type="button">×</button></header><div class="archive-content"><p class="archive-description">一度訪れたページが記録されます。解放済みのページを選ぶと、そのページへ戻れます。未探索のページは「？？？」と表示されます。</p><ol class="archive-list" id="archiveList"></ol><div class="archive-tools"><button class="archive-reset-button" id="archiveResetButton" type="button">アーカイブをリセット</button><div class="reset-confirm" id="resetConfirm" hidden><p>探索済みページの記録を消去しますか？ メールの会話は消去されません。</p><div class="reset-actions"><button id="resetCancel" type="button">キャンセル</button><button class="danger" id="resetAccept" type="button">リセットする</button></div></div></div></div></section></div>
+  <script>
+    const archiveStorageKey='hanazono-page-archive-v1',totalPages=30,currentPage={number:28,title:'花園雅巳のクラウド',href:'masami-cloud.html'};
+    const archiveButton=document.getElementById('archiveButton'),archiveOverlay=document.getElementById('archiveOverlay'),archiveClose=document.getElementById('archiveClose'),archiveList=document.getElementById('archiveList'),archiveResetButton=document.getElementById('archiveResetButton'),resetConfirm=document.getElementById('resetConfirm'),resetCancel=document.getElementById('resetCancel'),resetAccept=document.getElementById('resetAccept');
+    function loadArchive(){try{const saved=JSON.parse(localStorage.getItem(archiveStorageKey)||'[]');return Array.isArray(saved)?saved:[]}catch(error){return[]}}
+    function saveArchive(pages){try{localStorage.setItem(archiveStorageKey,JSON.stringify(pages))}catch(error){}}
+    function registerCurrentPage(){const pages=loadArchive(),index=pages.findIndex(page=>page.number===currentPage.number);if(index>=0)pages[index]=currentPage;else pages.push(currentPage);pages.sort((a,b)=>a.number-b.number);saveArchive(pages);return pages}
+    function renderArchive(){const pages=registerCurrentPage();archiveList.textContent='';for(let number=1;number<=totalPages;number+=1){const page=pages.find(item=>item.number===number),li=document.createElement('li'),entry=document.createElement(page?'a':'div'),no=document.createElement('span'),title=document.createElement('span');entry.className='archive-entry';no.className='archive-number';title.className='archive-title';no.textContent=String(number).padStart(2,'0');if(page){entry.href=page.href;title.textContent=page.title}else{entry.classList.add('is-locked');title.textContent='？？？'}entry.append(no,title);li.appendChild(entry);archiveList.appendChild(li)}}
+    function openArchive(){renderArchive();resetConfirm.hidden=true;archiveOverlay.classList.add('is-open');archiveOverlay.setAttribute('aria-hidden','false');document.body.classList.add('archive-open');archiveClose.focus()}
+    function closeArchive(){archiveOverlay.classList.remove('is-open');archiveOverlay.setAttribute('aria-hidden','true');document.body.classList.remove('archive-open');archiveButton.focus()}
+    const registeredPages=registerCurrentPage(),completionCard=document.getElementById('completionCard');if(registeredPages.some(page=>page.number===29)&&registeredPages.some(page=>page.number===30))completionCard.classList.add('is-visible');archiveButton.addEventListener('click',openArchive);archiveClose.addEventListener('click',closeArchive);archiveOverlay.addEventListener('click',event=>{if(event.target===archiveOverlay)closeArchive()});archiveResetButton.addEventListener('click',()=>{resetConfirm.hidden=false;resetCancel.focus()});resetCancel.addEventListener('click',()=>{resetConfirm.hidden=true;archiveResetButton.focus()});resetAccept.addEventListener('click',()=>{localStorage.removeItem(archiveStorageKey);window.location.href='index.html'});document.addEventListener('keydown',event=>{if(event.key==='Escape'&&archiveOverlay.classList.contains('is-open'))closeArchive()});
+  </script>
+<style id="archiveHintStyles">.archive-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:5px}.archive-row>.archive-entry{min-width:0}.archive-hint-link{display:grid;min-width:62px;place-items:center;padding:6px 9px;border:1px solid #aaa59a;color:#5f5550;background:#fffaf4;font:700 .68rem/1.4 "Yu Gothic","YuGothic",sans-serif;text-decoration:none}.archive-hint-link:hover,.archive-hint-link:focus-visible{border-color:#8d6573;color:#744c5b;background:#f8e9ee}@media(max-width:430px){.archive-row{grid-template-columns:minmax(0,1fr) 56px}.archive-hint-link{min-width:56px;padding-inline:5px}}</style>
+<script id="archiveHintScript">(()=>{const list=document.getElementById('archiveList');if(!list)return;const decorate=()=>{observer.disconnect();Array.from(list.children).forEach((row,index)=>{if(row.querySelector('.archive-hint-link'))return;row.classList.add('archive-row');const link=document.createElement('a');link.className='archive-hint-link';link.href='hint.html#page-'+(index+1);link.target='_blank';link.rel='noopener noreferrer';link.textContent='ヒント';link.setAttribute('aria-label','ページ '+(index+1)+' のヒントを見る');row.appendChild(link)});observer.observe(list,{childList:true})};const observer=new MutationObserver(decorate);observer.observe(list,{childList:true});decorate()})();</script></body>
+</html>

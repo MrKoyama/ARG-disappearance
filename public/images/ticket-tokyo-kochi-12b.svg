@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1700" height="1150" viewBox="0 0 1700 1150">
+  <defs>
+    <pattern id="paper" width="32" height="32" patternUnits="userSpaceOnUse">
+      <rect width="32" height="32" fill="#eee9dc"/>
+      <path d="M0 8H32M0 24H32M8 0V32M24 0V32" stroke="#d8d1c1" stroke-width="1" opacity=".18"/>
+      <circle cx="7" cy="13" r="1.2" fill="#c9c0ae" opacity=".18"/>
+      <circle cx="25" cy="28" r="1" fill="#fff" opacity=".5"/>
+    </pattern>
+    <style>
+      .jp{font-family:"Yu Gothic","YuGothic","Meiryo",sans-serif;fill:#263f50}
+      .bold{font-weight:700}
+      .blue{fill:#1f6696}
+      .label{font-size:27px;letter-spacing:.12em}
+      .small{font-size:25px;letter-spacing:.06em}
+      .micro{font-size:19px;letter-spacing:.08em}
+    </style>
+  </defs>
+  <rect width="1700" height="1150" rx="26" fill="url(#paper)"/>
+  <rect x="18" y="18" width="1664" height="1114" rx="18" fill="none" stroke="#286c9c" stroke-width="12"/>
+  <rect x="42" y="42" width="1616" height="116" rx="8" fill="#dce9f1"/>
+  <text x="84" y="117" class="jp bold" font-size="43">西瀬旅客鉄道</text>
+  <text x="1618" y="117" text-anchor="end" class="jp bold blue" font-size="44" letter-spacing=".14em">指定席券</text>
+  <line x1="70" y1="194" x2="1630" y2="194" stroke="#52788f" stroke-width="3"/>
+  <text x="96" y="245" class="jp label">乗車区間</text>
+  <text x="250" y="355" text-anchor="middle" class="jp bold" font-size="33">乗車駅</text>
+  <text x="250" y="505" text-anchor="middle" class="jp bold" font-size="102">東京</text>
+  <text x="250" y="553" text-anchor="middle" class="jp small">TOKYO</text>
+  <path d="M545 465H775" stroke="#236f9f" stroke-width="22" stroke-linecap="round"/>
+  <path d="M760 420L830 465L760 510Z" fill="#236f9f"/>
+  <text x="1170" y="355" text-anchor="middle" class="jp bold" font-size="33">下車駅</text>
+  <text x="1170" y="505" text-anchor="middle" class="jp bold" font-size="102">高知中央</text>
+  <text x="1170" y="553" text-anchor="middle" class="jp small">KOCHI-CHUO</text>
+  <line x1="70" y1="598" x2="1630" y2="598" stroke="#52788f" stroke-width="3"/>
+  <rect x="80" y="638" width="720" height="248" rx="12" fill="#f8f5ec" stroke="#7892a2" stroke-width="3"/>
+  <text x="116" y="697" class="jp label">列車・路線</text>
+  <text x="116" y="770" class="jp bold blue" font-size="45">丘海南線</text>
+  <text x="116" y="842" class="jp bold" font-size="48">特急 みさき風7号</text>
+  <rect x="828" y="638" width="792" height="248" rx="12" fill="#f8f5ec" stroke="#7892a2" stroke-width="3"/>
+  <text x="866" y="697" class="jp label">乗車日・座席</text>
+  <text x="866" y="770" class="jp bold" font-size="44">2026年6月14日</text>
+  <text x="866" y="843" class="jp bold blue" font-size="52">5号車</text>
+  <text x="1245" y="843" class="jp bold blue" font-size="78">12B</text>
+  <text x="1510" y="843" text-anchor="end" class="jp small">大人 1名</text>
+  <line x1="70" y1="925" x2="1630" y2="925" stroke="#52788f" stroke-width="3"/>
+  <text x="84" y="978" class="jp small">東京駅発　高知中央駅着</text>
+  <text x="84" y="1028" class="jp micro">本券は指定された列車・座席に限り有効です　途中下車無効</text>
+  <g fill="#31566e" opacity=".82">
+    <rect x="1120" y="955" width="8" height="92"/><rect x="1138" y="955" width="4" height="92"/>
+    <rect x="1152" y="955" width="11" height="92"/><rect x="1173" y="955" width="5" height="92"/>
+    <rect x="1190" y="955" width="9" height="92"/><rect x="1210" y="955" width="4" height="92"/>
+    <rect x="1224" y="955" width="13" height="92"/><rect x="1248" y="955" width="6" height="92"/>
+    <rect x="1265" y="955" width="4" height="92"/><rect x="1279" y="955" width="10" height="92"/>
+    <rect x="1300" y="955" width="5" height="92"/><rect x="1315" y="955" width="14" height="92"/>
+    <rect x="1340" y="955" width="4" height="92"/><rect x="1355" y="955" width="8" height="92"/>
+    <rect x="1374" y="955" width="12" height="92"/><rect x="1398" y="955" width="5" height="92"/>
+    <rect x="1414" y="955" width="9" height="92"/><rect x="1435" y="955" width="4" height="92"/>
+    <rect x="1450" y="955" width="13" height="92"/>
+  </g>
+  <text x="1610" y="1090" text-anchor="end" class="jp micro">No. 0614-0512B</text>
+</svg>

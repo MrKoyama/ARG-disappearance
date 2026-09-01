@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="ハナの自己紹介と好きなものについて">
+  <link rel="icon" type="image/svg+xml" href="images/favicon-blog.svg">
   <title>私について | ハナのブログ</title>
   <style>
     :root{--ink:#564b50;--muted:#8b7d83;--line:#d9c8ce;--paper:#fffdf9;--rose:#b8788f;--rose-dark:#8f536a;--soft:#f4e7eb;--shadow:0 5px 18px rgba(88,66,74,.12)}
@@ -60,7 +61,8 @@
     function closeArchive(){archiveResetConfirm.hidden=true;archiveOverlay.classList.remove('is-open');archiveOverlay.setAttribute('aria-hidden','true');document.body.classList.remove('archive-open');archiveButton.focus();}
     registerCurrentPage();archiveButton.addEventListener('click',openArchive);archiveClose.addEventListener('click',closeArchive);archiveOverlay.addEventListener('click',function(event){if(event.target===archiveOverlay)closeArchive();});archiveResetButton.addEventListener('click',function(){archiveResetConfirm.hidden=false;archiveResetCancel.focus();});archiveResetCancel.addEventListener('click',function(){archiveResetConfirm.hidden=true;archiveResetButton.focus();});archiveResetConfirmButton.addEventListener('click',function(){try{localStorage.removeItem(archiveStorageKey);localStorage.removeItem('hanazono-hidden-blog-lead-v1');localStorage.removeItem('hanazono-about-mail-notification-v1');localStorage.removeItem('hanazono-hidden-url-revealed-v1');localStorage.removeItem('hanazono-private-blog-unlocked-v1');}catch(error){}window.location.href='index.html';});document.addEventListener('keydown',function(event){if(event.key==='Escape'&&archiveOverlay.classList.contains('is-open')){if(!archiveResetConfirm.hidden){archiveResetConfirm.hidden=true;archiveResetButton.focus();}else closeArchive();}});
   </script>
-</body>
+<style id="archiveHintStyles">.archive-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:5px}.archive-row>.archive-entry{min-width:0}.archive-hint-link{display:grid;min-width:62px;place-items:center;padding:6px 9px;border:1px solid #aaa59a;color:#5f5550;background:#fffaf4;font:700 .68rem/1.4 "Yu Gothic","YuGothic",sans-serif;text-decoration:none}.archive-hint-link:hover,.archive-hint-link:focus-visible{border-color:#8d6573;color:#744c5b;background:#f8e9ee}@media(max-width:430px){.archive-row{grid-template-columns:minmax(0,1fr) 56px}.archive-hint-link{min-width:56px;padding-inline:5px}}</style>
+<script id="archiveHintScript">(()=>{const list=document.getElementById('archiveList');if(!list)return;const decorate=()=>{observer.disconnect();Array.from(list.children).forEach((row,index)=>{if(row.querySelector('.archive-hint-link'))return;row.classList.add('archive-row');const link=document.createElement('a');link.className='archive-hint-link';link.href='hint.html#page-'+(index+1);link.target='_blank';link.rel='noopener noreferrer';link.textContent='ヒント';link.setAttribute('aria-label','ページ '+(index+1)+' のヒントを見る');row.appendChild(link)});observer.observe(list,{childList:true})};const observer=new MutationObserver(decorate);observer.observe(list,{childList:true});decorate()})();</script></body>
 </html>
 
 

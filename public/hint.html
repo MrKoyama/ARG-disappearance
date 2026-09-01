@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta name="description" content="ARG『ハナゾノマサミの捜索』の段階式ヒントページ">
+  <link rel="icon" type="image/svg+xml" href="images/favicon-blog.svg">
+  <title>ARG「ハナゾノマサミの捜索」ヒントページ</title>
+  <style>
+    :root{--bg:#f4f1ea;--paper:#fff;--ink:#34312f;--muted:#706b66;--line:#cec7bd;--soft:#f5f3ef;--accent:#885d6c;--accent-soft:#f3e5ea}*{box-sizing:border-box}html{scroll-behavior:smooth}body{min-width:320px;margin:0;color:var(--ink);background:linear-gradient(rgba(255,255,255,.46) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.46) 1px,transparent 1px),var(--bg);background-size:5px 5px;font-family:"Yu Gothic","Meiryo",sans-serif;line-height:1.7}button,select{font:inherit}.site-header{padding:34px 20px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.94);text-align:center}.site-header h1{margin:0;color:#4b4245;font-size:clamp(1.25rem,4vw,1.8rem);font-weight:600;letter-spacing:.04em}.site-header p{margin:7px 0 0;color:var(--muted);font-size:.78rem}.main{width:min(820px,calc(100% - 30px));margin:34px auto 58px}.rule-box{margin-bottom:28px;padding:20px 22px;border:1px solid var(--line);background:var(--paper);box-shadow:0 5px 18px rgba(61,53,48,.06)}.rule-box h2{margin:0 0 11px;padding-bottom:9px;border-bottom:1px dashed var(--line);font-size:1rem}.rule-box ul{margin:0;padding-left:1.3em;color:var(--muted);font-size:.8rem}.rule-box li+li{margin-top:6px}.hint-container{display:grid;gap:9px}.page-accordion{scroll-margin-top:14px;border:1px solid var(--line);background:var(--paper);box-shadow:0 2px 8px rgba(61,53,48,.035)}.page-trigger{width:100%;display:flex;align-items:center;justify-content:space-between;padding:15px 18px;border:0;color:var(--ink);background:#fff;text-align:left;font-size:.92rem;font-weight:700;cursor:pointer}.page-trigger::after{content:"▼";color:var(--muted);font-size:.66rem;transition:transform .18s}.page-accordion.is-active>.page-trigger{color:#6f4655;background:#fffafb}.page-accordion.is-active>.page-trigger::after{transform:rotate(180deg)}.page-content{display:none;padding:15px;border-top:1px solid var(--line);background:#faf9f6}.page-accordion.is-active>.page-content{display:block}.sub-hint-box{border:1px solid #d4cec5;background:#fff}.sub-hint-box+.sub-hint-box{margin-top:8px}.sub-trigger{width:100%;display:flex;align-items:center;justify-content:space-between;padding:11px 13px;border:0;color:#47423f;background:var(--soft);text-align:left;font-size:.8rem;font-weight:700;cursor:pointer}.sub-trigger::after{content:"＋";color:var(--muted)}.sub-hint-box.is-active>.sub-trigger::after{content:"－"}.sub-content{display:none;padding:13px 15px;border-top:1px solid #ddd7ce;font-size:.8rem}.sub-hint-box.is-active>.sub-content{display:block}.sub-hint-box.answer{border-color:#cbaeba}.sub-hint-box.answer .sub-trigger{color:#704959;background:var(--accent-soft)}.ending-accordion{margin-top:20px;border-color:#9f9290}.site-footer{padding:30px 20px;border-top:1px solid var(--line);color:var(--muted);background:#ece8e0;text-align:center;font-size:.68rem}@media(max-width:620px){.site-header{padding:25px 16px}.main{width:min(100% - 20px,820px);margin-top:20px}.rule-box{padding:17px}.page-trigger{padding:14px}.page-content{padding:10px}}
+  </style>
+</head>
+<body>
+  <header class="site-header"><h1>ARG「ハナゾノマサミの捜索」ヒントページ</h1><p>必要な段階だけ開いてください。</p></header>
+  <main class="main">
+    <section class="rule-box"><h2>最初に必ずお読みください</h2><ul><li>本ゲームは、画面内の情報を読み、表示されているリンクやボタン、検索欄・入力欄などを操作して進行します。</li><li>URLの直接改変や、ソースコードの閲覧は一切必要ありません。</li><li>各ページ番号のヒントには、その番号のページへ到達する方法が書かれています。</li><li>ネタバレを避けるため、現在探しているページの番号のみを開いてご確認ください。</li></ul></section>
+    <div class="hint-container" id="hintContainer"></div>
+  </main>
+  <footer class="site-footer">このサイトの内容はフィクションです。登場する人物・団体・名称等は架空のものであり、実在のものとは関係ありません。</footer>
+  <script>
+    const hints=[
+      ['捜索を始めるための最初のページを開きます。','ゲームの開始地点は、失踪した女性について情報を募っているサイトです。','「失踪した彼女を探してください。」のページを開いてください。このページがページ1です。'],
+      ['捜索依頼を読んだあと、依頼者へ連絡する必要があります。','人物捜索サイトの下部に、連絡を始めるためのボタンがあります。','ページ1を最後まで読み、最下部の「連絡する」を押すとページ2のメール画面へ進みます。'],
+      ['管理者との会話を進め、HANAが使っているSNSを教えてもらいます。','入力待ちの間に返信を完成させて送信してください。','PCでは入力欄で任意のキーを押して定型文を完成させ、Enterキーか送信ボタンで送ります。スマートフォンでは返信候補を押します。会話を進め、届いた「HANAのSNS」リンクを開くとページ3です。'],
+      ['SNSからHANAのブログを見つけ、管理者へ知らせます。','アカウントを作り直した当時の古い投稿までさかのぼってください。','最古の投稿にあるブログURLをコピーし、ページアーカイブからメールへ戻って送信します。管理者の返信にある「HANAのブログを開く」を押すとページ4です。'],
+      ['表ブログからHANAの自己紹介ページを探します。','ブログのメニューだけでなく、プロフィール欄の名前も操作できます。','ページ4で「私について」を押すか、プロフィール欄の「HANA」をクリックするとページ5です。'],
+      ['表ブログの目的や読み方が書かれたページを探します。','ブログ上部のメニューを確認してください。','ページ4のメニューから「このブログについて」を押すとページ6です。'],
+      ['最近の記事から、花束の写真が掲載された記録を開きます。','記事のタイトルとサムネイルを見比べてください。','ページ4の最近の記事にある「覚えていてくれました」をクリックするとページ7です。'],
+      ['最近の記事から、カフェへ行った日の記録を開きます。','二つのケーキが写っている記事を探してください。','ページ4の最近の記事にある「気になっていたカフェへ」をクリックするとページ8です。'],
+      ['最近の記事から、Mくんと仲直りした日の食事の記録を開きます。','レストランでの料理が写っている記事を探してください。','ページ4の最近の記事にある「ふたり分の夜ごはん」をクリックするとページ9です。'],
+      ['最近の記事から、日帰り旅行について書かれた記録を開きます。','列車の窓や切符が写っている記事を探してください。','ページ4の最近の記事にある「窓の外を眺めながら」をクリックするとページ10です。'],
+      ['最近の記事には表示されていない、Mくんとの春の記録を探します。','複数の記事に付いている人物名のハッシュタグを、ブログ内検索で調べてください。','ページ4の検索欄に「Mくん」または「#Mくん」と入力し、検索結果の「桜が散る前に」を開くとページ11です。'],
+      ['Mくんについて書かれた、バレンタインの記事を探します。','「Mくん」の検索結果には、季節の異なる古い記事が複数あります。','ページ4で「Mくん」を検索し、「少しだけ苦いチョコレート」を開くとページ12です。'],
+      ['Mくんについて書かれた、クリスマスの記録を探します。','「Mくん」の検索結果から、冬の行事に関する記事を確認してください。','ページ4で「Mくん」を検索し、「イルミネーションの帰り道」を開くとページ13です。'],
+      ['Mくんについて書かれた、HANAの誕生日の記録を探します。','「Mくん」の検索結果から、年齢を重ねた日の記事を確認してください。','ページ4で「Mくん」を検索し、「ひとつ歳を重ねました」を開くとページ14です。'],
+      ['Mくんとの交際が始まった日の記事を探します。','「Mくん」の検索結果で記事のハッシュタグを比較し、重複する別のタグを検索してください。そこで示された日付も検索します。','「Mくん」で見つかる記事から「記念日」を見つけて検索し、案内にある「2025/08/03」を検索します。「これから、よろしくね」を開くとページ15です。'],
+      ['表に並んでいない、もう一つの記録場所について書かれた記事を探します。','ページ15の本文で、ここに書けないことをしまう場所として使われている特徴的な言葉を検索してください。','ページ4の検索欄に「もうひとつの引き出し」または「引き出し」と入力し、「もうひとつの引き出し」を開くとページ16です。'],
+      ['ページ16で見つけた裏ブログのURLを管理者へ報告します。','記事に表示されたURLはクリックするとコピーできます。コピー後はメールへ戻ってください。','ページ16のURLをコピーし、ページアーカイブからメールへ戻って貼り付けます。送信後の返信にある「裏ブログを開く」を押すとページ17です。'],
+      ['裏ブログに置かれた最初の記録を開きます。','トップページの「最初の記録」を確認してください。','ページ17に表示されている「気のせいならいい」をクリックするとページ18です。'],
+      ['最初の違和感のあと、HANAが友人へ相談した記録を探します。','ページ18の最後に書かれた、相談しようとしている人物の名前を検索してください。','裏ブログの検索欄に「カナ」と入力し、「カナに相談した」を開くとページ19です。'],
+      ['カナに相談したあと、二人が外部へ相談した記録を探します。','ページ19で、カナが探してくれた場所の名称を検索してください。','裏ブログの検索欄に「相談窓口」と入力し、「相談窓口へ行きました」を開くとページ20です。'],
+      ['相談窓口で勧められた対策が、その後どうなったのかを調べます。','ページ20の終盤で触れられている、住む場所を変える対策に注目してください。','裏ブログの検索欄に「引っ越し」と入力し、「引っ越すことにしました」を開くとページ21です。'],
+      ['HANAとカナだけに通じる昔の合図について、表ブログの記録を探します。','ページ21のカナのコメントにある、待ち合わせを表す言葉を表ブログで検索してください。','コメントから「雨宿り」を見つけ、ページアーカイブで「ハナのブログ」へ戻ります。「雨宿り」と検索し、「青い傘の待ち合わせ」を開くとページ22です。'],
+      ['カナと共有している、鍵をかけた記録の入口を開きます。','入口へのリンクは、引っ越しについて書かれた裏ブログの記事にあります。','ページアーカイブからページ21「引っ越すことにしました」へ戻り、「鍵をかけた記録を開く」を押すとページ23です。'],
+      ['合言葉を解き、HANAとカナの交換日記へ入ります。','ページ22で語られた、二人だけの待ち合わせの目印を入力してください。','ページ23の合言葉欄に「青い傘」と入力して送信すると、ページ24の交換日記が開きます。'],
+      ['交換日記から、HANAが新しい場所へ移った報告を開きます。','交換日記のトップに並ぶ記事のうち、引っ越し後について書かれたものを選んでください。','ページ24で「引っ越しの報告」をクリックするとページ25です。'],
+      ['交換日記から、カナがまとめた今後の対策を開きます。','交換日記のトップに、カナが書いたもう一つの記事があります。','ページ24で「これから気をつけること」をクリックするとページ26です。'],
+      ['HANAの引っ越し先を管理者へ報告し、後日届く発見報告の写真を開きます。','都道府県は表ブログの旅行写真に写る切符、町名は交換日記の街の写真から判断します。','メールで引っ越しを報告したあと、ページ10の切符から「高知」、ページ25の写真から「旭」を読み取り、「高知県旭町」と送信します。届いた発見報告の添付画像をクリックするとページ27です。'],
+      ['写真プレビューから、その写真を保存している人物のクラウドを開きます。','画像以外に操作できる、右上の所有者表示を確認してください。','ページ27右上の丸い「雅巳」アイコンをクリックするとページ28です。'],
+      ['クラウドに保存された、HANAの写真が入ったフォルダを開きます。','マイドライブに表示されているフォルダ名を確認してください。','ページ28で「健気な彼女」をクリックするとページ29です。'],
+      ['クラウドに保存された、人物や過去の出来事に関する資料を開きます。','マイドライブにある、写真以外の調査資料をまとめたフォルダを確認してください。','ページ28へ戻り、「確認資料」をクリックするとページ30です。']
+    ];
+    const endingHints=['クラウドの調査を終え、捜索の結末へ進みます。','マイドライブ内の二つのフォルダを、両方とも一度確認してください。','ページ29「健気な彼女」とページ30「確認資料」を確認してページ28へ戻り、表示された「捜索を完了する」をクリックしてください。'];
+    const container=document.getElementById('hintContainer');
+    function hintBox(label,text,isAnswer){const box=document.createElement('div');box.className='sub-hint-box'+(isAnswer?' answer':'');const trigger=document.createElement('button');trigger.className='sub-trigger';trigger.type='button';trigger.textContent=label;const content=document.createElement('div');content.className='sub-content';content.textContent=text;trigger.addEventListener('click',()=>box.classList.toggle('is-active'));box.append(trigger,content);return box}
+    function accordion(id,label,items,ending){const section=document.createElement('section');section.className='page-accordion'+(ending?' ending-accordion':'');section.id=id;const trigger=document.createElement('button');trigger.className='page-trigger';trigger.type='button';trigger.textContent=label;const content=document.createElement('div');content.className='page-content';content.append(hintBox('【第1段階】ヒント1',items[0],false),hintBox('【第2段階】ヒント2',items[1],false),hintBox('【第3段階】答え',items[2],true));trigger.addEventListener('click',()=>section.classList.toggle('is-active'));section.append(trigger,content);return section}
+    hints.forEach((items,index)=>{const number=index+1;container.appendChild(accordion('page-'+number,'ページ '+number+' のヒント',items,false))});container.appendChild(accordion('ending','エンディングのヒント',endingHints,true));
+    function openTarget(id){const target=document.getElementById(id);if(!target)return;target.classList.add('is-active');target.scrollIntoView({block:'start'})}
+    window.addEventListener('hashchange',()=>openTarget(location.hash.slice(1)));if(location.hash)requestAnimationFrame(()=>openTarget(location.hash.slice(1)));
+  </script>
+</body>
+</html>

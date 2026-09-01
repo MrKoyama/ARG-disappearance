@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="捜索ページ管理者とのメール画面">
+  <link rel="icon" type="image/svg+xml" href="images/favicon-mail.svg">
   <title>捜索ページ管理者とのメール</title>
   <style>
     :root {
@@ -378,6 +379,35 @@
       font-weight: 500;
     }
 
+    .message-attachment {
+      display: block;
+      width: min(250px, 100%);
+      aspect-ratio: 9 / 16;
+      margin-top: 10px;
+      border-radius: 12px;
+      object-fit: cover;
+      background: #d6d6d8;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, .14);
+    }
+
+    .message-attachment-link {
+      display: block;
+      width: fit-content;
+      max-width: 100%;
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .message-attachment-link:hover .message-attachment,
+    .message-attachment-link:focus-visible .message-attachment {
+      outline: 3px solid rgba(19, 119, 237, .28);
+      outline-offset: 2px;
+    }
+
+    .time-skip-divider {
+      margin: 18px 0;
+    }
+
     .typing-row {
       display: none;
     }
@@ -434,9 +464,54 @@
     }
 
     .composer-row {
+      position: relative;
       display: flex;
       align-items: flex-end;
       gap: 9px;
+    }
+
+    .reply-mirror {
+      position: absolute;
+      z-index: 2;
+      top: 0;
+      right: 51px;
+      left: 0;
+      min-height: 44px;
+      padding: 10px 14px;
+      overflow: hidden;
+      border: 1px solid transparent;
+      border-radius: 18px;
+      color: var(--ink);
+      font-size: .84rem;
+      line-height: 1.55;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      pointer-events: none;
+      visibility: hidden;
+    }
+
+    .desktop-composer.is-scripted .reply-mirror {
+      visibility: visible;
+    }
+
+    .desktop-composer.is-scripted .reply-input {
+      color: transparent;
+      caret-color: transparent;
+    }
+
+    .scripted-caret {
+      display: inline-block;
+      width: 1px;
+      height: 1.15em;
+      margin-left: 1px;
+      vertical-align: -.18em;
+      background: #1b63b5;
+      animation: scripted-caret-blink .9s steps(1,end) infinite;
+    }
+
+    .desktop-composer.is-scripted:not(:focus-within) .scripted-caret {
+      opacity: 0;
+      animation: none;
     }
 
     .reply-input {
@@ -457,6 +532,7 @@
     .reply-input:focus {
       border-color: var(--blue);
       box-shadow: 0 0 0 3px rgba(8, 121, 249, .12);
+      caret-color: #1b63b5;
     }
 
     .composer.is-inputting .reply-input {
@@ -853,6 +929,32 @@
       background: #9a5757;
     }
 
+    .time-passage {
+      position: fixed;
+      inset: 0;
+      z-index: 1200;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      background: #111217;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .32s ease, visibility .32s ease;
+      pointer-events: none;
+    }
+
+    .time-passage.is-visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .time-passage p {
+      margin: 0;
+      font-family: "Yu Mincho", "Hiragino Mincho ProN", serif;
+      font-size: clamp(1.15rem, 4vw, 1.75rem);
+      letter-spacing: .22em;
+    }
+
     @keyframes message-in {
       from {
         opacity: 0;
@@ -873,6 +975,11 @@
         transform: translateY(-3px);
         opacity: 1;
       }
+    }
+
+    @keyframes scripted-caret-blink {
+      0%, 48% { opacity: 1; }
+      49%, 100% { opacity: 0; }
     }
 
     @media (max-width: 700px) {
@@ -1059,12 +1166,13 @@
           <div class="composer is-inputting" id="composer">
             <p class="composer-guide" id="composerGuide">入力欄を選択し、キーボードで文章を入力してください。</p>
             <div class="composer-row desktop-composer" id="desktopComposer">
+              <div class="reply-mirror" id="replyMirror" aria-hidden="true"><span id="replyMirrorText"></span><span class="scripted-caret"></span></div>
               <textarea class="reply-input" id="replyInput" rows="1" placeholder="メッセージ" aria-label="返信メッセージ"></textarea>
               <button class="send-button" id="sendButton" type="button" aria-label="メッセージを送信" disabled>↑</button>
             </div>
             <button class="mobile-reply" id="mobileReply" type="button">捜索への協力を申し出る</button>
             <div class="cloze-composer" id="clozeComposer">
-              <div class="cloze-sentence"><span id="clozePrefix"></span><input class="cloze-input" id="clozeInput" type="text" autocomplete="off" aria-label="空欄に入る言葉"><span id="clozeSuffix"></span><button class="cloze-send" id="clozeSend" type="button" disabled>送信</button></div>
+              <div class="cloze-sentence"><span id="clozePrefix"></span><input class="cloze-input" id="clozeInput" type="text" autocomplete="off" aria-label="空欄に入る言葉"><span id="clozeMiddle" hidden></span><input class="cloze-input" id="clozeInputSecond" type="text" autocomplete="off" aria-label="二つ目の空欄に入る言葉" hidden><span id="clozeSuffix"></span><button class="cloze-send" id="clozeSend" type="button" disabled>送信</button></div>
               <p class="cloze-feedback" id="clozeFeedback" role="status" aria-live="polite"></p>
             </div>
             <p class="waiting-note" id="waitingNote">SNSでブログのURLを見つけたら、このメールに戻り、入力欄へ貼り付けてください。</p>
@@ -1105,6 +1213,8 @@
     </section>
   </div>
 
+  <div class="time-passage" id="timePassage" aria-hidden="true"><p id="timePassageLabel">数日後</p></div>
+
   <script>
     const conversationSteps = [
       {
@@ -1135,6 +1245,7 @@
     const dateDivider = document.getElementById('dateDivider');
     const typingRow = document.getElementById('typingRow');
     const replyInput = document.getElementById('replyInput');
+    const replyMirrorText = document.getElementById('replyMirrorText');
     const sendButton = document.getElementById('sendButton');
     const mobileReply = document.getElementById('mobileReply');
     const composer = document.getElementById('composer');
@@ -1144,6 +1255,8 @@
     const clozeComposer = document.getElementById('clozeComposer');
     const clozePrefix = document.getElementById('clozePrefix');
     const clozeInput = document.getElementById('clozeInput');
+    const clozeMiddle = document.getElementById('clozeMiddle');
+    const clozeInputSecond = document.getElementById('clozeInputSecond');
     const clozeSuffix = document.getElementById('clozeSuffix');
     const clozeSend = document.getElementById('clozeSend');
     const clozeFeedback = document.getElementById('clozeFeedback');
@@ -1154,6 +1267,8 @@
     const confirmMessage = document.getElementById('confirmMessage');
     const confirmCancel = document.getElementById('confirmCancel');
     const confirmAccept = document.getElementById('confirmAccept');
+    const timePassage = document.getElementById('timePassage');
+    const timePassageLabel = document.getElementById('timePassageLabel');
     const conversationStorageKey = 'hanazono-mail-progress-v3';
     const conversationStartedStorageKey = 'hanazono-mail-started-at-v3';
     const blogFoundStorageKey = 'hanazono-mail-blog-found-v3';
@@ -1164,11 +1279,16 @@
     const hiddenBlogMessageStorageKey = 'hanazono-mail-hidden-blog-message-v1';
     const hiddenBlogFoundStorageKey = 'hanazono-mail-hidden-blog-found-v1';
     const hiddenBlogUrlStorageKey = 'hanazono-mail-hidden-blog-url-v1';
+    const finaleStageStorageKey = 'hanazono-mail-finale-stage-v1';
+    const finaleStartedStorageKey = 'hanazono-mail-finale-started-v1';
     const expectedBlogFile = 'hana-blog.html';
     const expectedHiddenBlogFile = 'hana-blog-hidden.html';
     const blogConfirmationReply = '確認します。\n\n……これで間違いないです。彼女のブログです。ブログの中に、行方につながる情報があるかもしれません。僕も確認してみます。何か見つけ次第、ここで連絡しましょう。';
     const hiddenBlogLeadReply = 'このブログを読んでいて気づいたのですが、どうやら表にはない裏のブログが隠されているみたいです。\n\n僕も少し探してみます。あなたも見つけたら、そのURLをここに送ってください。';
     const hiddenBlogConfirmationReply = '確認しました。表のブログからは見えないようにしていた記録なんですね。\n\n僕も読み進めてみます。彼女がいなくなる前に何を考えていたのか、分かったことがあれば教えてください。';
+    const arrivalReply = '現地に着きました。教えてもらった場所を中心に探しています。もう少しだけ待ってください。';
+    const foundReply = '彼女を見つけました！もうこんな事が起きないようにきちんと二人で話し合います！ありがとうございました！';
+    const foundImage = 'images/hana-found.png';
     const wrongUrlReplies = [
       'これではないような……。彼女が書いていたブログとは雰囲気が違います。',
       '確認しましたが、彼女のブログではありませんね……。ほかに心当たりはありませんか？',
@@ -1186,8 +1306,20 @@
         prefix: '彼女は今の家を離れ、（',
         suffix: '）をすることに決めたようです。',
         answers: ['引っ越し', '引越し', '引越', '転居'],
-        requiresArchivePage: 20,
+        requiresArchivePage: 21,
         reply: '私も今、同じ記事を確認しました。\n\n引っ越すことは決めていたようですが、行き先までは書かれていませんね。別の記録が残っていないか、もう少し調べてもらえませんか。'
+      },
+      {
+        prefix: '彼女は（',
+        middle: '）県（',
+        suffix: '）町に引っ越したようです。',
+        answers: ['高知'],
+        secondAnswers: ['旭'],
+        completed: '彼女は高知県旭町に引っ越したようです。',
+        requiresArchivePage: 25,
+        guide: '引っ越し先の県名と町名を入力してください。',
+        note: '引っ越し先の情報を入力してください。',
+        reply: 'ありがとうございます。高知県旭町ですね。\n\nここまで場所を絞り込んでもらえれば、あとは僕が確かめられます。すぐに準備して、実際に行ってみます。\n\n本当にありがとうございました。彼女を見つけたら、必ず連絡します。'
       }
     ];
     const wrongReportMessages = ['どこか違う気がする……。', '記事の表現と合っていないようです。', 'もう一度、見つけた記事を読み返してみましょう。'];
@@ -1199,6 +1331,9 @@
     let hiddenBlogMessageDelivered = loadHiddenBlogMessageDelivered();
     let hiddenBlogFound = loadHiddenBlogFound();
     let confirmedHiddenBlogUrl = loadConfirmedHiddenBlogUrl();
+    let finaleStage = loadFinaleStage();
+    let finaleStartedAt = loadFinaleStartedAt();
+    let finaleTimersScheduled = false;
     let typedLength = 0;
     let isReplying = false;
     let pendingConfirmAction = null;
@@ -1281,9 +1416,7 @@
 
     function hiddenBlogLeadIsKnown() {
       try {
-        if (localStorage.getItem(hiddenBlogLeadStorageKey) === 'true') return true;
-        const archivedPages = JSON.parse(localStorage.getItem('hanazono-page-archive-v1') || '[]');
-        return Array.isArray(archivedPages) && archivedPages.some(function (page) { return page.number === 6; });
+        return localStorage.getItem(hiddenBlogLeadStorageKey) === 'true';
       } catch (error) {
         return false;
       }
@@ -1349,6 +1482,40 @@
       }
     }
 
+    function loadFinaleStage() {
+      try {
+        return Math.min(2, Number(localStorage.getItem(finaleStageStorageKey)) || 0);
+      } catch (error) {
+        return 0;
+      }
+    }
+
+    function saveFinaleStage(stage) {
+      finaleStage = stage;
+      try {
+        localStorage.setItem(finaleStageStorageKey, String(stage));
+      } catch (error) {
+        return;
+      }
+    }
+
+    function loadFinaleStartedAt() {
+      try {
+        return Number(localStorage.getItem(finaleStartedStorageKey)) || 0;
+      } catch (error) {
+        return 0;
+      }
+    }
+
+    function saveFinaleStartedAt(timestamp) {
+      finaleStartedAt = timestamp;
+      try {
+        localStorage.setItem(finaleStartedStorageKey, String(timestamp));
+      } catch (error) {
+        return;
+      }
+    }
+
     function loadDiscoveries() {
       try {
         const saved = JSON.parse(localStorage.getItem(discoveryStorageKey) || '[]');
@@ -1377,10 +1544,14 @@
     }
 
     function completedReportText(step) {
+      if (step.completed) return step.completed;
+      if (step.secondAnswers) {
+        return step.prefix + step.answers[0] + step.middle + step.secondAnswers[0] + step.suffix;
+      }
       return step.prefix + step.answers[0] + step.suffix;
     }
 
-    function createMessage(direction, text, link, linkLabel, animate, timestamp) {
+    function createMessage(direction, text, link, linkLabel, animate, timestamp, image) {
       const row = document.createElement('div');
       const wrap = document.createElement('div');
       const meta = document.createElement('p');
@@ -1405,6 +1576,19 @@
         bubble.appendChild(anchor);
       }
 
+      if (image) {
+        const attachmentLink = document.createElement('a');
+        const attachment = document.createElement('img');
+        attachmentLink.className = 'message-attachment-link';
+        attachmentLink.href = 'cloud-photo.html';
+        attachmentLink.setAttribute('aria-label', '共有された写真をプレビューで開く');
+        attachment.className = 'message-attachment';
+        attachment.src = image;
+        attachment.alt = '住宅街を歩く彼女の後ろ姿';
+        attachmentLink.appendChild(attachment);
+        bubble.appendChild(attachmentLink);
+      }
+
       wrap.append(meta, bubble);
       if (direction === 'incoming') {
         const messageAvatar = document.createElement('span');
@@ -1416,6 +1600,15 @@
       row.appendChild(wrap);
       messageLog.insertBefore(row, typingRow);
       return row;
+    }
+
+    function createTimeSkipDivider(label, animate) {
+      const divider = document.createElement('p');
+      divider.className = 'date-divider time-skip-divider';
+      divider.textContent = label;
+      if (!animate) divider.style.animation = 'none';
+      messageLog.insertBefore(divider, typingRow);
+      return divider;
     }
 
     function restoreConversation() {
@@ -1447,6 +1640,15 @@
             createMessage('outgoing', completedReportText(reportStep), '', '', false, reportTime);
             createMessage('incoming', reportStep.reply, '', '', false, reportTime + 45000);
           }
+          if (reportProgress >= reportSteps.length && finaleStage >= 1) {
+            const narrativeStart = finaleStartedAt || Date.now();
+            createTimeSkipDivider('数日後', false);
+            createMessage('incoming', arrivalReply, '', '', false, narrativeStart + 259200000);
+            if (finaleStage >= 2) {
+              createTimeSkipDivider('数時間後', false);
+              createMessage('incoming', foundReply, '', '', false, narrativeStart + 270000000, foundImage);
+            }
+          }
         }
       }
     }
@@ -1463,6 +1665,7 @@
       if (document.getElementById('archiveOverlay').classList.contains('is-open')) return;
 
       if (clozeComposer.style.display === 'block') {
+        if (document.activeElement === clozeInput || document.activeElement === clozeInputSecond) return;
         clozeInput.focus({ preventScroll: true });
         return;
       }
@@ -1480,9 +1683,14 @@
       clozeComposer.style.display = 'none';
       clozeFeedback.textContent = '';
       clozeInput.value = '';
+      clozeInputSecond.value = '';
+      clozeInputSecond.hidden = true;
+      clozeMiddle.hidden = true;
       clozeSend.disabled = true;
 
       if (currentStep >= conversationSteps.length) {
+        desktopComposer.classList.remove('is-scripted');
+        replyMirrorText.textContent = '';
         composer.classList.add('url-mode');
         desktopComposer.style.display = '';
         composerGuide.style.display = 'block';
@@ -1518,19 +1726,30 @@
             const reportStep = reportSteps[reportProgress];
             if (reportStep && hasRequiredDiscovery(reportStep)) {
               clozePrefix.textContent = reportStep.prefix;
+              clozeMiddle.textContent = reportStep.middle || '';
+              clozeMiddle.hidden = !reportStep.secondAnswers;
+              clozeInputSecond.hidden = !reportStep.secondAnswers;
               clozeSuffix.textContent = reportStep.suffix;
               clozeComposer.style.display = 'block';
-              composerGuide.textContent = '記事から分かった内容を、空欄に入力して送ってください。';
-              waitingNote.textContent = '「引っ越すことにしました」の記事に書かれていた内容を報告してください。';
+              composerGuide.textContent = reportStep.guide || '記事から分かった内容を、空欄に入力して送ってください。';
+              waitingNote.textContent = reportStep.note || '「引っ越すことにしました」の記事に書かれていた内容を報告してください。';
               threadStatus.textContent = '調査結果の入力待ち';
               focusComposerIfReady();
               return;
             }
 
             if (reportProgress >= reportSteps.length) {
-              composerGuide.textContent = '引っ越し先につながる記録を探してください。';
-              waitingNote.textContent = '裏ブログや鍵付きの記録を調べ、彼女が移動した場所を特定してください。';
-              threadStatus.textContent = '引っ越し先の調査待ち';
+              desktopComposer.style.display = 'none';
+              mobileReply.style.display = 'none';
+              if (finaleStage >= 2) {
+                composerGuide.textContent = '捜索ページ管理者から発見の報告が届きました。';
+                waitingNote.textContent = '添付された写真を確認してください。';
+                threadStatus.textContent = '発見報告を受信';
+              } else {
+                composerGuide.textContent = '捜索ページ管理者からの返信を待っています。';
+                waitingNote.textContent = finaleStage >= 1 ? '現地で捜索が続いています。' : '捜索ページ管理者が現地へ向かっています。';
+                threadStatus.textContent = '返信待ち';
+              }
               return;
             }
 
@@ -1560,11 +1779,13 @@
       }
 
       const step = conversationSteps[currentStep];
+      desktopComposer.classList.add('is-scripted');
       composer.classList.remove('url-mode', 'is-receiving');
       composer.classList.add('is-inputting');
       desktopComposer.style.display = '';
       typedLength = 0;
       replyInput.value = '';
+      replyMirrorText.textContent = '';
       replyInput.placeholder = 'メッセージ';
       replyInput.readOnly = true;
       replyInput.setAttribute('inputmode', 'none');
@@ -1579,10 +1800,46 @@
     }
 
     function setReceivingState() {
+      desktopComposer.classList.remove('is-scripted');
       composer.classList.remove('is-inputting');
       composer.classList.add('is-receiving');
       threadStatus.textContent = 'メッセージを受信中';
       composerGuide.textContent = '捜索ページ管理者が返信しています。';
+    }
+
+    function scheduleFinaleSequence() {
+      if (finaleTimersScheduled || reportProgress < reportSteps.length || finaleStage >= 2) return;
+      if (!finaleStartedAt) saveFinaleStartedAt(Date.now());
+      finaleTimersScheduled = true;
+      setReceivingState();
+      typingRow.classList.add('is-visible');
+      scrollToLatest();
+
+      const passageLabel = finaleStage === 0 ? '数日後' : '数時間後';
+      const delay = finaleStage === 0 ? 1900 : 2800;
+      window.setTimeout(function () {
+        timePassageLabel.textContent = passageLabel;
+        timePassage.classList.add('is-visible');
+        timePassage.setAttribute('aria-hidden', 'false');
+      }, Math.max(0, delay - 850));
+      window.setTimeout(function () {
+        timePassage.classList.remove('is-visible');
+        timePassage.setAttribute('aria-hidden', 'true');
+        typingRow.classList.remove('is-visible');
+        if (finaleStage === 0) {
+          createTimeSkipDivider('数日後', true);
+          createMessage('incoming', arrivalReply, '', '', true, finaleStartedAt + 259200000);
+          saveFinaleStage(1);
+        } else if (finaleStage === 1) {
+          createTimeSkipDivider('数時間後', true);
+          createMessage('incoming', foundReply, '', '', true, finaleStartedAt + 270000000, foundImage);
+          saveFinaleStage(2);
+        }
+        finaleTimersScheduled = false;
+        updateComposer();
+        scrollToLatest();
+        if (finaleStage < 2) scheduleFinaleSequence();
+      }, delay);
     }
 
     function sendCurrentReply() {
@@ -1730,18 +1987,23 @@
       const submitted = normalizeReportAnswer(clozeInput.value);
       const correct = step.answers.some(function (answer) {
         return normalizeReportAnswer(answer) === submitted;
-      });
+      }) && (!step.secondAnswers || step.secondAnswers.some(function (answer) {
+        return normalizeReportAnswer(answer) === normalizeReportAnswer(clozeInputSecond.value);
+      }));
 
       if (!correct) {
         clozeFeedback.textContent = wrongReportMessages[Math.floor(Math.random() * wrongReportMessages.length)];
         clozeInput.setAttribute('aria-invalid', 'true');
+        if (step.secondAnswers) clozeInputSecond.setAttribute('aria-invalid', 'true');
         clozeInput.focus();
         return;
       }
 
       clozeInput.removeAttribute('aria-invalid');
+      clozeInputSecond.removeAttribute('aria-invalid');
       clozeFeedback.textContent = '';
       clozeInput.disabled = true;
+      clozeInputSecond.disabled = true;
       clozeSend.disabled = true;
       isReplying = true;
       setReceivingState();
@@ -1755,9 +2017,11 @@
         reportProgress += 1;
         saveReportProgress();
         clozeInput.disabled = false;
+        clozeInputSecond.disabled = false;
         isReplying = false;
         updateComposer();
         scrollToLatest();
+        if (reportProgress >= reportSteps.length) scheduleFinaleSequence();
       }, 900 + Math.min(1100, step.reply.length * 6));
     }
 
@@ -1795,11 +2059,16 @@
       typedLength = Math.min(targetText.length, typedLength + characterCount);
 
       replyInput.value = targetText.slice(0, typedLength);
+      replyMirrorText.textContent = replyInput.value;
       sendButton.disabled = typedLength < targetText.length;
       replyInput.scrollTop = replyInput.scrollHeight;
     });
 
     replyInput.addEventListener('paste', function (event) {
+      if (currentStep < conversationSteps.length) event.preventDefault();
+    });
+
+    replyInput.addEventListener('beforeinput', function (event) {
       if (currentStep < conversationSteps.length) event.preventDefault();
     });
 
@@ -1823,10 +2092,26 @@
     clozeInput.addEventListener('input', function () {
       clozeFeedback.textContent = '';
       clozeInput.removeAttribute('aria-invalid');
-      clozeSend.disabled = clozeInput.value.trim().length === 0;
+      clozeInputSecond.removeAttribute('aria-invalid');
+      clozeSend.disabled = clozeInput.value.trim().length === 0 || (!clozeInputSecond.hidden && clozeInputSecond.value.trim().length === 0);
+    });
+
+    clozeInputSecond.addEventListener('input', function () {
+      clozeFeedback.textContent = '';
+      clozeInput.removeAttribute('aria-invalid');
+      clozeInputSecond.removeAttribute('aria-invalid');
+      clozeSend.disabled = clozeInput.value.trim().length === 0 || clozeInputSecond.value.trim().length === 0;
     });
 
     clozeInput.addEventListener('keydown', function (event) {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        if (!clozeInputSecond.hidden && !clozeInputSecond.value.trim()) clozeInputSecond.focus();
+        else if (!clozeSend.disabled) sendReport();
+      }
+    });
+
+    clozeInputSecond.addEventListener('keydown', function (event) {
       if (event.key === 'Enter') {
         event.preventDefault();
         if (!clozeSend.disabled) sendReport();
@@ -1873,6 +2158,8 @@
             localStorage.removeItem(hiddenBlogMessageStorageKey);
             localStorage.removeItem(hiddenBlogFoundStorageKey);
             localStorage.removeItem(hiddenBlogUrlStorageKey);
+            localStorage.removeItem(finaleStageStorageKey);
+            localStorage.removeItem(finaleStartedStorageKey);
           } catch (error) {
             return;
           }
@@ -1998,6 +2285,7 @@
     updateComposer();
     scrollToLatest();
     deliverHiddenBlogLead(650);
+    scheduleFinaleSequence();
 
     archiveButton.addEventListener('click', openArchive);
     archiveClose.addEventListener('click', closeArchive);
@@ -2036,11 +2324,12 @@
     window.addEventListener('focus', focusComposerIfReady);
 
     document.addEventListener('click', function (event) {
-      if (event.target.closest('button, a, textarea')) return;
+      if (event.target.closest('button, a, textarea, input')) return;
       focusComposerIfReady();
     });
   </script>
-</body>
+<style id="archiveHintStyles">.archive-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:5px}.archive-row>.archive-entry{min-width:0}.archive-hint-link{display:grid;min-width:62px;place-items:center;padding:6px 9px;border:1px solid #aaa59a;color:#5f5550;background:#fffaf4;font:700 .68rem/1.4 "Yu Gothic","YuGothic",sans-serif;text-decoration:none}.archive-hint-link:hover,.archive-hint-link:focus-visible{border-color:#8d6573;color:#744c5b;background:#f8e9ee}@media(max-width:430px){.archive-row{grid-template-columns:minmax(0,1fr) 56px}.archive-hint-link{min-width:56px;padding-inline:5px}}</style>
+<script id="archiveHintScript">(()=>{const list=document.getElementById('archiveList');if(!list)return;const decorate=()=>{observer.disconnect();Array.from(list.children).forEach((row,index)=>{if(row.querySelector('.archive-hint-link'))return;row.classList.add('archive-row');const link=document.createElement('a');link.className='archive-hint-link';link.href='hint.html#page-'+(index+1);link.target='_blank';link.rel='noopener noreferrer';link.textContent='ヒント';link.setAttribute('aria-label','ページ '+(index+1)+' のヒントを見る');row.appendChild(link)});observer.observe(list,{childList:true})};const observer=new MutationObserver(decorate);observer.observe(list,{childList:true});decorate()})();</script></body>
 </html>
 
 
